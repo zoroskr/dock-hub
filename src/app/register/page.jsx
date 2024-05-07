@@ -1,8 +1,35 @@
-import Publicacion from "@/components/ui/Publicacion";
+"use client";
+import React, { useRef } from 'react';
+
 
 export default function Home() {
+  const fullNameRef = useRef();
+  const addressRef = useRef();
+  const emailRef = useRef();
+  const passwordRef = useRef();
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const response = await fetch('http://localhost:3000/api/users', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        fullName: fullNameRef.current.value,
+        address: addressRef.current.value,
+        email: emailRef.current.value,
+        password: passwordRef.current.value
+      }),
+    });
+
+    const data = await response.json();
+    console.log(data);
+  };
+
   return (
-    <form class="max-w-sm mx-auto">
+    <form class="max-w-sm mx-auto" onSubmit={handleSubmit}>
       <div class="mb-5">
         <label
           for="fullname"
@@ -13,8 +40,10 @@ export default function Home() {
         <input
           type="text"
           id="fullname"
+          name="fullName" // Add this line
           class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
           placeholder="John Doe"
+          ref={fullNameRef}
           required
         />
       </div>
@@ -29,6 +58,7 @@ export default function Home() {
         <input
           type="text"
           id="address"
+          ref={addressRef}
           class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
           placeholder="123 Main St"
           required
@@ -45,6 +75,7 @@ export default function Home() {
         <input
           type="email"
           id="email"
+          ref={emailRef}
           class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
           placeholder="name@flowbite.com"
           required
@@ -60,6 +91,7 @@ export default function Home() {
         </label>
         <input
           type="password"
+          ref={passwordRef}
           id="password"
           class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
           required
