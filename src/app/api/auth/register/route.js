@@ -10,7 +10,8 @@ export async function GET() {
 
 export async function POST(request) {
   await connectDB();
-  const data = await request.json()
+  const data = await request.json();
+  // Si la solicitud es para crear un nuevo usuario
   const user = await User.create(data);
   return NextResponse.json(user);
 }
