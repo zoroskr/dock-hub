@@ -1,12 +1,22 @@
 "use client";
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useParams } from 'next/navigation';
 
-const UserForm = ({ user }) => {
-  const form = useRef(null);
+const UserForm = ( {user} ) => {
+  const form = useRef(user);
   const params = useParams();
 
+  useEffect(() => {
+    if (form.current) {
+      form.current.elements.fullName.value = user.fullName || '';
+      form.current.elements.address.value = user.address || '';
+      form.current.elements.email.value = user.email || '';
+      form.current.elements.password.value = user.password || '';
+    }
+  }, [user]);
+
   const handleSubmit = async (e) => {
+    console.log("form", form.current);
     e.preventDefault();
 
     const formData = new FormData(form.current);
@@ -22,7 +32,6 @@ const UserForm = ({ user }) => {
       email: formData.get('email'),
       password: formData.get('password')
     }
-    console.log(user);
 
     const createUser = async () => {
       const response = await fetch('http://localhost:3000/api/auth/register', {
@@ -50,6 +59,7 @@ const UserForm = ({ user }) => {
       console.log(data);
     };
 
+    console.log("usuariooooooooo", user);
     if (params.id) {
       await updateUser();
     } else {
@@ -72,7 +82,7 @@ const UserForm = ({ user }) => {
           id="fullname"
           name="fullName" // Add this line
           class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-          placeholder={user.fullName}
+          placeholder="John Doe"
           required
         />
       </div>
@@ -89,7 +99,7 @@ const UserForm = ({ user }) => {
           id="address"
           name="address"
           class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-          placeholder={user.address}
+          placeholder="123 Main St, New York, NY 10030"
           required
         />
       </div>
@@ -106,7 +116,7 @@ const UserForm = ({ user }) => {
           id="email"
           name="email"
           class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-          placeholder={user.email}
+          placeholder="tuemail@example.com"
           required
         />
       </div>
