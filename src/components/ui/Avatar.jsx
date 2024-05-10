@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from 'next/image'
 
 const Avatar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -8,48 +9,45 @@ const Avatar = () => {
   const toggleDropdown = () => setIsOpen(!isOpen);
 
   return (
-    <>
-      <img
-        id="avatarButton"
-        type="button"
-        onClick={toggleDropdown}
-        class="w-10 h-10 rounded-full cursor-pointer"
-        src="/docs/images/people/profile-picture-5.jpg"
-        alt="User dropdown"
-      ></img>
-      {isOpen && (
+    <div style={{ position: "relative" }}>
+  <span className="ml-2 cursor-pointer" onClick={toggleDropdown}>
         <div
-          id="userDropdown"
-          class="z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600"
+          className="inline-block rounded-full bg-rgb-190-175-85 p-1 hover:scale-110"
+          style={{ transition: "transform 0.1s ease-in-out" }}
         >
-          <div class="px-4 py-3 text-sm text-gray-900 dark:text-white">
-            <div>Bonnie Green</div>
-            <div class="font-medium truncate">name@flowbite.com</div>
-          </div>
-          <ul
-            class="py-2 text-sm text-gray-700 dark:text-gray-200"
-            aria-labelledby="avatarButton"
-          >
-            <li>
-              <a
-                href="#"
-                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-              >
-                Dashboard
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-              >
-                Settings
-              </a>
-            </li>
-          </ul>
+          <Image
+            src="/userIcon.png"
+            className="text-gray-800 dark:text-white rounded-full"
+            alt="Dropdown"
+            width={30}
+            height={30}
+          />
         </div>
-      )}
-    </>
+  </span>
+  {isOpen && (
+    <div
+      className="absolute right-0 z-10 bg-white border border-gray-200 rounded-lg shadow border-t-0"
+      style={{ top: "calc(100% + 8px)" }}
+    >
+      <div className="p-2">
+        <div>Felipe Fidalgo</div>
+        <div className="font-semibold">felipote@gmail.com</div>
+      </div>
+      <ul className="py-1">
+        <li>
+          <a href="#" className="block px-4 py-2 hover:bg-gray-100">
+            Ver mis publicaciones
+          </a>
+        </li>
+        <li>
+          <a href="#" className="block px-4 py-2 hover:bg-gray-100">
+            Editar Perfil
+          </a>
+        </li>
+      </ul>
+    </div>
+  )}
+</div>
   );
 };
 
