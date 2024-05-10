@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Image from 'next/image'
+import Link from "next/link";
 
 const Avatar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -40,9 +41,9 @@ const Avatar = () => {
           </a>
         </li>
         <li>
-          <a href="#" className="block px-4 py-2 hover:bg-gray-100">
+          <Link href="/editarperfil/1" className="block px-4 py-2 hover:bg-gray-100">
             Editar Perfil
-          </a>
+          </Link>
         </li>
       </ul>
     </div>
