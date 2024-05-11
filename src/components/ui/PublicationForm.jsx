@@ -11,24 +11,28 @@ const PublicationForm = () => {
     
     const formData = new FormData(form.current);
 
-    const publcation = {
+    const post = {
       name: formData.get('name'),
-      anio: formData.get('anio'),
       description: formData.get('description'),
-      file: formData.get('file')
+      image: formData.get('image'), 
+      owner: "mundofelipote@gmail.com"
     }
 
-    console.log(publcation);
-
-    const response = await fetch('http://localhost:3000/api/publications', {
+    const response = await fetch('http://localhost:3000/api/bienes', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(publcation),
-    });
+      body: JSON.stringify(post), 
+  });
 
-    const data = await response.json();
+  if (response.ok) {
+      const data = await response.json();
+      console.log(data);
+    } else {
+      console.error('Error al cargar los datos:', response.statusText);
+    }
+    
     console.log(data);
   }
 
@@ -41,12 +45,6 @@ const PublicationForm = () => {
         </div>
         <TextInput name="name" type="text" placeholder="Rolls-Royce Phantom" required shadow />
       </div>
-      <div>
-        <div className="mb-2 block">
-          <Label htmlFor="anio" value="Año" />
-        </div>
-        <TextInput name="anio" type="number" placeholder='2024' required shadow />
-      </div>
 
       <div className="max-w-md">
         <div className="mb-2 block">
@@ -55,12 +53,11 @@ const PublicationForm = () => {
         <Textarea name="description" placeholder="Puro lujo..." required rows={4} />
       </div>
 
-
-      <div id="fileUpload" className="max-w-md">
+      <div className="max-w-md">
         <div className="mb-2 block">
-          <Label htmlFor="file" value="Subir foto" />
+          <Label htmlFor="image" value="Link a imagen" />
         </div>
-        <FileInput name="file" helperText="SVG, PNG, JPG or GIF (MAX. 800x400px)." />
+        <Textarea name="image" placeholder="Enlace a imagen" required rows={4} />
       </div>
 
       <Button type="submit" className='bg-black'>Cargar un bien</Button>

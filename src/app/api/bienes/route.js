@@ -1,23 +1,26 @@
 import { connectDB } from '@/libs/mongodb';
-import User from '@/models/user';
+import Post from '@/models/Post';
 import { NextResponse } from 'next/server';
 
 export async function GET() {
   await connectDB();
-  const users = await User.find();
-  return NextResponse.json(users);
+  const posts = await Post.find();
+  return NextResponse.json(posts);
 }
 
 export async function POST(request) {
   await connectDB();
   const data = await request.json();
-  const user = await User.create(data);
-  return NextResponse.json(user);
+  const post = await Post.create(data);
+  return NextResponse.json(post);
+  
 }
 
+/*
 export async function PUT(request) {
   await connectDB();
-  const { email, ...data } = await request.json();
-  const user = await User.findOneAndUpdate({ email }, data, { new: true });
-  return NextResponse.json(user);
+  const { } = await request.json();
+  const post = await Post.findOneAndUpdate({ email }, data, { new: true });
+  return NextResponse.json(post);
 }
+*/
