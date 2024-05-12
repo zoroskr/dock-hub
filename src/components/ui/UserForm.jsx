@@ -2,7 +2,11 @@
 import React, { useEffect, useRef } from 'react';
 import { useParams } from 'next/navigation';
 
-const UserForm = ( {user} ) => {
+import { createUser, updateUser, getUser, getUserByEmail } from '@/app/services/users.api';
+
+import Swal from 'sweetalert2'
+
+const UserForm = ({ user, title }) => {
   const form = useRef(user);
   const params = useParams();
 
@@ -12,6 +16,7 @@ const UserForm = ( {user} ) => {
       form.current.elements.address.value = user.address || '';
       form.current.elements.email.value = user.email || '';
       form.current.elements.password.value = user.password || '';
+      form.current.elements['repeat-password'].value = user.password || '';
     }
   }, [user]);
 
@@ -21,11 +26,6 @@ const UserForm = ( {user} ) => {
 
     const formData = new FormData(form.current);
 
-    if (formData.get('password') !== formData.get('repeat-password')) {
-      alert('Passwords do not match');
-      return;
-    }
-
     const user = {
       fullName: formData.get('fullName'),
       address: formData.get('address'),
@@ -33,49 +33,64 @@ const UserForm = ( {user} ) => {
       password: formData.get('password')
     }
 
-    const createUser = async () => {
-      const response = await fetch('http://localhost:3000/api/auth/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(user),
+    if (formData.get('password') !== formData.get('repeat-password')) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Las contraseñas no coninciden!',
       });
+      return;
+    }
 
-      const data = await response.json();
-      console.log(data);
-    };
+    console.log("formData.get('email')", formData.get('email'));
 
-    const updateUser = async () => {
-      const response = await fetch(`http://localhost:3000/api/auth/update/${params.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(user),
-      });
+    let usuarioExistente = false;
+    usuarioExistente = await getUserByEmail(formData.get('email'));
 
-      const data = await response.json();
-      console.log(data);
-    };
+    if (usuarioExistente) {
+      if (!params.id || (params.id && usuarioExistente._id !== params.id)) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'El email ya está registrado!',
+        });
+        return;
+      }
+    }
 
-    console.log("usuariooooooooo", user);
     if (params.id) {
-      await updateUser();
+      user._id = params.id;
+      await updateUser(user);
+      Swal.fire({
+        icon: 'success',
+        title: '¡Actualización exitosa!',
+        showConfirmButton: false,
+        timer: 1500
+      });
     } else {
-      await createUser();
+      const newUser = await createUser(user);
+      localStorage.setItem('id', newUser._id);
+      Swal.fire({
+        icon: 'success',
+        title: '¡Registro exitoso!',
+        showConfirmButton: false,
+        timer: 1500
+      });
     }
 
   };
 
   return (
     <form ref={form} class="max-w-sm mx-auto" onSubmit={handleSubmit}>
+      <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+        {title}
+      </h1>
       <div class="mb-5">
         <label
           for="fullname"
           class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
         >
-          Your Full Name
+          Nombre
         </label>
         <input
           type="text"
@@ -92,7 +107,7 @@ const UserForm = ( {user} ) => {
           for="address"
           class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
         >
-          Your Address
+          Dirección
         </label>
         <input
           type="text"
@@ -109,7 +124,7 @@ const UserForm = ( {user} ) => {
           for="email"
           class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
         >
-          Your email
+          Email
         </label>
         <input
           type="email"
@@ -126,7 +141,7 @@ const UserForm = ( {user} ) => {
           for="password"
           class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
         >
-          Your password
+          Contraseña
         </label>
         <input
           type="password"
@@ -141,7 +156,7 @@ const UserForm = ( {user} ) => {
           for="repeat-password"
           class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
         >
-          Repeat password
+          Repetir contraseña
         </label>
         <input
           type="password"
@@ -156,7 +171,7 @@ const UserForm = ( {user} ) => {
         type="submit"
         class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
       >
-        Save
+        {title}
       </button>
     </form>
   );

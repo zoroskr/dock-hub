@@ -1,11 +1,15 @@
 'use client';
 
 import React, { useEffect, useState } from 'react'
+import { useParams, useRouter } from 'next/navigation'
 import UserForm from '@/components/ui/UserForm'
-import { useParams } from 'next/navigation';
+import NotFound from '@/app/not-found';
+import { getUser } from '@/app/services/users.api.js';
 
 const page = () => {
   const params = useParams();
+  const decodedId = decodeURIComponent(params.id);
+  const [render, setRender] = useState(decodedId == localStorage.getItem('id') ? true : false);
   const [user, setUser] = useState({
     fullName: '',
     address: '',
@@ -14,34 +18,37 @@ const page = () => {
   });
 
   useEffect(() => {
-    obtenerUsuario().then(data => {
-      const response = data.find(user => user.password === params.id);
-      setUser({
-        fullName: response.fullName,
-        address: response.address,
-        email: response.email,
-        password: response.password
-      });
-    });
+    const inicializar = async () => {
+      if (decodedId == localStorage.getItem('id')) {
+        console.log("decodedId", decodedId);
+        getUser(decodedId).then(data => {
+          console.log("data", data);
+          if (data) {
+            setUser(data);
+            setRender(true);
+          } else {
+            setRender(false);
+          }
+        });
+      }
+    }
+    inicializar();
   }, []);
 
-  const obtenerUsuario = async () => {
-    try {
-      const response = await fetch(`http://localhost:3000/users.json`);
-      if (!response.ok) {
-        throw new Error('No se pudo obtener el usuario');
-      }
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
   return (
-    <UserForm
-      user={user}
-    ></UserForm>
+    <>
+      {
+        render ? (
+          <UserForm
+            user={user}
+            title="Actualizar datos"
+          >
+          </UserForm>
+        ) : (
+          <NotFound></NotFound>
+        )
+      }
+    </>
   )
 }
 

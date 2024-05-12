@@ -7,12 +7,13 @@ const page = () => {
     fullName: '',
     address: '',
     email: '',
-    password: ''
+    password: '',
   }
 
   return (
     <UserForm
       user={user}
+      title="Registrarte"
     ></UserForm>
   )
 }
