@@ -6,8 +6,8 @@ const Navbar = () => {
   return (
     <div className="bg-gray-900 border-gray-200 dark:bg-gray-900 shadow-md">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-          <a href="#" className="flex items-center space-x-3 rtl:space-x-reverse -mt-3">
-            <Image src='/logo_yatemate.png' width={140} height={100} className="rounded-md" alt="Flowbite Logo"  style={{ borderRadius: '50%'}}  />
+          <a href="#" className="flex items-center space-x-3 rtl:space-x-reverse">
+            <Image src='/logo_yatemate.png' width={130} height={70} className="rounded-md" alt="Flowbite Logo"  style={{ borderRadius: '50%'}}  />
             {/* Puedes ajustar marginTop según el tamaño de tu logo */}
           </a>
 
