@@ -1,10 +1,10 @@
 import React from 'react'
-import PublicationForm from '@/components/ui/PostsForm'
+import PostsForm from '@/components/ui/PostsForm'
 
 const page = () => {
   return (
     <div className='grid place-items-center'>
-      <PublicationForm></PublicationForm>
+      <PostsForm></PostsForm>
     </div>
   )
 }

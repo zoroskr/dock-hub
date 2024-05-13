@@ -55,9 +55,9 @@ const Avatar = () => {
             </div>
             <ul className="py-1">
               <li>
-                <a href="#" className="block px-4 py-2 hover:bg-gray-100">
+                <Link href="/posts" className="block px-4 py-2 hover:bg-gray-100">
                   Ver mis publicaciones
-                </a>
+                </Link>
               </li>
               <li>
                 <Link href={

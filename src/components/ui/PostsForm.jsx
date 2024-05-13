@@ -1,21 +1,32 @@
 'use client'
 import React, { useRef } from 'react';
 import { FileInput, Button, Label, TextInput, Textarea } from "flowbite-react";
+import Swal from 'sweetalert2';
 
-const PublicationForm = () => {
+const PostsForm = () => {
 
   const form = useRef(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     const formData = new FormData(form.current);
 
     const post = {
       name: formData.get('name'),
       description: formData.get('description'),
-      image: formData.get('image'), 
-      owner: "mundofelipote@gmail.com"
+      image: formData.get('image'),
+      owner: localStorage.getItem('id'),
+    }
+
+    if (!localStorage.getItem('id')) {
+      Swal.fire({
+        title: 'Error',
+        text: 'Debes estar logueado para cargar un bien',
+        icon: 'error',
+        confirmButtonText: 'Ok'
+      });
+      return;
     }
 
     const response = await fetch('http://localhost:3000/api/bienes', {
@@ -23,17 +34,22 @@ const PublicationForm = () => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(post), 
-  });
+      body: JSON.stringify(post),
+    });
 
-  if (response.ok) {
+    if (response.ok) {
       const data = await response.json();
+      Swal.fire({
+        title: 'Carga exitosa!',
+        text: 'Estado: Revisión',
+        icon: 'success',
+        confirmButtonText: 'Ok'
+      });
       console.log(data);
     } else {
       console.error('Error al cargar los datos:', response.statusText);
     }
     
-    console.log(data);
   }
 
   return (
@@ -66,4 +82,4 @@ const PublicationForm = () => {
 }
 
 
-export default PublicationForm
+export default PostsForm
