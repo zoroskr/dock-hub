@@ -6,7 +6,7 @@ import { createUser, updateUser, getUser, getUserByEmail } from '@/app/services/
 
 import Swal from 'sweetalert2'
 
-const UserForm = ({ user, title }) => {
+const UserForm = ({ user, title, userId = false }) => {
   const form = useRef(user);
   const params = useParams();
 
@@ -46,38 +46,34 @@ const UserForm = ({ user, title }) => {
 
     let usuarioExistente = false;
     usuarioExistente = await getUserByEmail(formData.get('email'));
+    console.log("userId", userId);
 
-    if (usuarioExistente) {
-      if (!params.id || (params.id && usuarioExistente._id !== params.id)) {
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'El email ya está registrado!',
-        });
-        return;
-      }
+    if (usuarioExistente && !userId) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'El email ya está registrado!',
+      });
+      return;
     }
 
-    if (params.id) {
-      user._id = params.id;
+    let message = '¡Registro exitoso!';
+
+    if (userId) {
+      user._id = userId;
       await updateUser(user);
-      Swal.fire({
-        icon: 'success',
-        title: '¡Actualización exitosa!',
-        showConfirmButton: false,
-        timer: 1500
-      });
+      message = '¡Actualización exitosa!';
     } else {
       const newUser = await createUser(user);
       localStorage.setItem('id', newUser._id);
-      Swal.fire({
-        icon: 'success',
-        title: '¡Registro exitoso!',
-        showConfirmButton: false,
-        timer: 1500
-      });
     }
 
+    Swal.fire({
+      icon: 'success',
+      title: message,
+      showConfirmButton: false,
+      timer: 1500
+    });
   };
 
   return (
@@ -115,7 +111,7 @@ const UserForm = ({ user, title }) => {
               type="text"
               id="address"
               name="address"
-              class="shadow-sm bg-gray-50 border border-gray-300 text-white text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+              class="shadow-sm bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
               placeholder="123 Main St, New York, NY 10030"
               required
             />
@@ -134,6 +130,7 @@ const UserForm = ({ user, title }) => {
               name="email"
               class="shadow-sm bg-gray-50 border border-gray-300 text-black text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
               placeholder="tuemail@example.com"
+              readOnly={userId}
               required
             />
           </div>
