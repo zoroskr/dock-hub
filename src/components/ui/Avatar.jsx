@@ -1,13 +1,29 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from 'next/image'
 import Link from "next/link";
 
 const Avatar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const refDropdown = useRef(null);
 
   const toggleDropdown = () => setIsOpen(!isOpen);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (refDropdown.current && !refDropdown.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [refDropdown]);
+
+    
 
   const handleLogout = () => {
     localStorage.removeItem('id');
@@ -21,7 +37,7 @@ const Avatar = () => {
         >
           <Image
             src="/user48.png"
-            alt="Dropdown"
+            alt=""
             width={30}
             height={30}
           />
@@ -29,6 +45,7 @@ const Avatar = () => {
       </span>
       {isOpen && (
         <div
+          ref={refDropdown}
           className="absolute right-0 z-10 bg-white border border-gray-200 rounded-xl shadow border-t-0"
           style={{ top: "calc(100% + 8px)" }}
         >
