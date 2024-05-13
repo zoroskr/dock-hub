@@ -12,7 +12,7 @@ const Publicacion = ({title}) => {
                 <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{title}</h5>
             </a>
             <div className="mb-4">
-                <Image src='/boraEj.jpeg' width={300} height={300} className='rounded-xl' />
+                <Image src='/boraEj.jpeg' alt='bora' width={300} height={300} className='rounded-xl' />
             </div>
             <p className="mb-3 font-normal text-black dark:text-gray-400">Vendo Bora 1.8T Impecable!!! Nada para hacerle, 4 cubiertas nuevas.</p>
             <a href="#" className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-gray-800 rounded-xl hover:scale-105">
