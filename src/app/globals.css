@@ -3,11 +3,12 @@
 @tailwind utilities;
 
 body{
-    background-color: rgb(190, 175, 85);
+  background: linear-gradient(90deg, rgba(255,226,176,1) 0%, rgba(217,174,99,1) 48%, rgba(255,226,176,1) 100%);
 }
   
 .bg-custom-yellow {
-  background-color: rgb(233, 214, 106);
+  background: #cba25b;
+
 }
 
 .bg-custom-gray{

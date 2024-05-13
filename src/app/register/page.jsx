@@ -13,7 +13,7 @@ const page = () => {
   return (
     <UserForm
       user={user}
-      title="Registrarte"
+      title="Registrarse"
     ></UserForm>
   )
 }

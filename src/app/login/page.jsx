@@ -98,9 +98,9 @@ export default function Home() {
                 No tienes una cuenta?{" "}
                 <Link
                   href="/register"
-                  class="font-medium text-primary-600 hover:underline dark:text-primary-500 "
+                  class="font-medium text-primary-600 hover:underline dark:text-primary-500"
                 >
-                  Registrarse
+                  Regístrate!
                 </Link>
               </p>
             </form>

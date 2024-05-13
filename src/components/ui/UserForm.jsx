@@ -87,7 +87,7 @@ const UserForm = ({ user, title }) => {
           <h1 class="text-xl font-bold leading-tight tracking-tight text-white md:text-2xl dark:text-white">
             {title}
           </h1>
-          <div class="mb-5">
+          <div class="mb-5 mt-3">
             <label
               for="fullname"
               class="block mb-2 text-sm font-medium text-white dark:text-white"
