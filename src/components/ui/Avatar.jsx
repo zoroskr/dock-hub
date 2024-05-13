@@ -17,12 +17,10 @@ const Avatar = () => {
     <div style={{ position: "relative" }}>
       <span className="ml-2 cursor-pointer" onClick={toggleDropdown}>
         <div
-          className="inline-block rounded-full bg-rgb-190-175-85 p-1 hover:scale-110"
-          style={{ transition: "transform 0.1s ease-in-out" }}
+          className="inline-block rounded-full bg-rgb-190-175-85 p-1 duration-300 hover:scale-110"
         >
           <Image
-            src="/userIcon.png"
-            className="text-gray-800 dark:text-white rounded-full"
+            src="/user48.png"
             alt="Dropdown"
             width={30}
             height={30}
@@ -31,7 +29,7 @@ const Avatar = () => {
       </span>
       {isOpen && (
         <div
-          className="absolute right-0 z-10 bg-white border border-gray-200 rounded-lg shadow border-t-0"
+          className="absolute right-0 z-10 bg-white border border-gray-200 rounded-xl shadow border-t-0"
           style={{ top: "calc(100% + 8px)" }}
         >
           <div>
@@ -51,9 +49,11 @@ const Avatar = () => {
                   Editar Perfil
                 </Link>
               </li>
-              <Link href="/login" className="block px-4 py-2 hover:bg-gray-100" onClick={handleLogout}>
-                Cerrar sesión
-              </Link>
+              <li>
+                <Link href="/login" className="block px-4 py-2 hover:bg-gray-100" onClick={handleLogout}>
+                  Cerrar sesión
+                </Link>
+              </li>
             </ul>
           </div>
         </div>

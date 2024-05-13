@@ -4,5 +4,12 @@
 
 body{
     background-color: rgb(190, 175, 85);
-
 }
+  
+.bg-custom-yellow {
+  background-color: rgb(233, 214, 106);
+}
+
+.bg-custom-gray{
+  background-color: rgb(225, 222, 222);
+} 
