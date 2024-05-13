@@ -90,7 +90,7 @@ export default function Home() {
               </div> */}
               <button
                 type="submit"
-                class="w-full text-gray-300 bg-custom-yellow hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
+                class="w-full text-black bg-custom-yellow hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
               >
                 Iniciar sesión
               </button>
@@ -100,7 +100,7 @@ export default function Home() {
                   href="/register"
                   class="font-medium text-primary-600 hover:underline dark:text-primary-500"
                 >
-                  Registrarse
+                  Regístrate!
                 </Link>
               </p>
             </form>
