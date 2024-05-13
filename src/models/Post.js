@@ -7,4 +7,4 @@ const schema = new mongoose.Schema({
   owner: String,
 });
 
-export default mongoose.models.Publication || mongoose.model('Post', schema);
+export default mongoose.models.Post || mongoose.model('Post', schema);
