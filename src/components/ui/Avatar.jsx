@@ -50,7 +50,7 @@ const Avatar = () => {
           style={{ top: "calc(100% + 8px)" }}
         >
           <div>
-            <div className="p-2">
+            <div className="p-3">
               <div>Mi cuenta</div>
             </div>
             <ul className="py-1">

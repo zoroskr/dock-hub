@@ -112,7 +112,7 @@ const UserForm = ({ user, title, userId = false }) => {
             >
               DNI
             </label>
-            <input type='number' id='dni' name='dni' className='shadow-sm bg-gray-50 border border-gray-300 text-black text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light' placeholder='12345678' required />
+            <input type='number' id='dni' name='dni' className='shadow-sm bg-gray-400 text-black text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light' placeholder='12345678' required />
           </div>
 
           <div className="mb-5">
@@ -184,13 +184,13 @@ const UserForm = ({ user, title, userId = false }) => {
           <div className="mb-5">
             <div className="flex items-center gap-2">
               <input type="checkbox" id="isOwner" name="isOwner" disabled={userId} className="text-blue-500 rounded-xl focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:text-blue-500 dark:shadow-sm-light" />
-              <label for="isOwner" className="text-white dark:text-white">Soy cliente en YATEMATE</label>
+              <label for="isOwner" className="text-white dark:text-white font-semibold">Soy cliente en Yate Mate</label>
             </div>
           </div>
 
           <button
             type="submit"
-            className="text-black  bg-custom-yellow duration-300 hover:scale-110 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            className="text-black  bg-custom-yellow duration-300 hover:scale-105 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
           >
             {title}
           </button>

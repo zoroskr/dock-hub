@@ -14,6 +14,10 @@ body{
   background-color: rgb(225, 222, 222);
 } 
 
+.bg-custom-blue{
+  background: linear-gradient(90deg, rgba(176,203,255,1) 0%, rgba(99,125,217,1) 48%, rgba(176,194,255,1) 100%);
+}
+
 .text-shadow {
   text-shadow: 2px 1px 3px rgba(0, 0, 0, 0.3);
 }
