@@ -24,13 +24,15 @@ const page = () => {
 
   return (
     <>
-      <h1 className='text-3xl font-bold text-center'>Posts</h1>
-      <a href='/publicar' className='text-center text-white bg-blue-500 p-2 rounded-lg mt-4'>Crear Post</a>
-      <div>
-        {
-          posts.length > 0 ? posts.map(post => <Post key={post._id} post={post} />) : <span className='text-3xl font-bold' >Usted no tiene ninguna publicación</span>
-        }
-      </div>
+        <div className='flex flex-col items-center gap-14 min-h-screen w-full'>
+          <h1 className='text-3xl font-bold leading-none tracking-tight text-gray-950 md:text-5xl lg:text-6xl dark:text-white p-6'>Mis publicaciones</h1>
+          <div className="flex flex-wrap justify-center gap-4">
+            {
+              posts.length > 0 ? posts.map(post => <Post key={post._id} post={post} />) : <span className='text-3xl mt-auto mb-auto text-left p-3' >Usted no tiene ninguna publicación</span>
+            }
+          </div>
+          <a href='/publicar' className='text-gray-100 bg-gray-900 rounded-xl text-xl p-2 duration-500 hover:scale-105'>Crear Publicación</a>
+        </div>
     </>
   )
 }

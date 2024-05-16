@@ -53,31 +53,41 @@ const PostsForm = () => {
   }
 
   return (
-    <form ref={form} className="flex max-w-md flex-col gap-4 bg-slate-50 rounded-xl p-7 px-14" onSubmit={handleSubmit} >
-      <h1 className="text-2xl font-bold">Cargar un bien</h1>
-      <div>
-        <div className="mb-2 block">
-          <Label htmlFor="name" value="Nombre" />
-        </div>
-        <TextInput name="name" type="text" placeholder="Rolls-Royce Phantom" required shadow />
-      </div>
+    <div className="flex justify-center items-center min-h-screen max-w-lg w-full">
+      <form ref={form} className="flex w-full flex-col gap-4 rounded-xl bg-gray-900 border-gray-200 dark:bg-gray-900 shadow-md p-7 items-center" onSubmit={handleSubmit}>
+        <h1 className="text-2xl font-bold text-white">Cargar un bien</h1>
+        <div className='max-w-md w-full'>
+          <div className="mb-2 block">
+            <Label htmlFor="name" value="Nombre"/>
+          </div>
+          <div className="rounded-xl overflow-hidden">
+            <TextInput
+              name="name"
+              type="text"
+              placeholder="Nombre del bien que vas a publicar"
+              required
+              shadow
+            />
+          </div>
 
-      <div className="max-w-md">
-        <div className="mb-2 block">
-          <Label htmlFor="description" value="Descripción" />
         </div>
-        <Textarea name="description" placeholder="Puro lujo..." required rows={4} />
-      </div>
-
-      <div className="max-w-md">
-        <div className="mb-2 block">
-          <Label htmlFor="image" value="Link a imagen" />
+        <div className="max-w-md w-full">
+          <div className="mb-2 block">
+            <Label htmlFor="description" value="Descripción" />
+          </div>
+          <Textarea name="description" placeholder="Descripción de las características!" required rows={4} className='rounded-xl'  />
         </div>
-        <Textarea name="image" placeholder="Enlace a imagen" required rows={4} />
-      </div>
 
-      <Button type="submit" className='bg-black'>Cargar un bien</Button>
-    </form>
+        <div className="max-w-md w-full">
+          <div className="mb-2 block">
+            <Label htmlFor="image" value="Link a imagen" />
+          </div>
+          <Textarea name="image" placeholder="Enlace a imagen" required rows={4} className='rounded-xl'/>
+        </div>
+
+        <Button type="submit" className="bg-custom-yellow text-black rounded-xl border-gray-900 duration-500 hover:scale-105">Cargar un bien</Button>
+      </form>
+    </div>
   );
 }
 
