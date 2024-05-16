@@ -2,6 +2,7 @@ import React from 'react'
 import Avatar from './Avatar'
 import Image from 'next/image'
 import Link from 'next/link'
+import Link from 'next/link'
 
 const Navbar = () => {
   return (
