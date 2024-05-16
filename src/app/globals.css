@@ -3,6 +3,17 @@
 @tailwind utilities;
 
 body{
-    background-color: rgb(190, 175, 85);
+  background: linear-gradient(90deg, rgba(255,226,176,1) 0%, rgba(217,174,99,1) 48%, rgba(255,226,176,1) 100%);
+}
+  
+.bg-custom-yellow {
+  background: #e4bf7f;
+}
 
+.bg-custom-gray{
+  background-color: rgb(225, 222, 222);
+} 
+
+.text-shadow {
+  text-shadow: 2px 1px 3px rgba(0, 0, 0, 0.3);
 }

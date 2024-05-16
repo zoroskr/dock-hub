@@ -5,15 +5,17 @@ const page = () => {
 
   const user = {
     fullName: '',
+    dni: '',
     address: '',
     email: '',
     password: '',
+    isOwner: false,
   }
 
   return (
     <UserForm
       user={user}
-      title="Registrarte"
+      title="Registrarse"
     ></UserForm>
   )
 }

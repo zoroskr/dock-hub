@@ -8,20 +8,21 @@ import { getUser } from '@/app/services/users.api.js';
 
 const page = () => {
   const params = useParams();
-  const decodedId = decodeURIComponent(params.id);
-  const [render, setRender] = useState(decodedId == localStorage.getItem('id') ? true : false);
+  const [render, setRender] = useState(true);
   const [user, setUser] = useState({
     fullName: '',
+    dni: '',
     address: '',
     email: '',
-    password: ''
+    password: '',
+    isOwner: false,
   });
 
   useEffect(() => {
     const inicializar = async () => {
-      if (decodedId == localStorage.getItem('id')) {
-        console.log("decodedId", decodedId);
-        getUser(decodedId).then(data => {
+      if (params.id == localStorage.getItem('id')) {
+        console.log("params.id", params.id);
+        getUser(params.id).then(data => {
           console.log("data", data);
           if (data) {
             setUser(data);
@@ -42,6 +43,7 @@ const page = () => {
           <UserForm
             user={user}
             title="Actualizar datos"
+            userId={params.id}
           >
           </UserForm>
         ) : (
