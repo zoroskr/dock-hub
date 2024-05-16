@@ -1,18 +1,21 @@
 import React from 'react'
-import UserForm from '@/components/UserForm'
+import UserForm from '@/components/ui/UserForm'
 
 const page = () => {
 
   const user = {
-    fullName: 'John Doe',
-    address: '123 Main St',
-    email: 'tuemail@example.com',
-    password: ''
+    fullName: '',
+    dni: '',
+    address: '',
+    email: '',
+    password: '',
+    isOwner: false,
   }
 
   return (
     <UserForm
       user={user}
+      title="Registrarse"
     ></UserForm>
   )
 }

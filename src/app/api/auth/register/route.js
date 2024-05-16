@@ -17,7 +17,7 @@ export async function POST(request) {
 
 export async function PUT(request) {
   await connectDB();
-  const { email, ...data } = await request.json();
-  const user = await User.findOneAndUpdate({ email }, data, { new: true });
+  const { _id, ...data } = await request.json();
+   const user = await User.findOneAndUpdate({ _id }, data, { new: true });
   return NextResponse.json(user);
 }
