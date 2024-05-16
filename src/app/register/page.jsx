@@ -5,9 +5,11 @@ const page = () => {
 
   const user = {
     fullName: '',
+    dni: '',
     address: '',
     email: '',
     password: '',
+    isOwner: false,
   }
 
   return (

@@ -11,9 +11,11 @@ const page = () => {
   const [render, setRender] = useState(true);
   const [user, setUser] = useState({
     fullName: '',
+    dni: '',
     address: '',
     email: '',
-    password: ''
+    password: '',
+    isOwner: false,
   });
 
   useEffect(() => {
