@@ -27,14 +27,21 @@ const UserForm = ({ user, title, userId = false }) => {
     e.preventDefault();
 
     const formData = new FormData(form.current);
+    let t;
+    if (formData.get('isOwner')){
+      t = "Titular"
+    } else {
+      t = "Regular"
+    }
 
     const user = {
       fullName: formData.get('fullName'),
-      dni: formData.get('dni'),
+      DNI: formData.get('dni'),
       address: formData.get('address'),
       email: formData.get('email'),
       password: formData.get('password'),
-      isOwner: formData.get('isOwner'),
+      type: t,
+      verified: false
     }
     console.log("user", user);
 
