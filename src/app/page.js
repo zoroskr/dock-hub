@@ -2,26 +2,16 @@
 
 import React, { useEffect, useState } from 'react';
 import Post from '@/components/ui/Post'
-import { Link } from 'next/link'
+import { getPosts } from './services/posts.api';
 
 export default function Home() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const obtenerPosts = async () => {
-    try {
-      const res = await fetch('http://localhost:3000/api/bienes')
-      const data = await res.json()
-      return data
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
   useEffect(() => {
-    obtenerPosts().then(data => {
-      setPosts(data)
-      setLoading(false)
+    getPosts().then((data) => {
+      setPosts(data);
+      setLoading(false);
     });
   }, []);
 
