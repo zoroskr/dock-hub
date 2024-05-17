@@ -1,11 +1,30 @@
 'use client'
-import React, { useRef } from 'react';
-import { FileInput, Button, Label, TextInput, Textarea } from "flowbite-react";
+import React, { useEffect, useRef } from 'react';
+import { Button, Label, Select, TextInput, Textarea } from "flowbite-react";
+import { createPost } from '@/app/services/posts.api';
+
 import Swal from 'sweetalert2';
 
-const PostsForm = () => {
 
-  const form = useRef(null);
+const PostsForm = ({ post = {
+  name: '',
+  description: '',
+  image: '',
+  type: '',
+  owner: ''
+}, title }) => {
+  console.log("postsform", post);
+  const form = useRef(post);
+
+  useEffect(() => {
+    if (form.current) {
+      form.current.elements.name.value = post.name || '';
+      form.current.elements.description.value = post.description || '';
+      form.current.elements.image.value = post.image || '';
+      form.current.elements.tiposBienes.value = post.type || '';
+    }
+  }, [post]);
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -16,6 +35,7 @@ const PostsForm = () => {
       name: formData.get('name'),
       description: formData.get('description'),
       image: formData.get('image'),
+      type: formData.get('tiposBienes'),
       owner: localStorage.getItem('id'),
     }
 
@@ -29,36 +49,16 @@ const PostsForm = () => {
       return;
     }
 
-    const response = await fetch('http://localhost:3000/api/bienes', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(post),
-    });
-
-    if (response.ok) {
-      const data = await response.json();
-      Swal.fire({
-        title: 'Carga exitosa!',
-        text: 'Estado: Revisión',
-        icon: 'success',
-        confirmButtonText: 'Ok'
-      });
-      console.log(data);
-    } else {
-      console.error('Error al cargar los datos:', response.statusText);
-    }
-    
+    await createPost(post);
   }
 
   return (
     <div className="flex justify-center items-center min-h-screen max-w-lg w-full">
       <form ref={form} className="flex w-full flex-col gap-4 rounded-xl bg-gray-900 border-gray-200 dark:bg-gray-900 shadow-md p-7 items-center" onSubmit={handleSubmit}>
-        <h1 className="text-2xl font-bold text-white">Cargar un bien</h1>
+        <h1 className="text-2xl font-bold text-white">{ title }</h1>
         <div className='max-w-md w-full'>
           <div className="mb-2 block">
-            <Label htmlFor="name" value="Nombre"/>
+            <Label htmlFor="name" value="Nombre" />
           </div>
           <div className="rounded-xl overflow-hidden">
             <TextInput
@@ -75,17 +75,29 @@ const PostsForm = () => {
           <div className="mb-2 block">
             <Label htmlFor="description" value="Descripción" />
           </div>
-          <Textarea name="description" placeholder="Descripción de las características!" required rows={4} className='rounded-xl'  />
+          <Textarea name="description" placeholder="Descripción de las características!" required rows={4} className='rounded-xl' />
         </div>
 
         <div className="max-w-md w-full">
           <div className="mb-2 block">
             <Label htmlFor="image" value="Link a imagen" />
           </div>
-          <Textarea name="image" placeholder="Enlace a imagen" required rows={4} className='rounded-xl'/>
+          <Textarea name="image" placeholder="Enlace a imagen" required rows={4} className='rounded-xl' />
         </div>
 
-        <Button type="submit" className="bg-custom-yellow text-black rounded-xl border-gray-900 duration-500 hover:scale-105">Cargar un bien</Button>
+        <div className="max-w-md">
+          <div className="mb-2 block">
+            <Label htmlFor="tiposBienes" value="Selecciona el tipo de bien" className='text-white' />
+          </div>
+          <Select id="tiposBienes" required>
+            <option>Vehículos</option>
+            <option>Aeronaves</option>
+            <option>Inmuebles</option>
+            <option>Embarcaciones</option>
+          </Select>
+        </div>
+
+        <Button type="submit" className="bg-custom-yellow text-black rounded-xl border-gray-900 duration-500 hover:scale-105">{title}</Button>
       </form>
     </div>
   );

@@ -13,6 +13,51 @@ export const getPosts = async () => {
   }
 }
 
+export const getPost = async (id) => {
+  try {
+    const response = await fetch(`http://localhost:3000/api/bienes/${id}`);
+    if (!response.ok) {
+      throw new Error('No se pudo obtener el post');
+    }
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export const createPost = async (post) => {
+  try {
+    const response = await fetch('http://localhost:3000/api/bienes', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(post)
+    });
+    if (!response.ok) {
+      throw new Error('No se pudo crear el post');
+    }
+    const data = await response.json();
+    Swal.fire({
+      icon: 'success',
+      title: 'Publicación Creada',
+      showConfirmButton: false,
+      timer: 1500
+    })
+    return data;
+  } catch (error) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Error al crear la publicación',
+      showConfirmButton: false,
+      timer: 1500
+    })
+    console.error(error);
+  }
+}
+
 export const updatePost = async (id, post) => {
   try {
     const response = await fetch(`http://localhost:3000/api/bienes/${id}`, {
