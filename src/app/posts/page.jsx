@@ -35,13 +35,13 @@ const page = () => {
               : posts.length > 0 
                 ? posts.map(post => (
                   <div className="p-2" key={post._id}>
-                    <Post post={post} showProposeButton={true} />
+                    <Post post={post} showProposeButton={false} />
                   </div>
                 ))
                 : <span className='text-2xl mt-auto mb-auto ml-auto mr-auto text-left p-3 col-span-3 font-medium'>No tienes publicaciones</span>
             }
           </div>
-          <a href='/publicar' className='text-gray-100 bg-gray-900 rounded-xl text-xl font-medium p-2 duration-300 hover:scale-105'>Crear Publicación</a>
+          <a href='/publicar' className='text-gray-100 bg-gray-900 mb-auto rounded-xl text-xl font-medium p-2 duration-300 hover:scale-105'>Crear Publicación</a>
         </div>
     </>
   )
