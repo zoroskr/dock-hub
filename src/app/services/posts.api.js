@@ -1,5 +1,17 @@
 import Swal from 'sweetalert2';
 
+export const getPosts = async () => {
+  try {
+    const response = await fetch('http://localhost:3000/api/bienes');
+    if (!response.ok) {
+      throw new Error('No se pudo obtener los posts');
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 export const updatePost = async (id, post) => {
   try {
