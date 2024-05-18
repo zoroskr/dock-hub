@@ -93,10 +93,22 @@ const Post = ({ post , showProposeButton}) => {
       <a href="#">
         <img className="rounded-t-lg" src="#" alt="" />
       </a>
-      <div className="p-5 flex flex-wrap justify-between">
+      <div className="p-5 flex flex-col justify-between">
         <a href="#">
-          <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white break-words overflow-y-auto">{post.name}</h5>
+            <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white break-words overflow-y-auto">{post.name}</h5>
         </a>
+        <div className='flex mb-2'>
+          <div>Estado: </div>
+          {post.aproved === 1 && (
+            <div className='text-green-700 font-semibold ml-1 mb-1'>Aprobado</div>
+          )}
+          {post.aproved === 2 && (
+            <div className='text-yellow-400 font-semibold mb-1'>Pendiente</div>
+          )}
+          {post.aproved === 3 && (
+            <div className='text-red-500 font-semibold mb-1'>Rechazado</div>
+          )}
+        </div>
         <div className="mb-4">
           <Image src={post.image} alt='bora' width={300} height={300} className='rounded-xl' />
         </div>

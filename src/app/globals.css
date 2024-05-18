@@ -21,7 +21,3 @@ body{
 .text-shadow {
   text-shadow: 2px 1px 3px rgba(0, 0, 0, 0.3);
 }
-
-.custom-select {
-  border-radius: 0.75rem; /* Equivalente a rounded-xl */
-}

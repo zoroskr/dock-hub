@@ -87,7 +87,7 @@ const UserForm = ({ user, title, userId = false }) => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen">
+    <div className="flex justify-center items-center h-screen mt-16 mb-16">
       <div className="max-w-lg w-full bg-gray-900 rounded-xl p-6">
         <form ref={form} className="max-w-sm mx-auto" onSubmit={handleSubmit}>
           <h1 className="text-xl font-bold leading-tight tracking-tight text-white md:text-2xl dark:text-white">
@@ -181,6 +181,22 @@ const UserForm = ({ user, title, userId = false }) => {
               type="password"
               id="repeat-password"
               name="repeat-password"
+              className="shadow-sm bg-gray-50 border border-gray-300 text-black text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+              required
+            />
+          </div>
+
+          <div className="mb-5">
+            <label
+              htmlFor="birthdate"
+              className="block mb-2 text-sm font-medium text-white dark:text-white"
+            >
+              Fecha de nacimiento
+            </label>
+            <input
+              type="date"
+              id="birthdate"
+              name="birthdate"
               className="shadow-sm bg-gray-50 border border-gray-300 text-black text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
               required
             />
