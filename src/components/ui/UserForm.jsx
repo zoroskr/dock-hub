@@ -13,7 +13,7 @@ const UserForm = ({ user, title, userId = false }) => {
   useEffect(() => {
     if (form.current) {
       form.current.elements.fullName.value = user.fullName || '';
-      form.current.elements.dni.value = user.dni || '';
+      form.current.elements.DNI.value = user.DNI || '';
       form.current.elements.address.value = user.address || '';
       form.current.elements.email.value = user.email || '';
       form.current.elements.password.value = user.password || '';
@@ -36,7 +36,7 @@ const UserForm = ({ user, title, userId = false }) => {
 
     const user = {
       fullName: formData.get('fullName'),
-      DNI: formData.get('dni'),
+      DNI: formData.get('DNI'),
       address: formData.get('address'),
       email: formData.get('email'),
       password: formData.get('password'),
@@ -53,8 +53,6 @@ const UserForm = ({ user, title, userId = false }) => {
       });
       return;
     }
-
-    console.log("formData.get('email')", formData.get('email'));
 
     let usuarioExistente = false;
     usuarioExistente = await getUserByEmail(formData.get('email'));
@@ -114,12 +112,12 @@ const UserForm = ({ user, title, userId = false }) => {
 
           <div className="mb-5">
             <label
-              for="dni"
+              for="DNI"
               className="block mb-2 text-sm font-medium text-white dark:text-white"
             >
               DNI
             </label>
-            <input type='number' id='dni' name='dni' className='shadow-sm bg-gray-400 text-black text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light' placeholder='12345678' required />
+            <input type='number' id='DNI' name='DNI' className='shadow-sm text-black text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light' placeholder='12345678' required />
           </div>
 
           <div className="mb-5">

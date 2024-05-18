@@ -53,6 +53,7 @@ const Avatar = () => {
             <div className="p-3">
               <div>Mi cuenta</div>
             </div>
+            { localStorage.getItem('id') && (
             <ul className="py-1">
               <li>
                 <Link href="/posts" className="block px-4 py-2 hover:bg-gray-100">
@@ -60,9 +61,7 @@ const Avatar = () => {
                 </Link>
               </li>
               <li>
-                <Link href={
-                  localStorage.getItem('id') ? `/editarperfil/${localStorage.getItem('id')}` : "/login"
-                } className="block px-4 py-2 hover:bg-gray-100">
+                <Link href={`/editarperfil/${localStorage.getItem('id')}`} className="block px-4 py-2 hover:bg-gray-100">
                   Editar Perfil
                 </Link>
               </li>
@@ -71,7 +70,7 @@ const Avatar = () => {
                   Cerrar sesión
                 </Link>
               </li>
-            </ul>
+            </ul>)}
           </div>
         </div>
       )}

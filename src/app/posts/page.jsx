@@ -1,8 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react'
 import Post from '@/components/ui/Post'
-import { Link } from 'next/link'
-import NotFound from '../not-found';
 
 const page = () => {
   const [posts, setPosts] = useState([]);

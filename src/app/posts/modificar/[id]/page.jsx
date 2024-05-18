@@ -10,11 +10,14 @@ const page = () => {
   
   useEffect(() => {
     const id = params.id;
-    getPost(id).then(data => {
-      setPost(data);
-      console.log("posten useeffect", post);
-      console.log(data);
-    });
+    const inicializar = async () => {
+      getPost(id).then(data => {
+        if (data) {
+          setPost(data);
+        }
+      });
+    }
+    inicializar();
   }
   , []);
 
