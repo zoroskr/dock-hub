@@ -7,7 +7,8 @@ const schema = new mongoose.Schema({
   email: String,
   password: String,
   type: String,
-  verified: Boolean
+  verified: Boolean,
+  confirmationToken: String
 });
 
 export default mongoose.models.User || mongoose.model('User', schema);
