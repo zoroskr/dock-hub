@@ -36,7 +36,11 @@ export default function Home() {
       setPosts(posts);
       return;
     }
+    
     const postsFiltered = posts.filter(p => p.name.includes(defaultSearch) || p.description.includes(defaultSearch));
+    if (postsFiltered.length === 0) {
+      setMessage('No se encuentran resultados relacionados');
+    }
 
     setPosts(posts.filter(p => p.name.includes(defaultSearch) || p.description.includes(defaultSearch)));
     console.log('Form submitted', form.current);
@@ -58,7 +62,7 @@ export default function Home() {
             className="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-xl bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 break-words overflow-y-auto" 
             placeholder="Buscar Embarcaciones, Amarras..."
           />
-          <button type="submit" className="text-white absolute right-2.5 bottom-2.5 rounded-xl bg-gray-800 duration-300 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</button>
+          <button type="submit" className="text-white absolute right-2.5 bottom-2.5 rounded-xl bg-gray-800 duration-300 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Buscar</button>
         </div>
     </form>
 
@@ -78,7 +82,7 @@ export default function Home() {
                 <Post post={post} showProposeButton={true} />
               </div>
             ))
-            : <span className='text-3xl mt-auto mb-auto ml-auto mr-auto text-left p-3 col-span-3 font-medium'>No hay publicaciones disponibles</span>
+            : <span className='text-3xl mt-auto mb-auto ml-auto mr-auto text-left p-3 col-span-3 font-medium'>{message}</span>
         }
         </div>
     </div>
