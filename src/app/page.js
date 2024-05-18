@@ -1,26 +1,52 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Post from '@/components/ui/Post'
 import { getPosts } from './services/posts.api';
 
 export default function Home() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [message, setMessage] = useState('No hay publicaciones disponibles');
+
+  const form = useRef(null);
 
   useEffect(() => {
-    getPosts().then((data) => {
-      setPosts(data);
+    const fetchPosts = async () => {
+      const posts = await getPosts();
+      setPosts(posts);
       setLoading(false);
-    });
+      console.log('useeffct:', posts);
+    }
+    fetchPosts();
   }, []);
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    let defaultSearch;
+
+    if (form.current) {
+      defaultSearch = form.current.elements['default-search'].value;
+      console.log('Form submitted', defaultSearch);
+    }
+
+    if (defaultSearch == '') {
+      const posts = await getPosts();
+      setPosts(posts);
+      return;
+    }
+    const postsFiltered = posts.filter(p => p.name.includes(defaultSearch) || p.description.includes(defaultSearch));
+
+    setPosts(posts.filter(p => p.name.includes(defaultSearch) || p.description.includes(defaultSearch)));
+    console.log('Form submitted', form.current);
+  }
   // Filtrar los posts aprobados
   const approvedPosts = posts.filter(post => post.aproved === 1);
 
   return (
     <>  
-    <form className="w-1/2 ml-auto mr-auto p-3">   
+      <form className="w-1/2 ml-auto mr-auto p-3" onSubmit={handleSubmit} ref={form}>   
         <label htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
         <div className="relative rounded-xl bg-custom-gray">
           <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -28,7 +54,10 @@ export default function Home() {
               <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
             </svg>
           </div>
-          <input type="search" id="default-search" className="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-xl bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 break-words overflow-y-auto" required />
+          <input type="search" id="default-search" 
+            className="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-xl bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 break-words overflow-y-auto" 
+            placeholder="Buscar Embarcaciones, Amarras..."
+          />
           <button type="submit" className="text-white absolute right-2.5 bottom-2.5 rounded-xl bg-gray-800 duration-300 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</button>
         </div>
     </form>
