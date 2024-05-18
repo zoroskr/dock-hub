@@ -84,12 +84,12 @@ const PostsForm = ({ post = {
           </div>
           <Textarea name="image" placeholder="Enlace a imagen" required rows={4} className='rounded-xl' />
         </div>
-
+        
         <div className="max-w-md">
           <div className="mb-2 block">
             <Label htmlFor="tiposBienes" value="Selecciona el tipo de bien" className='text-white' />
           </div>
-          <Select id="tiposBienes" required>
+          <Select id="tiposBienes" className='custom-select' required>
             <option>Vehículos</option>
             <option>Aeronaves</option>
             <option>Inmuebles</option>

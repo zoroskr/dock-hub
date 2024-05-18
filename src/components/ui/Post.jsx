@@ -108,15 +108,15 @@ const Post = ({ post , showProposeButton}) => {
             <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
           </svg>
           </button>) : (
-            <div className="flex flex-col gap-2">
-              <Button onClick={() => eliminarPublicacion(post._id)} className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-700 rounded-xl duration-300 hover:bg-red-600">
-                Eliminar Publicación
+            <div className="flex gap-2">
+              <Button onClick={() => eliminarPublicacion(post._id)} className="inline-flex items-center px-2 py-2 text-md font-medium text-center text-white bg-red-700 rounded-3xl duration-300 hover:bg-red-600">
+                Eliminar
               </Button>
-              <Button onClick={() => router.push(`/posts/modificar/${post._id}`)} className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-800 rounded-xl duration-300 hover:bg-blue-700">
-                Editar Publicación
+              <Button onClick={() => router.push(`/posts/modificar/${post._id}`)} className="inline-flex items-center px-2 py-2 text-md font-medium text-center text-white bg-blue-800 rounded-3xl duration-300 hover:bg-blue-700">
+                Editar
               </Button>
-              <Button onClick={() => pausarPublicacion(post._id, post)} className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-yellow-800 rounded-xl duration-300 hover:bg-yellow-700">
-                Pausar Publicación
+              <Button onClick={() => pausarPublicacion(post._id, post)} className="inline-flex items-center px-2 py-2 text-md font-medium text-center text-white bg-yellow-800 rounded-3xl duration-300 hover:bg-yellow-700">
+                Pausar
               </Button>
             </div>
           )
