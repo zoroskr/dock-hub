@@ -6,7 +6,7 @@ const schema = new mongoose.Schema({
   image: String,
   owner: String,
   type: String,
-  aproved: Boolean
+  state: String
 });
 
 export default mongoose.models.Post || mongoose.model('Post', schema);
