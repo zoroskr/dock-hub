@@ -21,3 +21,18 @@ body{
 .text-shadow {
   text-shadow: 2px 1px 3px rgba(0, 0, 0, 0.3);
 }
+
+.fixed-height {
+  line-height: 1.5; /* Ajusta la altura de línea según sea necesario */
+  height: 4.5rem; /* 3 líneas de texto */
+  overflow: hidden;
+  position: relative; /* Para el botón 'Ver más' */
+}
+
+.button-container {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  text-align: center;
+}

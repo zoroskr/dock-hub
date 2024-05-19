@@ -2,7 +2,7 @@
 import React, { useEffect, useRef } from 'react';
 import { Button, Label, Select, TextInput, Textarea } from "flowbite-react";
 import { createPost, updatePost } from '@/app/services/posts.api';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import Swal from 'sweetalert2';
 
 const PostsForm = ({ post = {
@@ -14,6 +14,7 @@ const PostsForm = ({ post = {
 }, title }) => {
   const form = useRef(post);
   const params = useParams();
+  const router = useRouter();
 
   useEffect(() => {
     if (form.current) {
@@ -24,13 +25,12 @@ const PostsForm = ({ post = {
     }
   }, [post]);
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const formData = new FormData(form.current);
 
-    const post = {
+    const newPost = {
       name: formData.get('name'),
       description: formData.get('description'),
       image: formData.get('image'),
@@ -38,7 +38,7 @@ const PostsForm = ({ post = {
       owner: localStorage.getItem('id'),
       state: 'Pendiente'
     }
-    console.log('post', formData);
+
     if (!localStorage.getItem('id')) {
       Swal.fire({
         title: 'Error',
@@ -49,12 +49,38 @@ const PostsForm = ({ post = {
       return;
     }
 
-    if (params.id) {
-      updatePost(params.id, post);
-    } else {
-      createPost(post);
+    try {
+      if (params.id) {
+        await updatePost(params.id, newPost);
+        Swal.fire({
+          title: 'Éxito',
+          text: 'Publicación actualizada correctamente',
+          icon: 'success',
+          confirmButtonText: 'Ok'
+        }).then(() => {
+          router.push('/').then(() => {
+            router.refresh(); // Forzar recarga de la página
+          });
+        });
+      } else {
+        await createPost(newPost);
+        Swal.fire({
+          title: 'Éxito',
+          text: 'Publicación creada correctamente',
+          icon: 'success',
+          confirmButtonText: 'Ok'
+        }).then(() => {
+          router.push('/')
+        });
+      }
+    } catch (error) {
+      Swal.fire({
+        title: 'Error',
+        text: 'Hubo un error al crear la publicación. Por favor, inténtalo de nuevo.',
+        icon: 'error',
+        confirmButtonText: 'Ok'
+      });
     }
-    
   }
 
   return (
