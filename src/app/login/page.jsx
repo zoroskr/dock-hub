@@ -24,7 +24,7 @@ export default function Home() {
     if (user && user.email === email && user.password === password) {
       // console.log("Inicio de sesión exitoso:", data);
       localStorage.setItem('id', user._id);
-      router.push('/'); // Redirige a la página de inicio
+      window.location.href = '/';
     } else {
       Swal.fire({
         icon: 'error',
