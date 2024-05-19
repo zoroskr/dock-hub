@@ -23,12 +23,6 @@ const page = () => {
     obtenerPosts();
   }, []);
 
-  useEffect(() => {
-    if (!loading && posts.length === 0) {
-      const timer = setTimeout(() => setShowButton(true), 3000); // Mostrar botón después de 3 segundos
-      return () => clearTimeout(timer); // Limpiar el temporizador si el componente se desmonta
-    }
-  }, [loading, posts.length]);
 
   return (
     <>
@@ -45,13 +39,8 @@ const page = () => {
               ))
               : <span className='text-2xl mt-auto mb-auto ml-auto mr-auto text-left p-3 col-span-3 font-medium'>No tienes publicaciones</span>
           }
-          {!loading && posts.length === 0 && showButton && (
-            <a href='/publicar' className='text-gray-100 bg-gray-900 mb-auto mt-auto rounded-xl text-lg font-medium p-2 duration-300 hover:scale-105'>Crear Publicación</a>
-          )}
         </div>
-        {posts.length > 0 && (
-          <a href='/publicar' className='text-gray-100 bg-gray-900 mb-auto mt-auto rounded-xl text-lg font-medium p-2 duration-300 hover:scale-105'>Crear Publicación</a>
-        )}
+        <a href='/publicar' className='text-gray-100 bg-gray-900 mb-5 mt-auto rounded-xl text-lg font-medium p-2 duration-300 hover:scale-105'>Crear Publicación</a>
       </div>
     </>
   );

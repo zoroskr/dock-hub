@@ -1,16 +1,29 @@
 "use client";
 
-import React from 'react'
+import React, { useState } from 'react'
 import Image from 'next/image'
 import { sendEmail } from '@/lib/mail'
 import { getUser } from '@/app/services/users.api';
 import Swal from 'sweetalert2';
 import { Button } from 'flowbite-react';
 import { deletePost, updatePost } from '@/app/services/posts.api';
-import { useRouter } from 'next/navigation';
+import { useRouter} from 'next/navigation';
 
 const Post = ({ post , showProposeButton}) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [needsTruncate, setNeedsTruncate] = useState(false);
   const router = useRouter();
+  const descriptionRef = React.useRef(null);
+  
+  React.useEffect(() => {
+    if (descriptionRef.current) {
+      setNeedsTruncate(descriptionRef.current.scrollHeight > descriptionRef.current.clientHeight);
+    }
+  }, [post.description]);
+
+  const handleExpandClick = () => {
+    setIsExpanded(!isExpanded);
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -96,7 +109,7 @@ const Post = ({ post , showProposeButton}) => {
       </a>
       <div className="p-5 flex flex-col justify-between">
         <a href="#">
-            <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white break-words overflow-y-auto">{post.name}</h5>
+            <h5 className="mb-1 text-2xl font-bold tracking-tight text-gray-900 dark:text-white break-words overflow-y-auto">{post.name}</h5>
         </a>
         <div className='flex mb-2'>
           <div>Estado: </div>
@@ -110,10 +123,24 @@ const Post = ({ post , showProposeButton}) => {
             <div className='text-red-500 font-semibold ml-1 mb-1'>Rechazado</div>
           )}
         </div>
-        <div className="mb-4">
+        <div className="mb-2">
           <Image src={post.image} alt='bora' width={300} height={300} className='rounded-xl' />
         </div>
-        <p className="mb-3 font-normal w-full text-black dark:text-gray-400 break-words overflow-y-auto">{post.description}</p>
+        <div className="relative">
+          <p
+            ref={descriptionRef}
+            className={`mb-4 font-normal w-full text-black dark:text-gray-400 break-words ${!isExpanded ? 'fixed-height' : ''}`}
+          >
+            {post.description}
+          </p>
+          {needsTruncate && (
+            <div className="button-container">
+              <button onClick={handleExpandClick} className="text-gray-800 font-semibold text-sm">
+                {isExpanded ? 'Ver menos' : 'Ver más'}
+              </button>
+            </div>
+          )}
+        </div>
         { showProposeButton ? (
           <button onClick={handleSubmit} className="inline-flex items-center mx-auto px-3 py-2 text-sm font-medium text-center text-white bg-gray-800 rounded-xl duration-300 hover:bg-gray-700">
           Proponer Intercambio

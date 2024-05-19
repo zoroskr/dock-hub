@@ -39,21 +39,10 @@ export const createPost = async (post) => {
       throw new Error('No se pudo crear el post');
     }
     const data = await response.json();
-    Swal.fire({
-      icon: 'success',
-      title: 'Publicación Creada',
-      showConfirmButton: false,
-      timer: 1500
-    })
     return data;
   } catch (error) {
-    Swal.fire({
-      icon: 'error',
-      title: 'Error al crear la publicación',
-      showConfirmButton: false,
-      timer: 1500
-    })
-    console.error(error);
+    console.error('Error en createPost:', error);
+    throw error;
   }
 }
 
@@ -67,25 +56,13 @@ export const updatePost = async (id, post) => {
       body: JSON.stringify(post)
     });
     if (!response.ok) {
-      console.error("response", response);
       throw new Error('No se pudo actualizar el post');
     }
     const data = await response.json();
-    Swal.fire({
-      icon: 'success',
-      title: 'Publicación Actualizada',
-      showConfirmButton: false,
-      timer: 1500
-    })
     return data;
   } catch (error) {
-    Swal.fire({
-      icon: 'error',
-      title: 'Error al actualizar la publicación',
-      showConfirmButton: false,
-      timer: 1500
-    })
-    console.error(error);
+    console.error('Error en updatePost:', error);
+    throw error;
   }
 }
 
