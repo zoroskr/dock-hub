@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
-import UserForm from '@/components/ui/UserForm'
+import UserFormEdit from '@/components/ui/UserFormEdit'
 import NotFound from '@/app/not-found';
 import { getUser } from '@/app/services/users.api.js';
 
@@ -40,12 +40,12 @@ const page = () => {
     <>
       {
         render ? (
-          <UserForm
+          <UserFormEdit
             user={user}
             title="Actualizar datos"
             userId={params.id}
           >
-          </UserForm>
+          </UserFormEdit>
         ) : (
           <NotFound></NotFound>
         )

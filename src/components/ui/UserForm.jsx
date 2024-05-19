@@ -1,10 +1,14 @@
 "use client";
-import React, { useEffect, useRef } from 'react';
-import { useParams } from 'next/navigation';
+import React, { useEffect, useRef } from "react";
+import { useParams } from "next/navigation";
 
-import { createUser, updateUser, getUserByEmail } from '@/app/services/users.api';
+import {
+  createUser,
+  updateUser,
+  getUserByEmail,
+} from "@/app/services/users.api";
 
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
 
 const UserForm = ({ user, title, userId = false }) => {
   const form = useRef(user);
@@ -12,12 +16,12 @@ const UserForm = ({ user, title, userId = false }) => {
 
   useEffect(() => {
     if (form.current) {
-      form.current.elements.fullName.value = user.fullName || '';
-      form.current.elements.DNI.value = user.DNI || '';
-      form.current.elements.address.value = user.address || '';
-      form.current.elements.email.value = user.email || '';
-      form.current.elements.password.value = user.password || '';
-      form.current.elements['repeat-password'].value = user.password || '';
+      form.current.elements.fullName.value = user.fullName || "";
+      form.current.elements.DNI.value = user.DNI || "";
+      form.current.elements.address.value = user.address || "";
+      form.current.elements.email.value = user.email || "";
+      form.current.elements.password.value = user.password || "";
+      form.current.elements["repeat-password"].value = user.password || "";
       form.current.elements.isOwner.checked = user.isOwner || false;
     }
   }, [user]);
@@ -28,61 +32,61 @@ const UserForm = ({ user, title, userId = false }) => {
 
     const formData = new FormData(form.current);
     let t;
-    if (formData.get('isOwner')){
-      t = "Titular"
+    if (formData.get("isOwner")) {
+      t = "Titular";
     } else {
-      t = "Regular"
+      t = "Regular";
     }
 
     const user = {
-      fullName: formData.get('fullName'),
-      DNI: formData.get('DNI'),
-      address: formData.get('address'),
-      email: formData.get('email'),
-      password: formData.get('password'),
+      fullName: formData.get("fullName"),
+      DNI: formData.get("DNI"),
+      address: formData.get("address"),
+      email: formData.get("email"),
+      password: formData.get("password"),
       type: t,
-      verified: false
-    }
+      verified: false,
+    };
     console.log("user", user);
 
-    if (formData.get('password') !== formData.get('repeat-password')) {
+    if (formData.get("password") !== formData.get("repeat-password")) {
       Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Las contraseñas no coninciden!',
+        icon: "error",
+        title: "Oops...",
+        text: "Las contraseñas no coninciden!",
       });
       return;
     }
 
     let usuarioExistente = false;
-    usuarioExistente = await getUserByEmail(formData.get('email'));
+    usuarioExistente = await getUserByEmail(formData.get("email"));
     console.log("userId", userId);
 
     if (usuarioExistente && !userId) {
       Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'El email ya está registrado!',
+        icon: "error",
+        title: "Oops...",
+        text: "El email ya está registrado!",
       });
       return;
     }
 
-    let message = '¡Registro exitoso!';
+    let message = "¡Registro exitoso!";
 
     if (userId) {
       user._id = userId;
       await updateUser(user._id, user);
-      message = '¡Actualización exitosa!';
+      message = "¡Actualización exitosa!";
     } else {
       const newUser = await createUser(user);
-      localStorage.setItem('id', newUser._id);
+      localStorage.setItem("id", newUser._id);
     }
 
     Swal.fire({
-      icon: 'success',
+      icon: "success",
       title: message,
       showConfirmButton: false,
-      timer: 1500
+      timer: 1500,
     });
   };
 
@@ -117,7 +121,14 @@ const UserForm = ({ user, title, userId = false }) => {
             >
               DNI
             </label>
-            <input type='number' id='DNI' name='DNI' className='shadow-sm text-black text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light' placeholder='12345678' required />
+            <input
+              type="number"
+              id="DNI"
+              name="DNI"
+              className="shadow-sm text-black text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+              placeholder="12345678"
+              required
+            />
           </div>
 
           <div className="mb-5">
@@ -188,15 +199,16 @@ const UserForm = ({ user, title, userId = false }) => {
 
           <div className="mb-5">
             <label
-              htmlFor="birthdate"
+              htmlFor="age"
               className="block mb-2 text-sm font-medium text-white dark:text-white"
             >
-              Fecha de nacimiento
+              Edad
             </label>
             <input
-              type="date"
-              id="birthdate"
-              name="birthdate"
+              type="number"
+              id="age"
+              name="age"
+              min="18"
               className="shadow-sm bg-gray-50 border border-gray-300 text-black text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
               required
             />
@@ -204,8 +216,19 @@ const UserForm = ({ user, title, userId = false }) => {
 
           <div className="mb-5">
             <div className="flex items-center gap-2">
-              <input type="checkbox" id="isOwner" name="isOwner" disabled={userId} className="text-blue-500 rounded-xl focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:text-blue-500 dark:shadow-sm-light" />
-              <label for="isOwner" className="text-white dark:text-white font-semibold">Soy cliente en Yate Mate</label>
+              <input
+                type="checkbox"
+                id="isOwner"
+                name="isOwner"
+                disabled={userId}
+                className="text-blue-500 rounded-xl focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:text-blue-500 dark:shadow-sm-light"
+              />
+              <label
+                for="isOwner"
+                className="text-white dark:text-white font-semibold"
+              >
+                Soy cliente en Yate Mate
+              </label>
             </div>
           </div>
 
@@ -219,6 +242,6 @@ const UserForm = ({ user, title, userId = false }) => {
       </div>
     </div>
   );
-}
+};
 
 export default UserForm;
