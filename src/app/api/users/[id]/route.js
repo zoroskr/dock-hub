@@ -27,6 +27,7 @@ export async function PUT(request, { params }) {
         return NextResponse.json({ error: "ID is required" }, { status: 400 });
         }
         const user = await User.findByIdAndUpdate(id, request.body, { new: true });
+        console.log("prueba")
         if (!user) {
         return NextResponse.json({ error: "User not found" }, { status: 404 });
         }
