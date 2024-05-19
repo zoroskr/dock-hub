@@ -1,10 +1,9 @@
 'use client'
 import React, { useEffect, useRef } from 'react';
 import { Button, Label, Select, TextInput, Textarea } from "flowbite-react";
-import { createPost } from '@/app/services/posts.api';
-
+import { createPost, updatePost } from '@/app/services/posts.api';
+import { useParams } from 'next/navigation';
 import Swal from 'sweetalert2';
-
 
 const PostsForm = ({ post = {
   name: '',
@@ -13,15 +12,15 @@ const PostsForm = ({ post = {
   type: '',
   owner: ''
 }, title }) => {
-  console.log("postsform", post);
   const form = useRef(post);
+  const params = useParams();
 
   useEffect(() => {
     if (form.current) {
       form.current.elements.name.value = post.name || '';
       form.current.elements.description.value = post.description || '';
       form.current.elements.image.value = post.image || '';
-      form.current.elements.tiposBienes.value = post.type || '';
+      form.current.elements.type.value = post.type || '';
     }
   }, [post]);
 
@@ -35,10 +34,10 @@ const PostsForm = ({ post = {
       name: formData.get('name'),
       description: formData.get('description'),
       image: formData.get('image'),
-      type: formData.get('tiposBienes'),
+      type: formData.get('type'),
       owner: localStorage.getItem('id'),
     }
-
+    console.log('post', formData);
     if (!localStorage.getItem('id')) {
       Swal.fire({
         title: 'Error',
@@ -49,7 +48,12 @@ const PostsForm = ({ post = {
       return;
     }
 
-    await createPost(post);
+    if (params.id) {
+      updatePost(params.id, post);
+    } else {
+      createPost(post);
+    }
+    
   }
 
   return (
@@ -87,9 +91,9 @@ const PostsForm = ({ post = {
         
         <div className="max-w-md">
           <div className="mb-2 block">
-            <Label htmlFor="tiposBienes" value="Selecciona el tipo de bien" className='text-white' />
+            <Label htmlFor="type" value="Selecciona el tipo de bien" className='text-white' />
           </div>
-          <Select id="tiposBienes" className='custom-select' required>
+          <Select name='type' id="type" className='custom-select' required>
             <option>Vehículos</option>
             <option>Aeronaves</option>
             <option>Inmuebles</option>

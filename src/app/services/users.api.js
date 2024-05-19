@@ -1,6 +1,6 @@
 export const getUsers = async () => {
   try {
-    const response = await fetch(`http://localhost:3000/users.json`);
+    const response = await fetch(`http://localhost:3000/auth/register`);
     if (!response.ok) {
       throw new Error('No se pudo obtener el usuario');
     }
@@ -13,14 +13,12 @@ export const getUsers = async () => {
 
 export const getUser = async (id) => {
   try {
-    const response = await fetch(`http://localhost:3000/api/auth/register`);
+    const response = await fetch(`http://localhost:3000/api/users/${id}`);
     if (!response.ok) {
       throw new Error('No se pudo obtener el usuario');
     }
     const data = await response.json();
-    const result = data.find(user => user._id === id);
-    console.log("result", result);
-    return result;
+    return data;
   } catch (error) {
     console.error(error);
   }
@@ -59,9 +57,9 @@ export const createUser = async (user) => {
   }
 }
 
-export const updateUser = async (user) => {
+export const updateUser = async (id, user) => {
   try {
-    const response = await fetch(`http://localhost:3000/api/auth/register`, {
+    const response = await fetch(`http://localhost:3000/api/users/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'

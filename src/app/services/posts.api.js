@@ -20,7 +20,6 @@ export const getPost = async (id) => {
       throw new Error('No se pudo obtener el post');
     }
     const data = await response.json();
-
     return data;
   } catch (error) {
     console.error(error);
@@ -68,12 +67,13 @@ export const updatePost = async (id, post) => {
       body: JSON.stringify(post)
     });
     if (!response.ok) {
+      console.error("response", response);
       throw new Error('No se pudo actualizar el post');
     }
     const data = await response.json();
     Swal.fire({
       icon: 'success',
-      title: 'Publicación Aprobada',
+      title: 'Publicación Actualizada',
       showConfirmButton: false,
       timer: 1500
     })

@@ -71,7 +71,7 @@ const UserForm = ({ user, title, userId = false }) => {
 
     if (userId) {
       user._id = userId;
-      await updateUser(user);
+      await updateUser(user._id, user);
       message = '¡Actualización exitosa!';
     } else {
       const newUser = await createUser(user);
