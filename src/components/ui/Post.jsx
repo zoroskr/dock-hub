@@ -100,14 +100,14 @@ const Post = ({ post , showProposeButton}) => {
         </a>
         <div className='flex mb-2'>
           <div>Estado: </div>
-          {post.aproved === 1 && (
-            <div className='text-green-700 font-semibold ml-1 mb-1'>Aprobado</div>
+          {post.state === 'Aprobado' && (
+            <div className='text-green-700 font-semibold ml-1 mb-1'> Aprobado</div>
           )}
-          {post.aproved === 2 && (
-            <div className='text-yellow-400 font-semibold mb-1'>Pendiente</div>
+          {post.state === 'Pendiente' && (
+            <div className='text-yellow-500 font-semibold ml-1 mb-1'> Pendiente</div>
           )}
-          {post.aproved === 3 && (
-            <div className='text-red-500 font-semibold mb-1'>Rechazado</div>
+          {post.state === 'Rechazado' && (
+            <div className='text-red-500 font-semibold ml-1 mb-1'>Rechazado</div>
           )}
         </div>
         <div className="mb-4">

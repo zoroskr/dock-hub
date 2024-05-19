@@ -36,6 +36,7 @@ const PostsForm = ({ post = {
       image: formData.get('image'),
       type: formData.get('type'),
       owner: localStorage.getItem('id'),
+      state: 'Pendiente'
     }
     console.log('post', formData);
     if (!localStorage.getItem('id')) {
