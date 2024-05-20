@@ -11,8 +11,18 @@ export async function POST(request) {
     console.log(data);
   
     // Crea los usuarios
-    const proposer = await User.create(data.proposer);
-    const owner = await User.create(data.owner);
+    let proposer = await User.findOne({ email: data.proposer.email });
+    let owner = await User.findOne({ email: data.owner.email });
+    
+    // Si el proponente no existe, crea un nuevo usuario
+    if (!proposer) {
+      proposer = await User.create(data.proposer);
+    }
+    
+    // Si el propietario no existe, crea un nuevo usuario
+    if (!owner) {
+      owner = await User.create(data.owner);
+    }
   
     // Configura el transportador de correo
     let transporter = nodemailer.createTransport({
