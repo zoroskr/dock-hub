@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['localhost:3000', 'localhost', 'imgur.com'],
+    domains: ['localhost:3000', 'localhost', 'imgur.com', 'i.imgur.com'],
   },
   env: {
     MAILGUN_API_KEY: process.env.MAILGUN_API_KEY,

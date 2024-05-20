@@ -8,11 +8,15 @@ const Avatar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const refDropdown = useRef(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     // Asegúrate de que el código solo se ejecuta en el cliente
     if (typeof window !== 'undefined') {
-      setIsLoggedIn(!!localStorage.getItem('id'));
+      const userId = localStorage.getItem('id');
+      const userType = localStorage.getItem('type');
+      setIsLoggedIn(!!userId);
+      setIsAdmin(userType === 'Admin');
     }
   }, []);
 
@@ -64,26 +68,43 @@ const Avatar = () => {
                 <div>Mi cuenta</div>
               </div>
               <ul className="py-1">
-                <li>
-                  <a href='/publicar' className='block px-4 py-2 hover:bg-gray-100'>
-                    Crear Publicación
-                  </a>
-                </li>
-                <li>
-                  <Link href="/posts" className="block px-4 py-2 hover:bg-gray-100">
-                    Ver mis publicaciones
-                  </Link>
-                </li>
-                <li>
-                  <Link href={`/editarperfil/${localStorage.getItem('id')}`} className="block px-4 py-2 hover:bg-gray-100">
-                    Editar Perfil
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/login" className="block px-4 py-2 hover:bg-gray-100" onClick={handleLogout}>
-                    Cerrar sesión
-                  </Link>
-                </li>
+              {isAdmin ? (
+                  <>
+                    <li>
+                      <Link href={`/editarperfil/${localStorage.getItem('id')}`} className="block px-3 py-2 hover:bg-gray-100">
+                        Editar Perfil
+                      </Link>
+                    </li>
+                    <li>
+                      <Link href="/login" className="block px-3 py-2 hover:bg-gray-100" onClick={handleLogout}>
+                        Cerrar sesión
+                      </Link>
+                    </li>
+                  </>
+                ) : (
+                  <>
+                    <li>
+                      <Link href="/publicar" className="block px-4 py-2 hover:bg-gray-100">
+                        Crear Publicación
+                      </Link>
+                    </li>
+                    <li>
+                      <Link href="/posts" className="block px-4 py-2 hover:bg-gray-100">
+                        Ver mis publicaciones
+                      </Link>
+                    </li>
+                    <li>
+                      <Link href={`/editarperfil/${localStorage.getItem('id')}`} className="block px-4 py-2 hover:bg-gray-100">
+                        Editar Perfil
+                      </Link>
+                    </li>
+                    <li>
+                      <Link href="/login" className="block px-4 py-2 hover:bg-gray-100" onClick={handleLogout}>
+                        Cerrar sesión
+                      </Link>
+                    </li>
+                  </>
+                )}
               </ul>
             </div>
           )}

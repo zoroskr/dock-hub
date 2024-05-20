@@ -6,7 +6,7 @@ const schema = new mongoose.Schema({
   image: String,
   owner: String,
   type: String, // "Vehículos", "Aeronaves", "Inmuebles", "Embarcaciones"
-  state: String // "Aprobado", "Pendiente", "Pausado"
+  state: String // "Activo", "Pendiente", "Pausado"
 });
 
 export default mongoose.models.Post || mongoose.model('Post', schema);

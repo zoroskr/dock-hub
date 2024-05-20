@@ -68,8 +68,16 @@ const Post = ({ post , showProposeButton}) => {
   
       const data = await response.json();
       console.log(data);
+      Swal.fire({
+        title: "Propuesta enviada!",
+        icon: "success",
+      })
     } catch (error) {
       console.error('Error:', error);
+      Swal.fire({
+        title: "UPS! Ocurrió un error en el envío de la propuesta.",
+        icon: "error",
+      })
     }
   };
 
@@ -125,14 +133,13 @@ const Post = ({ post , showProposeButton}) => {
 
   return (
     <div className="max-w-sm bg-custom-gray rounded-xl shadow dark:bg-gray-800 dark:border-gray-700 duration-500 hover:scale-105">
-      <a href="#">
-        <img className="rounded-t-lg" src="#" alt="" />
-      </a>
       <div className="p-5 flex flex-col justify-between">
         <a href="#">
             <h5 className="mb-1 text-2xl font-bold tracking-tight text-gray-900 dark:text-white break-words overflow-y-auto">{post.name}</h5>
         </a>
-        <div className='flex mb-2'>
+        
+        {showOwnerButtons && (
+        <><div className='flex mb-2'>
           <div>Estado: </div>
           {post.state === 'Activo' && (
             <div className='text-green-700 font-semibold ml-1 mb-1'> Activo</div>
@@ -144,8 +151,9 @@ const Post = ({ post , showProposeButton}) => {
             <div className='text-red-500 font-semibold ml-1 mb-1'>Rechazado</div>
           )}
         </div>
-        <div className="mb-2">
-          <Image src={post.image} alt='bora' width={300} height={300} className='rounded-xl' />
+        </>)}
+        <div className="relative mb-2">
+          <Image src={post.image} alt='bora' width={300} height={300} className='rounded-xl h-48 object-cover' />
         </div>
         <div className="relative">
           <p

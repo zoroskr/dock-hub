@@ -8,11 +8,15 @@ import Link from 'next/link'
 
 const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userType, setUserType] = useState('');
 
   useEffect(() => {
     // Asegúrate de que el código solo se ejecuta en el cliente
     if (typeof window !== 'undefined') {
-      setIsLoggedIn(!!localStorage.getItem('id'));
+      const userId = localStorage.getItem('id');
+      const userType = localStorage.getItem('type');
+      setIsLoggedIn(!!userId);
+      setUserType(userType);
     }
   }, []);
 
@@ -30,8 +34,7 @@ const Navbar = () => {
                 <li>
                   <Link href="/" className="block py-2 px-3 text-md text-white md:bg-transparent md:text-white-700 md:p-0 dark:text-white md:dark:text-blue-500 duration-300 hover:scale-110" aria-current="page">Inicio</Link>
                 </li>
-                {
-                  (localStorage.getItem('type') == 'Admin' && localStorage.getItem("id")) && (
+                {userType === 'Admin' && isLoggedIn && (
                   <li>
                     <Link href="/admin/register" className="block py-2 px-3 text-md text-white md:bg-transparent md:text-white-700 md:p-0 dark:text-white md:dark:text-blue-500 duration-300 hover:scale-110" aria-current="page">Registrar administrativo</Link>
                   </li>

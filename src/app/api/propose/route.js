@@ -28,14 +28,14 @@ export async function POST(request) {
     let transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: 'mundofelipote@gmail.com',
-        pass: ''
+        user: 'ivanskrt1@gmail.com',
+        pass: 'cawt heob hzhr feqh'
       }
     });
   
     // Configura las opciones de correo para el propietario
     let mailOptionsOwner = {
-      from: "mundofelipote@gmail.com",
+      from: "ivanskrt1@gmail.com",
       to: owner.email,
       subject: 'Propuesta de intercambio',
       text: `Hola ${owner.fullName}, ${proposer.fullName} ha propuesto un intercambio.`

@@ -30,14 +30,14 @@ const PostsForm = ({ post = {
 
     const formData = new FormData(form.current);
 
-    const urlRegex = /^(https?:\/\/)?(localhost(:3000)?|imgur\.com)\/[^\s/$.?#].[^\s]*$/i;
+    const urlRegex = /^(https?:\/\/)?(localhost(:3000)?|imgur\.com|i\.imgur\.com)\/[^\s/$.?#].[^\s]*$/i;
     let url = formData.get('image');
     if (!url) {
       url = 'https://imgur.com/n4GiKsx.png';
     } else if (!urlRegex.test(url)) {
       Swal.fire({
         title: 'Error',
-        text: 'Por favor, ingresa una URL válida, solo aceptamos imágenes alojadas en imgur.com o localhost:3000, al pegar la URL de la imagen, asegúrate de que termine en .png, .jpg, .jpeg, .gif o .webp',
+        text: 'Por favor, ingresa una URL válida, solo aceptamos imágenes alojadas en imgur.com, al pegar la URL de la imagen, asegúrate de que termine en .png, .jpg, .jpeg, .gif o .webp',
         icon: 'error',
         confirmButtonText: 'Ok'
       });
@@ -62,9 +62,7 @@ const PostsForm = ({ post = {
           icon: 'success',
           confirmButtonText: 'Ok'
         }).then(() => {
-          router.push('/').then(() => {
-            router.refresh(); // Forzar recarga de la página
-          });
+          router.push('/posts')
         });
       } else {
         await createPost(newPost);
