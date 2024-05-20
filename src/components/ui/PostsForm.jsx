@@ -74,7 +74,7 @@ const PostsForm = ({ post = {
           icon: 'success',
           confirmButtonText: 'Ok'
         }).then(() => {
-          router.push('/');
+          router.push('/posts')
         });
       }
     } catch (error) {
