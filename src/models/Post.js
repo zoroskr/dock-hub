@@ -5,8 +5,8 @@ const schema = new mongoose.Schema({
   description: String,
   image: String,
   owner: String,
-  type: String,
-  state: String
+  type: String, // "Titular", "Regular", "Administrativo"
+  state: String // "Aprobado", "Pendiente", "Pausado"
 });
 
 export default mongoose.models.Post || mongoose.model('Post', schema);
