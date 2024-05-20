@@ -1,10 +1,54 @@
 import React from 'react'
 import Image from 'next/image'
 import { Button } from 'flowbite-react'
+import Swal from 'sweetalert2';
 
 import { updatePost, deletePost } from '@/app/services/posts.api'
 
 const Publicacion = ({ post, user }) => {
+
+  const aprobar = async (id) => {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, aprobar',
+      cancelButtonText: 'Cancelar'
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await updatePost(id, { ...post, state: "Aprobado"});
+        Swal.fire({
+          title: 'Publicación aprobada',
+          icon: 'success'
+        }).then(() => {
+            location.reload();
+          })
+    }});
+  }
+
+  const denegar = async (id) => {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, denegar',
+      cancelButtonText: 'Cancelar'
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await deletePost(id);
+        Swal.fire({
+          title: 'Publicación eliminada',
+          icon: 'success'
+        }
+        ).then(() => {
+            location.reload();
+          })
+    }});
+  }
 
   return (
     <div className="max-w-sm bg-custom-gray rounded-xl shadow dark:bg-gray-800 dark:border-gray-700 duration-500 hover:scale-105">
@@ -30,10 +74,10 @@ const Publicacion = ({ post, user }) => {
       </section>
     </div>
     <div className='flex gap-3'>
-      <Button onClick={() => updatePost(post._id, { ...post, verified: true })} className="inline-flex items-center px-3 py-2 text-md font-medium text-center text-gray-200 bg-gray-800 rounded-xl duration-300 hover:bg-green-600">
+      <Button onClick={() => aprobar(post._id)} className="inline-flex items-center px-3 py-2 text-md font-medium text-center text-gray-200 bg-gray-800 rounded-xl duration-300 hover:bg-green-600">
         Aprobar Publicación
       </Button>
-      <Button onClick={() => deletePost(post._id)} className="inline-flex items-center px-3 py-2 text-md font-medium text-center text-gray-200 bg-gray-800 rounded-xl duration-300 hover:bg-red-700">
+      <Button onClick={() => denegar(post._id)} className="inline-flex items-center px-3 py-2 text-md font-medium text-center text-gray-200 bg-gray-800 rounded-xl duration-300 hover:bg-red-700">
         Denegar Publicación
       </Button>
     </div>

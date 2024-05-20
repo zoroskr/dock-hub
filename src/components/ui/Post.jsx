@@ -74,7 +74,6 @@ const Post = ({ post , showProposeButton}) => {
   };
 
   const eliminarPublicacion = async (id) => {
-    console.log('id', id);
     Swal.fire({
       title: '¿Estás seguro?',
       text: "Una vez eliminada la publicación no podrás recuperarla",
@@ -91,9 +90,10 @@ const Post = ({ post , showProposeButton}) => {
           'Eliminada!',
           'Tu publicación ha sido eliminada.',
           'success'
-        )
-      }
-    })
+        ).then(() => {
+            location.reload();
+          })
+    }});
   }
 
   const pausarPublicacion = async (id, newFields) => {
