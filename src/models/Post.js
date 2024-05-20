@@ -5,7 +5,7 @@ const schema = new mongoose.Schema({
   description: String,
   image: String,
   owner: String,
-  type: String, // "Titular", "Regular", "Administrativo"
+  type: String, // "Vehículos", "Aeronaves", "Inmuebles", "Embarcaciones"
   state: String // "Aprobado", "Pendiente", "Pausado"
 });
 
