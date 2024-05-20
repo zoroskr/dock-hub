@@ -40,7 +40,6 @@ const page = () => {
               : <span className='text-2xl mt-auto mb-auto ml-auto mr-auto text-left p-3 col-span-3 font-medium'>No tienes publicaciones</span>
           }
         </div>
-        <a href='/publicar' className='text-gray-100 bg-gray-900 mb-5 mt-auto rounded-xl text-lg font-medium p-2 duration-300 hover:scale-105'>Crear Publicación</a>
       </div>
     </>
   );

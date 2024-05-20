@@ -65,6 +65,11 @@ const Avatar = () => {
               </div>
               <ul className="py-1">
                 <li>
+                  <a href='/publicar' className='block px-4 py-2 hover:bg-gray-100'>
+                    Crear Publicación
+                  </a>
+                </li>
+                <li>
                   <Link href="/posts" className="block px-4 py-2 hover:bg-gray-100">
                     Ver mis publicaciones
                   </Link>
