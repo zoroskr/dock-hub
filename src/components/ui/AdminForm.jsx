@@ -40,7 +40,7 @@ const UserForm = ({ user, title, userId = false }) => {
       email: formData.get("email"),
       password: formData.get("password"),
       type: "Admin",
-      verified: false,
+      verified: true,
     };
     console.log("user", user);
 
