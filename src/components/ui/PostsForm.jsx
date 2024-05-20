@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import React, { useEffect, useRef } from 'react';
 import { Button, Label, Select, TextInput, Textarea } from "flowbite-react";
 import { createPost, updatePost } from '@/app/services/posts.api';
@@ -30,24 +30,28 @@ const PostsForm = ({ post = {
 
     const formData = new FormData(form.current);
 
-    const newPost = {
-      name: formData.get('name'),
-      description: formData.get('description'),
-      image: formData.get('image'),
-      type: formData.get('type'),
-      owner: localStorage.getItem('id'),
-      state: 'Pendiente'
-    }
-
-    if (!localStorage.getItem('id')) {
+    const urlRegex = /^(https?:\/\/)?(localhost(:3000)?|imgur\.com)\/[^\s/$.?#].[^\s]*$/i;
+    let url = formData.get('image');
+    if (!url) {
+      url = 'https://imgur.com/n4GiKsx.png';
+    } else if (!urlRegex.test(url)) {
       Swal.fire({
         title: 'Error',
-        text: 'Debes estar logueado para cargar un bien',
+        text: 'Por favor, ingresa una URL válida, solo aceptamos imágenes alojadas en imgur.com o localhost:3000, al pegar la URL de la imagen, asegúrate de que termine en .png, .jpg, .jpeg, .gif o .webp',
         icon: 'error',
         confirmButtonText: 'Ok'
       });
       return;
     }
+
+    const newPost = {
+      name: formData.get('name'),
+      description: formData.get('description'),
+      image: url,
+      type: formData.get('type'),
+      owner: localStorage.getItem('id'),
+      state: 'Pendiente'
+    };
 
     try {
       if (params.id) {
@@ -70,7 +74,7 @@ const PostsForm = ({ post = {
           icon: 'success',
           confirmButtonText: 'Ok'
         }).then(() => {
-          router.push('/')
+          router.push('/');
         });
       }
     } catch (error) {
@@ -81,12 +85,12 @@ const PostsForm = ({ post = {
         confirmButtonText: 'Ok'
       });
     }
-  }
+  };
 
   return (
     <div className="flex justify-center items-center min-h-screen max-w-lg w-full">
       <form ref={form} className="flex w-full flex-col gap-4 rounded-xl bg-gray-900 border-gray-200 dark:bg-gray-900 shadow-md p-7 items-center" onSubmit={handleSubmit}>
-        <h1 className="text-2xl font-bold text-white">{ title }</h1>
+        <h1 className="text-2xl font-bold text-white">{title}</h1>
         <div className='max-w-md w-full'>
           <div className="mb-2 block">
             <Label htmlFor="name" value="Nombre" />
@@ -113,18 +117,27 @@ const PostsForm = ({ post = {
           <div className="mb-2 block">
             <Label htmlFor="image" value="Link a imagen" />
           </div>
-          <Textarea name="image" placeholder="Enlace a imagen" required rows={4} className='rounded-xl' />
+          <TextInput
+            className='rounded-xl overflow-hidden'
+            name="image"
+            type="url"
+            placeholder="Link a la imagen del bien"
+          />
         </div>
-        
+
         <div className="max-w-md">
           <div className="mb-2 block">
             <Label htmlFor="type" value="Selecciona el tipo de bien" className='text-white' />
           </div>
           <Select name='type' id="type" className='custom-select' required>
             <option>Vehículos</option>
+            {
+              localStorage.getItem('type') === 'Titular' && localStorage.getItem('verified') === 'true' && (
+                <option>Embarcaciones</option>
+              )
+            }
             <option>Aeronaves</option>
             <option>Inmuebles</option>
-            <option>Embarcaciones</option>
           </Select>
         </div>
 
@@ -132,7 +145,7 @@ const PostsForm = ({ post = {
       </form>
     </div>
   );
-}
+};
 
 
-export default PostsForm
+export default PostsForm;

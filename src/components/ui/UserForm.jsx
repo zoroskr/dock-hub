@@ -80,6 +80,8 @@ const UserForm = ({ user, title, userId = false }) => {
     } else {
       const newUser = await createUser(user);
       localStorage.setItem("id", newUser._id);
+      localStorage.setItem('type', user.type);
+      localStorage.setItem('verified', user.verified);
     }
 
     Swal.fire({
