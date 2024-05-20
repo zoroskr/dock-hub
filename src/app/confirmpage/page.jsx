@@ -20,14 +20,15 @@ export default function Confirm() {
   }
 
   return (
-    <div>
+    <div className='w-full flex flex-col min-h-screen items-center justify-center'>
       <input 
         type="text" 
         placeholder="Ingrese el token del usuario a validar" 
+        className='rounded-xl mb-3 w-1/5'
         value={token} 
         onChange={(e) => setToken(e.target.value)} 
       />
-      <button onClick={handleTokenSubmit}>Aceptar</button>
+      <button className='bg-gray-900 text-gray-300 rounded-xl p-2 font-semibold duration-500 hover:scale-105' onClick={handleTokenSubmit}>Aceptar</button>
     </div>
   );
 }

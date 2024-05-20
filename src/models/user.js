@@ -6,7 +6,7 @@ const schema = new mongoose.Schema({
   address: String,
   email: String,
   password: String,
-  type: String,
+  type: String, // "Titular", "Regular", "Administrativo"
   verified: Boolean,
   confirmationToken: String
 });

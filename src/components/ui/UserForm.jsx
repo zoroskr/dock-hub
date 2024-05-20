@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useRef } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 import {
   createUser,
@@ -13,6 +13,7 @@ import Swal from "sweetalert2";
 const UserForm = ({ user, title, userId = false }) => {
   const form = useRef(user);
   const params = useParams();
+  const router = useRouter(); 
 
   useEffect(() => {
     if (form.current) {
@@ -73,7 +74,8 @@ const UserForm = ({ user, title, userId = false }) => {
 
     let message = "¡Registro exitoso!";
 
-    if (userId) {
+    try {
+      if (userId) {
       user._id = userId;
       await updateUser(user._id, user);
       message = "¡Actualización exitosa!";
@@ -84,12 +86,20 @@ const UserForm = ({ user, title, userId = false }) => {
       localStorage.setItem('verified', user.verified);
     }
 
-    Swal.fire({
-      icon: "success",
-      title: message,
-      showConfirmButton: false,
-      timer: 1500,
-    });
+      Swal.fire({
+        icon: 'success',
+        title: message,
+      }).then(() => {
+        // Redirigir al home después de mostrar el mensaje
+        router.push('/');
+      });
+    } catch (error) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: error.message,
+      });
+    }
   };
 
   return (
@@ -170,6 +180,23 @@ const UserForm = ({ user, title, userId = false }) => {
 
           <div className="mb-5">
             <label
+              htmlFor="age"
+              className="block mb-2 text-sm font-medium text-white dark:text-white"
+            >
+              Edad
+            </label>
+            <input
+              type="number"
+              id="age"
+              name="age"
+              min="18"
+              className="shadow-sm bg-gray-50 border border-gray-300 text-black text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+              required
+            />
+          </div>
+
+          <div className="mb-5">
+            <label
               for="password"
               className="block mb-2 text-sm font-medium text-white dark:text-white"
             >
@@ -194,23 +221,6 @@ const UserForm = ({ user, title, userId = false }) => {
               type="password"
               id="repeat-password"
               name="repeat-password"
-              className="shadow-sm bg-gray-50 border border-gray-300 text-black text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-              required
-            />
-          </div>
-
-          <div className="mb-5">
-            <label
-              htmlFor="age"
-              className="block mb-2 text-sm font-medium text-white dark:text-white"
-            >
-              Edad
-            </label>
-            <input
-              type="number"
-              id="age"
-              name="age"
-              min="18"
               className="shadow-sm bg-gray-50 border border-gray-300 text-black text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
               required
             />

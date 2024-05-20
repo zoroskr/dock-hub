@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react'
 import Image from 'next/image'
-import { sendEmail } from '@/lib/mail'
 import { getUser } from '@/app/services/users.api';
 import Swal from 'sweetalert2';
 import { Button } from 'flowbite-react';
@@ -13,6 +12,10 @@ const Post = ({ post , showProposeButton}) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [needsTruncate, setNeedsTruncate] = useState(false);
   const router = useRouter();
+  const interesado = localStorage.getItem('id');
+  const showButton = interesado && interesado !== post.owner;
+  const showOwnerButtons = interesado && interesado === post.owner;
+
   const descriptionRef = React.useRef(null);
   
   React.useEffect(() => {
@@ -27,38 +30,50 @@ const Post = ({ post , showProposeButton}) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+  
     const owner = await getUser(post.owner);
     const interesado = localStorage.getItem('id');
     const interesadoData = await getUser(interesado);
-
-    const emailDetails = {
-      to: owner.email,
-      from: interesadoData.email,
-      subject: 'Hola me interesa tu publicación!',
-      message: 'Hola, me interesa tu publicación. Me gustaría proponerte un intercambio. ¿Podemos hablar? http://localhost:3000/',
+  
+    // Prepara los datos para la solicitud POST
+    const postData = {
+      proposer: {
+        email: interesadoData.email,
+        fullName: interesadoData.fullName
+      },
+      owner: {
+        email: owner.email,
+        fullName: owner.fullName
+      }
     };
-
+    console.log(postData);
+  
+    // Llama a la función que maneja el envío del correo
+    sendEmail(postData);
+  };
+  const sendEmail = async (postData) => {
     try {
-      await sendEmail(emailDetails);
-      Swal.fire({
-        icon: 'success',
-        title: 'Correo enviado',
-        text: 'Tu propuesta de intercambio ha sido enviada al dueño de la publicación. ¡Buena suerte!',
+      // Asume que tienes una ruta de API que maneja el envío de correos
+      const response = await fetch('api/propose', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(postData),
       });
-      console.log('Email sent successfully!');
+  
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+  
+      const data = await response.json();
+      console.log(data);
     } catch (error) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'Ha ocurrido un error al enviar el correo',
-      });
-      console.error('Error sending email:', error);
+      console.error('Error:', error);
     }
   };
 
   const eliminarPublicacion = async (id) => {
-    console.log('id', id);
     Swal.fire({
       title: '¿Estás seguro?',
       text: "Una vez eliminada la publicación no podrás recuperarla",
@@ -75,9 +90,10 @@ const Post = ({ post , showProposeButton}) => {
           'Eliminada!',
           'Tu publicación ha sido eliminada.',
           'success'
-        )
-      }
-    })
+        ).then(() => {
+            location.reload();
+          })
+    }});
   }
 
   const pausarPublicacion = async (id, newFields) => {
@@ -141,27 +157,29 @@ const Post = ({ post , showProposeButton}) => {
             </div>
           )}
         </div>
-        { showProposeButton ? (
-          <button onClick={handleSubmit} className="inline-flex items-center mx-auto px-3 py-2 text-sm font-medium text-center text-white bg-gray-800 rounded-xl duration-300 hover:bg-gray-700">
+        {showButton && showProposeButton && (
+        <button onClick={handleSubmit} className="inline-flex items-center mx-auto px-3 py-2 text-sm font-medium text-center text-white bg-gray-800 rounded-xl duration-300 hover:bg-gray-700">
           Proponer Intercambio
           <svg className="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
             <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
           </svg>
-          </button>) : (
-            <div className="flex gap-2">
-              <Button onClick={() => eliminarPublicacion(post._id)} className="inline-flex items-center px-2 py-2 text-md font-medium text-center text-white bg-red-700 rounded-3xl duration-300 hover:bg-red-600">
-                Eliminar
-              </Button>
-              <Button onClick={() => router.push(`/posts/modificar/${post._id}`)} className="inline-flex items-center px-2 py-2 text-md font-medium text-center text-white bg-blue-800 rounded-3xl duration-300 hover:bg-blue-700">
-                Editar
-              </Button>
-              <Button onClick={() => pausarPublicacion(post._id, post)} className="inline-flex items-center px-2 py-2 text-md font-medium text-center text-white bg-yellow-800 rounded-3xl duration-300 hover:bg-yellow-700">
-                Pausar
-              </Button>
-            </div>
-          )
-        }
-      </div>
+        </button>
+      )}
+
+      {showOwnerButtons && (
+        <div className="flex gap-2">
+          <Button onClick={() => eliminarPublicacion(post._id)} className="inline-flex items-center px-2 py-2 text-md font-medium text-center text-white bg-red-700 rounded-3xl duration-300 hover:bg-red-600">
+            Eliminar
+          </Button>
+          <Button onClick={() => router.push(`/posts/modificar/${post._id}`)} className="inline-flex items-center px-2 py-2 text-md font-medium text-center text-white bg-blue-800 rounded-3xl duration-300 hover:bg-blue-700">
+            Editar
+          </Button>
+          <Button onClick={() => pausarPublicacion(post._id, post)} className="inline-flex items-center px-2 py-2 text-md font-medium text-center text-white bg-yellow-800 rounded-3xl duration-300 hover:bg-yellow-700">
+            Pausar
+          </Button>
+        </div>
+      )}
+    </div>
     </div>
   )
 }

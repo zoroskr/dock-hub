@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams} from 'next/navigation'
 import UserFormEdit from '@/components/ui/UserFormEdit'
 import NotFound from '@/app/not-found';
 import { getUser } from '@/app/services/users.api.js';

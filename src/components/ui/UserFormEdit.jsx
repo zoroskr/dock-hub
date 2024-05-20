@@ -1,12 +1,13 @@
 "use client";
 import React, { useEffect, useRef } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 
 import { createUser, getUserByEmail } from '@/app/services/users.api';
 
 import Swal from 'sweetalert2'
 
 const UserForm = ({ user, title, userId = false }) => {
+  const router = useRouter(); // Hook useRouter para redirigir
 
   async function updateUser(userId, user) {
     const response = await fetch(`/api/auth/register`, {
@@ -63,6 +64,8 @@ const UserForm = ({ user, title, userId = false }) => {
     Swal.fire({
       icon: 'success',
       title: message,
+    }).then(() => {
+      router.push('/'); // Redirigir al home después de la actualización
     });
   }
 

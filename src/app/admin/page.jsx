@@ -13,7 +13,8 @@ const page = () => {
     try {
       const res = await fetch('http://localhost:3000/api/bienes')
       const data = await res.json()
-      return data
+      const filteredPosts = data.filter(post => post.state === "Pendiente");
+      return filteredPosts;
     } catch (error) {
       console.log(error)
     }
