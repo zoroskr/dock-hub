@@ -10,7 +10,8 @@ const page = () => {
   const obtenerPosts = async () => {
     try {
       const res = await fetch('http://localhost:3000/api/bienes')
-      const data = await res.json()
+      let data = await res.json()
+      data = data.filter(p => p.owner === localStorage.getItem('id'));
       setPosts(data);
       setLoading(false);
     } catch (error) {

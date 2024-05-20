@@ -14,7 +14,8 @@ export default function Home() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const fetchedPosts = await getPosts();
+        let fetchedPosts = await getPosts();
+        fetchedPosts = fetchedPosts.filter(p => p.owner !== localStorage.getItem('id'));
         setPosts(fetchedPosts);
         setLoading(false);
         console.log('useEffect: posts fetched', fetchedPosts); // Depuración
@@ -98,7 +99,7 @@ export default function Home() {
         <div className="w-4/5 p-2 grid grid-cols-3 gap-4">
           {loading 
             ? <span className='text-3xl mt-auto mb-auto ml-auto mr-auto text-left p-3 col-span-3 font-medium'>Cargando Publicaciones...</span> 
-            : posts.length > 0 
+            : posts && posts.length > 0 
               ? posts.map(post => (
                 <div className="p-2" key={post._id}>
                   <Post post={post} showProposeButton={true} />
