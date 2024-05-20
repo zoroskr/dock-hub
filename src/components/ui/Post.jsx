@@ -134,11 +134,8 @@ const Post = ({ post , showProposeButton}) => {
         </a>
         <div className='flex mb-2'>
           <div>Estado: </div>
-          {post.state === 'Aprobado' && (
-            <div className='text-green-700 font-semibold ml-1 mb-1'> Aprobado</div>
-          )}
-          {post.state === 'Pendiente' && (
-            <div className='text-yellow-500 font-semibold ml-1 mb-1'> Pendiente</div>
+          {post.state === 'Activo' && (
+            <div className='text-green-700 font-semibold ml-1 mb-1'> Activo</div>
           )}
           {post.state === 'Pausado' && (
             <div className='text-blue-400 font-semibold ml-1 mb-1'> Pausado</div>

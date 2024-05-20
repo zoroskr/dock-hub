@@ -50,7 +50,7 @@ const PostsForm = ({ post = {
       image: url,
       type: formData.get('type'),
       owner: localStorage.getItem('id'),
-      state: 'Pendiente'
+      state: 'Activo'
     };
 
     try {
