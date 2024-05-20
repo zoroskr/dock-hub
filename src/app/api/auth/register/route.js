@@ -15,8 +15,8 @@ export async function GET() {
 let transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: 'mundofelipote@gmail.com', //TU EMAIL
-    pass: 'pyum gegx nzqd meuz' //GENERAR CONTRASEÑA POR GOOGLE APP PASSWORD
+    user: 'ivanskrt1@gmail.com', //TU EMAIL
+    pass: 'cawt heob hzhr feqh' //GENERAR CONTRASEÑA POR GOOGLE APP PASSWORD
   }
 });
 
@@ -43,7 +43,7 @@ export async function POST(request) {
         from: 'yatemate@gmail.com',
         to: adminUser.email, // Cambia el destinatario al correo electrónico del usuario administrativo
         subject: 'New Titular User Created',
-        text: `A new titular user has been created: ${user.fullName}. Please confirm your registration by clicking the following link: http://localhost:3000/confirmpage el token del usuario a verificar es: ${confirmationToken}`
+        text: `Un nuevo titular fue creado: ${user.email} ${user.DNI}. Porfavor confirmar a traves de este link: http://localhost:3000/confirmpage el token del usuario a verificar es: ${confirmationToken}`
       };
 
       transporter.sendMail(mailOptions, function(error, info){

@@ -35,7 +35,7 @@ export async function POST(request) {
   
     // Configura las opciones de correo para el propietario
     let mailOptionsOwner = {
-      from: "ivanskrt1@gmail.com",
+      from: "yatemate@gmail.com",
       to: owner.email,
       subject: 'Propuesta de intercambio',
       text: `Hola ${owner.fullName}, ${proposer.fullName} ha propuesto un intercambio.`
