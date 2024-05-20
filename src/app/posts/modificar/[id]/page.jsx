@@ -23,10 +23,12 @@ const page = () => {
   , []);
 
   return (
-    <PostsForm
-      post={post}
-      title="Actualizar datos"
-    ></PostsForm>
+    <div className='grid place-items-center'>
+      <PostsForm
+        post={post}
+        title="Actualizar datos"
+      ></PostsForm>
+    </div>
   )
 }
 

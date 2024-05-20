@@ -16,6 +16,9 @@ export default function Home() {
       try {
         let fetchedPosts = await getPosts();
         fetchedPosts = fetchedPosts.filter(p => p.owner !== localStorage.getItem('id'));
+        if (localStorage.getItem('verified') == 'false') {
+          fetchedPosts = fetchedPosts.filter(p => p.type != 'Embarcaciones');
+        }
         setPosts(fetchedPosts);
         setLoading(false);
         console.log('useEffect: posts fetched', fetchedPosts); // Depuración
