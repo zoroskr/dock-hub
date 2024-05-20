@@ -97,6 +97,8 @@ const Post = ({ post , showProposeButton}) => {
   }
 
   const pausarPublicacion = async (id, newFields) => {
+    newFields.state = 'Pausado';
+
     Swal.fire({
       title: '¿Estás seguro?',
       text: "Una vez pausada la publicación no podrá ser vista por otros usuarios",
@@ -115,7 +117,10 @@ const Post = ({ post , showProposeButton}) => {
           'success'
         )
       }
-    })
+    }).then(() => {
+      // Redirigir al home después de mostrar el mensaje
+      window.location.reload();
+    });
   }
 
   return (
@@ -134,6 +139,9 @@ const Post = ({ post , showProposeButton}) => {
           )}
           {post.state === 'Pendiente' && (
             <div className='text-yellow-500 font-semibold ml-1 mb-1'> Pendiente</div>
+          )}
+          {post.state === 'Pausado' && (
+            <div className='text-blue-400 font-semibold ml-1 mb-1'> Pausado</div>
           )}
           {post.state === 'Rechazado' && (
             <div className='text-red-500 font-semibold ml-1 mb-1'>Rechazado</div>
@@ -158,7 +166,7 @@ const Post = ({ post , showProposeButton}) => {
           )}
         </div>
         {showButton && showProposeButton && (
-        <button onClick={handleSubmit} className="inline-flex items-center mx-auto px-3 py-2 text-sm font-medium text-center text-white bg-gray-800 rounded-xl duration-300 hover:bg-gray-700">
+        <button onClick={handleSubmit} className="inline-flex items-center mx-auto mb-2 mt-1 px-3 py-2 text-sm font-medium text-center text-white bg-gray-800 rounded-xl duration-300 hover:bg-gray-700">
           Proponer Intercambio
           <svg className="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
             <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
@@ -167,14 +175,14 @@ const Post = ({ post , showProposeButton}) => {
       )}
 
       {showOwnerButtons && (
-        <div className="flex gap-2">
-          <Button onClick={() => eliminarPublicacion(post._id)} className="inline-flex items-center px-2 py-2 text-md font-medium text-center text-white bg-red-700 rounded-3xl duration-300 hover:bg-red-600">
+        <div className="flex justify-between gap-2">
+          <Button onClick={() => eliminarPublicacion(post._id)} className="inline-flex items-center px-1 py-1 text-md font-medium text-center text-white bg-red-700 rounded-3xl duration-300 hover:bg-red-600">
             Eliminar
           </Button>
-          <Button onClick={() => router.push(`/posts/modificar/${post._id}`)} className="inline-flex items-center px-2 py-2 text-md font-medium text-center text-white bg-blue-800 rounded-3xl duration-300 hover:bg-blue-700">
+          <Button onClick={() => router.push(`/posts/modificar/${post._id}`)} className="inline-flex items-center px-1 py-1 text-md font-medium text-center text-white bg-blue-800 rounded-3xl duration-300 hover:bg-blue-700">
             Editar
           </Button>
-          <Button onClick={() => pausarPublicacion(post._id, post)} className="inline-flex items-center px-2 py-2 text-md font-medium text-center text-white bg-yellow-800 rounded-3xl duration-300 hover:bg-yellow-700">
+          <Button onClick={() => pausarPublicacion(post._id, post)} className="inline-flex items-center px-1 py-1 text-md font-medium text-center text-white bg-yellow-800 rounded-3xl duration-300 hover:bg-yellow-700">
             Pausar
           </Button>
         </div>
