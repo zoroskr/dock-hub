@@ -16,7 +16,7 @@ let transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
     user: 'mundofelipote@gmail.com', //TU EMAIL
-    pass: '' //GENERAR CONTRASEÑA POR GOOGLE APP PASSWORD
+    pass: 'pyum gegx nzqd meuz' //GENERAR CONTRASEÑA POR GOOGLE APP PASSWORD
   }
 });
 
@@ -34,20 +34,26 @@ export async function POST(request) {
   });
 
   if (user.type === 'Titular') {
-    let mailOptions = {
-      from: 'your-email@gmail.com',
-      to: 'mundofelipote@gmail.com',
-      subject: 'New Titular User Created',
-      text: `A new titular user has been created: ${user.name}. Please confirm your registration by clicking the following link: http://localhost:3000/confirmpage el token del usuario a verificar es: ${confirmationToken}`
-    };
+    // Obtén todos los usuarios administrativos
+    const adminUsers = await User.find({ type: 'Administrativo' });
 
-    transporter.sendMail(mailOptions, function(error, info){
-      if (error) {
-        console.log(error);
-      } else {
-        console.log('Email sent: ' + info.response);
-      }
-    });
+    // Envía un correo electrónico a cada usuario administrativo
+    for (const adminUser of adminUsers) {
+      let mailOptions = {
+        from: 'yatemate@gmail.com',
+        to: adminUser.email, // Cambia el destinatario al correo electrónico del usuario administrativo
+        subject: 'New Titular User Created',
+        text: `A new titular user has been created: ${user.fullName}. Please confirm your registration by clicking the following link: http://localhost:3000/confirmpage el token del usuario a verificar es: ${confirmationToken}`
+      };
+
+      transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+          console.log(error);
+        } else {
+          console.log('Email sent: ' + info.response);
+        }
+      });
+    }
   }
 
   return NextResponse.json(user);
