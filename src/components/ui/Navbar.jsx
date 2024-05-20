@@ -30,6 +30,13 @@ const Navbar = () => {
                 <li>
                   <Link href="/" className="block py-2 px-3 text-md text-white md:bg-transparent md:text-white-700 md:p-0 dark:text-white md:dark:text-blue-500 duration-300 hover:scale-110" aria-current="page">Inicio</Link>
                 </li>
+                {
+                  (localStorage.getItem('type') == 'Admin' && localStorage.getItem("id")) && (
+                  <li>
+                    <Link href="/admin/register" className="block py-2 px-3 text-md text-white md:bg-transparent md:text-white-700 md:p-0 dark:text-white md:dark:text-blue-500 duration-300 hover:scale-110" aria-current="page">Registrar administrativo</Link>
+                  </li>
+                  )
+                }
                 {isLoggedIn ? (
                 <>
                   <li>
