@@ -19,7 +19,6 @@
     "flowbite-react": "^0.9.0",
     "i": "^0.3.7",
     "lucide-react": "^0.376.0",
-    "mailgun.js": "^10.2.1",
     "mongoose": "^8.3.4",
     "next": "14.2.3",
     "nodemailer": "^6.9.13",
