@@ -1,14 +1,13 @@
 "use client";
 import React, { useRef } from "react";
-import { useRouter } from 'next/navigation';
 import Link from "next/link";
 
 import Swal from 'sweetalert2';
+import { getUserByEmail } from "../services/users.api";
 
 export default function Home() {
   const emailRef = useRef();
   const passwordRef = useRef();
-  const router = useRouter();
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -16,10 +15,7 @@ export default function Home() {
     const email = emailRef.current.value;
     const password = passwordRef.current.value;
 
-    const response = await fetch("http://localhost:3000/api/auth/register");
-    const data = await response.json();
-
-    const user = data.find(user => user.email === email && user.password === password);
+    const user = await getUserByEmail(email);
 
     if (user && user.email === email && user.password === password) {
       // console.log("Inicio de sesión exitoso:", data);
@@ -42,7 +38,7 @@ export default function Home() {
   return (
     <section class="bg-rgb-190-175-85  dark:bg-gray-900">
       <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-         <div className="w-full md:max-w-md lg:max-w-md xl:max-w-lg bg-gray-900 rounded-xl shadow dark:border dark:bg-gray-800 dark:border-gray-700">
+        <div className="w-full md:max-w-md lg:max-w-md xl:max-w-lg bg-gray-900 rounded-xl shadow dark:border dark:bg-gray-800 dark:border-gray-700">
           <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
             <h1 class="text-xl font-bold leading-tight tracking-tight text-white md:text-2xl dark:text-white">
               Iniciar sesión
@@ -82,14 +78,6 @@ export default function Home() {
                   required=""
                 />
               </div>
-              {/* <div class="flex items-center justify-between">
-                <a
-                  href="#"
-                  class="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500"
-                >
-                  ¿Olvidaste tu contraseña?
-                </a>
-              </div> */}
               <button
                 type="submit"
                 class="w-full text-black bg-custom-yellow hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
