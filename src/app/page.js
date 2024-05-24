@@ -59,7 +59,7 @@ export default function Home() {
     // Filtrar los posts existentes
     if (posts.length > 0) {
       const postsFiltered = posts.filter(p => 
-        p.name.toLowerCase().includes(lowerCaseSearch) || p.description.toLowerCase().includes(lowerCaseSearch)
+        (p.name.toLowerCase().includes(lowerCaseSearch) || p.description.toLowerCase().includes(lowerCaseSearch)) && p.owner !== localStorage.getItem('id')
       );
 
       if (postsFiltered.length === 0) {

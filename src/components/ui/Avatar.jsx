@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Image from 'next/image'
 import Link from "next/link";
+import { useRouter} from 'next/navigation';
 
 const Avatar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -40,7 +41,7 @@ const Avatar = () => {
   const handleLogout = () => {
     localStorage.removeItem('id');
     localStorage.removeItem('type');
-    window.location.reload(); // Recargar el sitio
+    router.push('/login') // Recargar el sitio
   }
 
   return (

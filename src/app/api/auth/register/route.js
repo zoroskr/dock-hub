@@ -35,12 +35,12 @@ export async function POST(request) {
 
   if (user.type === 'Titular') {
     // Obtén todos los usuarios administrativos
-    const adminUsers = await User.find({ type: 'Administrativo' });
+    const adminUsers = await User.find({ type: 'Admin' });
 
     // Envía un correo electrónico a cada usuario administrativo
     for (const adminUser of adminUsers) {
       let mailOptions = {
-        from: 'yatemate@gmail.com',
+        from: 'YateMate@gmail.com',
         to: adminUser.email, // Cambia el destinatario al correo electrónico del usuario administrativo
         subject: 'New Titular User Created',
         text: `Un nuevo titular fue creado: ${user.email} ${user.DNI}. Porfavor confirmar a traves de este link: http://localhost:3000/confirmpage el token del usuario a verificar es: ${confirmationToken}`

@@ -91,7 +91,7 @@ const UserForm = ({ user, title, userId = false }) => {
         title: message,
       }).then(() => {
         // Redirigir al home después de mostrar el mensaje
-        router.push('/');
+        router.push('/login');
       });
     } catch (error) {
       Swal.fire({
