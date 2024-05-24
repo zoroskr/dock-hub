@@ -1,32 +1,12 @@
 "use client";
 import React, { useEffect, useRef } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import { updateUser } from '@/app/services/users.api';
+import Swal from 'sweetalert2';
 
-import { createUser, getUserByEmail } from '@/app/services/users.api';
-
-import Swal from 'sweetalert2'
-
-const UserForm = ({ user, title, userId = false }) => {
+const UserForm = ({ user, title, userId }) => {
   const router = useRouter(); // Hook useRouter para redirigir
-
-  async function updateUser(userId, user) {
-    const response = await fetch(`/api/auth/register`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(user),
-    });
-  
-    if (!response.ok) {
-      throw new Error(`Failed to update user: ${response.statusText}`);
-    }
-  
-    return await response.json();
-  }
-
   const form = useRef(user);
-  const params = useParams();
 
   useEffect(() => {
     if (form.current) {
@@ -47,26 +27,20 @@ const UserForm = ({ user, title, userId = false }) => {
       password: formData.get('password'),
     }
   
-    let message = '¡Registro exitoso!';
-  
-    if (userId) {
-      user._id = userId;
-
-      await updateUser(user._id, user);
-
-      
-      message = '¡Actualización exitosa!';
-    } else {
-      const newUser = await createUser(user);
-      localStorage.setItem('id', newUser._id);
+    try {
+      const result = await updateUser(userId, user);
+      if (!result) {
+        throw new Error('No se pudo actualizar el usuario');
+      }
+      Swal.fire({
+        icon: 'success',
+        title: '¡Actualización exitosa!',
+      }).then(() => {
+        router.push('/'); // Redirgir al home después de actualizar
+      });
+    } catch (error) {
+      console.error(error);
     }
-  
-    Swal.fire({
-      icon: 'success',
-      title: message,
-    }).then(() => {
-      router.push('/'); // Redirigir al home después de la actualización
-    });
   }
 
   return (
