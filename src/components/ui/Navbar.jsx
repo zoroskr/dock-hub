@@ -15,6 +15,7 @@ const Navbar = () => {
     if (typeof window !== 'undefined') {
       const userId = localStorage.getItem('id');
       const userType = localStorage.getItem('type');
+      
       setIsLoggedIn(!!userId);
       setUserType(userType);
     }

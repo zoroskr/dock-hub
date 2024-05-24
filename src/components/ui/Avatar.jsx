@@ -39,8 +39,7 @@ const Avatar = () => {
     
 
   const handleLogout = () => {
-    localStorage.removeItem('id');
-    localStorage.removeItem('type');
+    localStorage.clear();
     router.push('/login') // Recargar el sitio
   }
 
