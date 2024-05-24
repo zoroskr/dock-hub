@@ -20,22 +20,21 @@ export async function GET(request, { params }) {
 }
 
 export async function PUT(request, { params }) {
-    try {
-        await connectDB();
-        const {id} = params;
-        if (!id) {
-        return NextResponse.json({ error: "ID is required" }, { status: 400 });
-        }
-        const user = await User.findByIdAndUpdate(id, request.body, { new: true });
-        console.log("prueba")
-        if (!user) {
-        return NextResponse.json({ error: "User not found" }, { status: 404 });
-        }
-        return NextResponse.json(user);
+  try {
+    await connectDB();
+    const { id } = params;
+    if (!id) {
+      return NextResponse.json({ error: "ID is required" }, { status: 400 });
     }
-    catch (error) {
-        return NextResponse.json({ error: "Error updating user" }, { status: 500 });
+    const data = await request.json();
+    const user = await User.findByIdAndUpdate(id, data, { new: true });
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
+    return NextResponse.json(user);
+  } catch (error) {
+    return NextResponse.json({ error: "Error updating user" }, { status: 500 });
+  }
 }
 
 export async function DELETE(request, { params }) {

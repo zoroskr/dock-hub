@@ -46,7 +46,7 @@ export async function POST(request) {
         text: `Un nuevo titular fue creado: ${user.email} ${user.DNI}. Porfavor confirmar a traves de este link: http://localhost:3000/confirmpage el token del usuario a verificar es: ${confirmationToken}`
       };
 
-      transporter.sendMail(mailOptions, function(error, info){
+      transporter.sendMail(mailOptions, function (error, info) {
         if (error) {
           console.log(error);
         } else {
@@ -56,12 +56,5 @@ export async function POST(request) {
     }
   }
 
-  return NextResponse.json(user);
-}
-
-export async function PUT(request) {
-  await connectDB();
-  const { _id, ...data } = await request.json();
-   const user = await User.findOneAndUpdate({ _id }, data, { new: true });
   return NextResponse.json(user);
 }

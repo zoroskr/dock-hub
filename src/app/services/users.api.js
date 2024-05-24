@@ -1,6 +1,8 @@
+import Swal from "sweetalert2";
+
 export const getUsers = async () => {
   try {
-    const response = await fetch(`http://localhost:3000/auth/register`);
+    const response = await fetch(`http://localhost:3000/users`);
     if (!response.ok) {
       throw new Error('No se pudo obtener el usuario');
     }
@@ -26,7 +28,7 @@ export const getUser = async (id) => {
 
 export const getUserByEmail = async (email) => {
   try {
-    const response = await fetch(`http://localhost:3000/api/auth/register`);
+    const response = await fetch(`http://localhost:3000/api/users`);
     if (!response.ok) {
       throw new Error('No se pudo obtener el usuario');
     }
@@ -40,7 +42,7 @@ export const getUserByEmail = async (email) => {
 
 export const createUser = async (user) => {
   try {
-    const response = await fetch(`http://localhost:3000/api/auth/register`, {
+    const response = await fetch(`http://localhost:3000/api/users`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -72,6 +74,9 @@ export const updateUser = async (id, user) => {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error(error);
+    Swal.fire({
+      icon: 'error',
+      title: error.message,
+    });
   }
 }

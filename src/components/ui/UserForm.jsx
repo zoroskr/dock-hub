@@ -45,6 +45,7 @@ const UserForm = ({ user, title, userId = false }) => {
       address: formData.get("address"),
       email: formData.get("email"),
       password: formData.get("password"),
+      age: formData.get("age"),
       type: t,
       verified: false,
     };
