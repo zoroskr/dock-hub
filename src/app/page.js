@@ -15,10 +15,15 @@ export default function Home() {
     const fetchPosts = async () => {
       try {
         let fetchedPosts = await getPosts();
+        //filtrar por los que no corresponden al usuario logueado
         fetchedPosts = fetchedPosts.filter(p => p.owner !== localStorage.getItem('id'));
+        //Ver si se muestran posts de todos los tipos o solo de embarcaciones
         if (!localStorage.getItem('id')  || localStorage.getItem('verified') == 'false' && localStorage.getItem('type') != 'Admin') {
           fetchedPosts = fetchedPosts.filter(p => p.type == 'Embarcaciones');
         }
+        //Mostrar solo posts en estado Activo
+        fetchedPosts = fetchedPosts.filter(p => p.state == 'Activo');
+
         setPosts(fetchedPosts);
         setLoading(false);
         console.log('useEffect: posts fetched', fetchedPosts); // Depuración

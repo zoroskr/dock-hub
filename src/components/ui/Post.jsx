@@ -224,7 +224,7 @@ const Post = ({ post, showProposeButton }) => {
               onClick={() => pausarPublicacion(post._id, post)}
               className="inline-flex items-center px-1 py-1 text-md font-medium text-center text-white bg-yellow-800 rounded-3xl duration-300 hover:bg-yellow-700"
             >
-              {post.state === "Pausado" ? "Despausar" : "Pausar"}
+              {post.state === "Pausado" ? "Resumir" : "Pausar"}
             </Button>
           </div>
         )}
