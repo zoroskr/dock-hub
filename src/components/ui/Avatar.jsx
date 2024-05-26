@@ -10,6 +10,7 @@ const Avatar = () => {
   const refDropdown = useRef(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     // Asegúrate de que el código solo se ejecuta en el cliente
@@ -92,6 +93,11 @@ const Avatar = () => {
                     <li>
                       <Link href="/posts" className="block px-4 py-2 hover:bg-gray-100">
                         Ver mis publicaciones
+                      </Link>
+                    </li>
+                    <li>
+                      <Link href="/favorites" className="block px-4 py-2 hover:bg-gray-100">
+                        Ver mis favoritos
                       </Link>
                     </li>
                     <li>

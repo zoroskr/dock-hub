@@ -1,29 +1,28 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import { getUser } from "@/app/services/users.api";
+import { getUser, updateUser } from "@/app/services/users.api";
 import Swal from "sweetalert2";
 import { Button } from "flowbite-react";
 import { deletePost, updatePost } from "@/app/services/posts.api";
 import { useRouter } from "next/navigation";
 
-const Post = ({ post, showProposeButton }) => {
+const Post = ({ post, showProposeButton, isFavorite = false, showStar = true, onRemoveFavorite }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [needsTruncate, setNeedsTruncate] = useState(false);
+  const [star, setStar] = useState(isFavorite);
   const router = useRouter();
-  const interesado = localStorage.getItem("id");
-  const showButton = interesado && interesado !== post.owner;
-  const showOwnerButtons = interesado && interesado === post.owner;
 
-  const descriptionRef = React.useRef(null);
+  const loggedUserId = localStorage.getItem("id");
+  const showButton = loggedUserId && loggedUserId !== post.owner;
+  const showOwnerButtons = loggedUserId && loggedUserId === post.owner;
 
-  React.useEffect(() => {
+  const descriptionRef = useRef(null);
+
+  useEffect(() => {
     if (descriptionRef.current) {
-      setNeedsTruncate(
-        descriptionRef.current.scrollHeight >
-          descriptionRef.current.clientHeight
-      );
+      setNeedsTruncate(descriptionRef.current.scrollHeight > descriptionRef.current.clientHeight);
     }
   }, [post.description]);
 
@@ -84,6 +83,40 @@ const Post = ({ post, showProposeButton }) => {
     }
   };
 
+  const handleFavorite = async () => {
+    if (!loggedUserId) {
+      router.push("/login");
+      return;
+    }
+    const user = await getUser(loggedUserId);
+    let icon = "success";
+    let message = "Se agregó a Mis favoritos.";
+    if (user.favorites.includes(post._id)) {
+      user.favorites = user.favorites.filter((id) => id !== post._id);
+      icon = "error";
+      message = "Se eliminó de Mis favoritos.";
+      setStar(false);
+    } else {
+      user.favorites.push(post._id);
+      setStar(true);
+    }
+    await updateUser(loggedUserId, user);
+    const Toast = Swal.mixin({
+      toast: true,
+      position: "bottom-right",
+      showConfirmButton: false,
+      timer: 1500,
+      didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
+      },
+    });
+    Toast.fire({
+      icon: icon,
+      title: message,
+    });
+  };
+
   const eliminarPublicacion = async (id) => {
     Swal.fire({
       title: "¿Estás seguro?",
@@ -97,11 +130,7 @@ const Post = ({ post, showProposeButton }) => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         await deletePost(id);
-        Swal.fire(
-          "Eliminada!",
-          "Tu publicación ha sido eliminada.",
-          "success"
-        ).then(() => {
+        Swal.fire("Eliminada!", "Tu publicación ha sido eliminada.", "success").then(() => {
           location.reload();
         });
       }
@@ -110,69 +139,48 @@ const Post = ({ post, showProposeButton }) => {
 
   const pausarPublicacion = async (id, newFields) => {
     newFields.state = post.state === "Pausado" ? "Activo" : "Pausado";
-
     await updatePost(id, newFields);
-
     window.location.reload();
   };
 
   return (
     <div className="max-w-sm bg-custom-gray rounded-xl shadow dark:bg-gray-800 dark:border-gray-700 duration-500 hover:scale-105">
       <div className="p-5 flex flex-col justify-between">
-        <a href="#">
-          <h5 className="mb-1 text-2xl font-bold tracking-tight text-gray-900 dark:text-white break-words overflow-y-auto">
-            {post.name}
-          </h5>
-        </a>
-
+        <div className="flex justify-between mb-2">
+          <a href="#">
+            <h5 className="mb-1 text-2xl font-bold tracking-tight text-gray-900 dark:text-white break-words overflow-y-auto">
+              {post.name}
+            </h5>
+          </a>
+          {showStar && (
+            <span className="text-2xl cursor-pointer" onClick={handleFavorite}>
+              <Image src={star ? "/icons8-star.svg" : "/icons8-starWhite.svg"} alt="star" width={20} height={20}></Image>
+            </span>
+          )}
+        </div>
         {showOwnerButtons && (
           <>
             <div className="flex mb-2">
               <div>Estado: </div>
-              {post.state === "Activo" && (
-                <div className="text-green-700 font-semibold ml-1 mb-1">
-                  {" "}
-                  Activo
-                </div>
-              )}
-              {post.state === "Pausado" && (
-                <div className="text-blue-400 font-semibold ml-1 mb-1">
-                  {" "}
-                  Pausado
-                </div>
-              )}
-              {post.state === "Rechazado" && (
-                <div className="text-red-500 font-semibold ml-1 mb-1">
-                  Rechazado
-                </div>
-              )}
+              {post.state === "Activo" && <div className="text-green-700 font-semibold ml-1 mb-1"> Activo</div>}
+              {post.state === "Pausado" && <div className="text-blue-400 font-semibold ml-1 mb-1"> Pausado</div>}
+              {post.state === "Rechazado" && <div className="text-red-500 font-semibold ml-1 mb-1">Rechazado</div>}
             </div>
           </>
         )}
         <div className="relative mb-2">
-          <Image
-            src={post.image}
-            alt="bora"
-            width={300}
-            height={300}
-            className="rounded-xl h-48 object-cover"
-          />
+          <Image src={post.image} alt="bora" width={300} height={300} className="rounded-xl h-48 object-cover" />
         </div>
         <div className="relative">
           <p
             ref={descriptionRef}
-            className={`mb-4 font-normal w-full text-black dark:text-gray-400 break-words ${
-              !isExpanded ? "fixed-height" : ""
-            }`}
+            className={`mb-4 font-normal w-full text-black dark:text-gray-400 break-words ${!isExpanded ? "fixed-height" : ""}`}
           >
             {post.description}
           </p>
           {needsTruncate && (
             <div className="button-container">
-              <button
-                onClick={handleExpandClick}
-                className="text-gray-800 font-semibold text-sm"
-              >
+              <button onClick={handleExpandClick} className="text-gray-800 font-semibold text-sm">
                 {isExpanded ? "Ver menos" : "Ver más"}
               </button>
             </div>
@@ -191,19 +199,11 @@ const Post = ({ post, showProposeButton }) => {
               fill="none"
               viewBox="0 0 14 10"
             >
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M1 5h12m0 0L9 1m4 4L9 9"
-              />
+              <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
             </svg>
           </button>
         )}
-        {post.state === "Pausado" && (
-          <p>Esta publicacion se encuentra pausada</p>
-        )}
+        {post.state === "Pausado" && <p>Esta publicacion se encuentra pausada</p>}
 
         {showOwnerButtons && (
           <div className="flex justify-between gap-2">
@@ -227,6 +227,14 @@ const Post = ({ post, showProposeButton }) => {
               {post.state === "Pausado" ? "Resumir" : "Pausar"}
             </Button>
           </div>
+        )}
+        {showStar ? null : (
+          <button
+            onClick={() => onRemoveFavorite(post._id)}
+            className="inline-flex items-center mx-auto mb-2 mt-1 px-3 py-2 text-sm font-medium text-center rounded-xl duration-300 hover:bg-gray-300 border-solid border-2 border-black"
+          >
+            Eliminar de favoritos
+          </button>
         )}
       </div>
     </div>

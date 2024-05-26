@@ -9,7 +9,8 @@ const schema = new mongoose.Schema({
   age: Number,
   type: String, // "Titular", "Regular", "Admin"
   verified: Boolean,
-  confirmationToken: String
+  confirmationToken: String,
+  favorites: [String],
 });
 
 export default mongoose.models.User || mongoose.model('User', schema);
