@@ -1,24 +1,20 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import Image from 'next/image'
+import Image from "next/image";
 import Link from "next/link";
-import { useRouter} from 'next/navigation';
 
-const Avatar = () => {
+const Avatar = ({ handleLogout }) => {
   const [isOpen, setIsOpen] = useState(false);
   const refDropdown = useRef(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
-  const router = useRouter();
 
   useEffect(() => {
     // Asegúrate de que el código solo se ejecuta en el cliente
-    if (typeof window !== 'undefined') {
-      const userId = localStorage.getItem('id');
-      const userType = localStorage.getItem('type');
-      setIsLoggedIn(!!userId);
-      setIsAdmin(userType === 'Admin');
+    if (typeof window !== "undefined") {
+      const userId = localStorage.getItem("id");
+      const userType = localStorage.getItem("type");
+      setIsAdmin(userType === "Admin");
     }
   }, []);
 
@@ -37,25 +33,11 @@ const Avatar = () => {
     };
   }, [refDropdown]);
 
-    
-
-  const handleLogout = () => {
-    localStorage.clear();
-    router.push('/login') // Recargar el sitio
-  }
-
   return (
     <div style={{ position: "relative" }}>
       <span className="ml-2 cursor-pointer" onClick={toggleDropdown}>
-        <div
-          className="inline-block rounded-full bg-rgb-190-175-85 p-1 duration-300 hover:scale-110"
-        >
-          <Image
-            src="/user48.png"
-            alt=""
-            width={30}
-            height={30}
-          />
+        <div className="inline-block rounded-full bg-rgb-190-175-85 p-1 duration-300 hover:scale-110">
+          <Image src="/user48.png" alt="" width={30} height={30} />
         </div>
       </span>
       {isOpen && (
@@ -64,57 +46,55 @@ const Avatar = () => {
           className="absolute right-0 z-10 bg-white border border-gray-200 rounded-xl shadow border-t-0"
           style={{ top: "calc(100% + 8px)" }}
         >
-          {isLoggedIn && (
-            <div>
-              <div className="p-3">
-                <div>Mi cuenta</div>
-              </div>
-              <ul className="py-1">
-              {isAdmin ? (
-                  <>
-                    <li>
-                      <Link href={`/editarperfil/${localStorage.getItem('id')}`} className="block px-3 py-2 hover:bg-gray-100">
-                        Editar Perfil
-                      </Link>
-                    </li>
-                    <li>
-                      <Link href="/login" className="block px-3 py-2 hover:bg-gray-100" onClick={handleLogout}>
-                        Cerrar sesión
-                      </Link>
-                    </li>
-                  </>
-                ) : (
-                  <>
-                    <li>
-                      <Link href="/publicar" className="block px-4 py-2 hover:bg-gray-100">
-                        Crear Publicación
-                      </Link>
-                    </li>
-                    <li>
-                      <Link href="/posts" className="block px-4 py-2 hover:bg-gray-100">
-                        Ver mis publicaciones
-                      </Link>
-                    </li>
-                    <li>
-                      <Link href="/favorites" className="block px-4 py-2 hover:bg-gray-100">
-                        Ver mis favoritos
-                      </Link>
-                    </li>
-                    <li>
-                      <Link href={`/editarperfil/${localStorage.getItem('id')}`} className="block px-4 py-2 hover:bg-gray-100">
-                        Editar Perfil
-                      </Link>
-                    </li>
-                    <li>
-                      <Link href="/login" className="block px-4 py-2 hover:bg-gray-100" onClick={handleLogout}>
-                        Cerrar sesión
-                      </Link>
-                    </li>
-                  </>
-                )}
-              </ul>
+          <div>
+            <div className="p-3">
+              <div>Mi cuenta</div>
             </div>
-          )}
+            <ul className="py-1">
+              {isAdmin ? (
+                <>
+                  <li>
+                    <Link href={`/editarperfil/${localStorage.getItem("id")}`} className="block px-3 py-2 hover:bg-gray-100">
+                      Editar Perfil
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/login" className="block px-3 py-2 hover:bg-gray-100" onClick={handleLogout}>
+                      Cerrar sesión
+                    </Link>
+                  </li>
+                </>
+              ) : (
+                <>
+                  <li>
+                    <Link href="/publicar" className="block px-4 py-2 hover:bg-gray-100">
+                      Crear Publicación
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/posts" className="block px-4 py-2 hover:bg-gray-100">
+                      Ver mis publicaciones
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/favorites" className="block px-4 py-2 hover:bg-gray-100">
+                      Ver mis favoritos
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href={`/editarperfil/${localStorage.getItem("id")}`} className="block px-4 py-2 hover:bg-gray-100">
+                      Editar Perfil
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/login" className="block px-4 py-2 hover:bg-gray-100" onClick={handleLogout}>
+                      Cerrar sesión
+                    </Link>
+                  </li>
+                </>
+              )}
+            </ul>
+          </div>
         </div>
       )}
     </div>

@@ -10,12 +10,16 @@ const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userType, setUserType] = useState('');
 
+  const handleLogout = () => {
+    localStorage.clear();
+    setIsLoggedIn(false);
+  };
+
   useEffect(() => {
     // Asegúrate de que el código solo se ejecuta en el cliente
     if (typeof window !== 'undefined') {
       const userId = localStorage.getItem('id');
       const userType = localStorage.getItem('type');
-      
       setIsLoggedIn(!!userId);
       setUserType(userType);
     }
@@ -44,7 +48,9 @@ const Navbar = () => {
                 {isLoggedIn ? (
                 <>
                   <li>
-                    <Avatar>Mi usuario</Avatar>
+                    <Avatar 
+                      handleLogout={handleLogout}
+                    >Mi usuario</Avatar>
                   </li>
                 </>
                 ) : (
