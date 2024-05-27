@@ -56,9 +56,8 @@ export default function Home() {
     // Si no hay término de búsqueda, obtener todos los posts
     if (!defaultSearch) {
       try {
-        const fetchedPosts = await getPosts();
-        setPosts(fetchedPosts);
-        setMessage(fetchedPosts.length === 0 ? 'No hay publicaciones disponibles' : '');
+        setPosts(posts);
+        setMessage(posts.length === 0 ? 'No hay publicaciones disponibles' : '');
       } catch (error) {
         console.error('Error fetching posts:', error);
         setMessage('Error al obtener publicaciones');
