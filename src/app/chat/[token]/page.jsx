@@ -32,12 +32,13 @@ const ChatInterface = () => {
       const response = await fetch(`http://localhost:3000/api/messages/66621bee42945890c5dbabc4`);
       if (response.ok) {
         const data = await response.json();
+        console.log(data.messages);
   
         const responseAllMessages = await fetch(`http://localhost:3000/api/messages`);
         if (responseAllMessages.ok) {
           const allMessages = await responseAllMessages.json();
   
-          const filteredMessages = allMessages.filter((message) => data.message.includes(message.id));
+          const filteredMessages = allMessages.filter((message) => data.messages.includes(message._id));
   
           setMessages(filteredMessages);
         }
@@ -48,7 +49,7 @@ const ChatInterface = () => {
     loadMessages();
   
     // Configurar un intervalo para cargar nuevos mensajes cada 5 segundos
-    const intervalId = setInterval(loadMessages, 5000);
+    const intervalId = setInterval(loadMessages, 2000);
   
     // Limpiar el intervalo cuando el componente se desmonte
     return () => clearInterval(intervalId);
