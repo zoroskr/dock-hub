@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
+import { getUser } from "../../services/users.api";
 
 const ChatInterface = () => {
   const [currentMessage, setCurrentMessage] = useState("");
@@ -14,7 +15,8 @@ const ChatInterface = () => {
 
   const sendMessage = async () => {
     if (currentMessage.trim() !== "") {
-      const newMessage = { sender: "User", content: currentMessage, chatId: params.id };
+      const user = await getUser(localStorage.getItem("id"));
+      const newMessage = { sender: user.fullName, content: currentMessage, chatId: params.id };
       const response = await fetch("http://localhost:3000/api/messages", {
         method: "POST",
         headers: {
@@ -44,11 +46,13 @@ const ChatInterface = () => {
 
           const filteredMessages = allMessages.filter((message) => data.messages.includes(message._id));
 
+          console.log(filteredMessages);
+
           setMessages(filteredMessages);
         }
       }
       setChatId(params.id);
-      console.log(params.id);
+      //console.log(params.id);
     };
 
     // Cargar los mensajes inmediatamente después de que el componente se monte
