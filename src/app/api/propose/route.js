@@ -1,8 +1,8 @@
 import { connectDB } from '@/libs/mongodb';
 import User from '@/models/user';
+import Chat from '@/models/Chat';
 import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
-
 
 
 export async function POST(request) {
@@ -14,15 +14,8 @@ export async function POST(request) {
     let proposer = await User.findOne({ email: data.proposer.email });
     let owner = await User.findOne({ email: data.owner.email });
     
-    // Si el proponente no existe, crea un nuevo usuario
-    if (!proposer) {
-      proposer = await User.create(data.proposer);
-    }
-    
-    // Si el propietario no existe, crea un nuevo usuario
-    if (!owner) {
-      owner = await User.create(data.owner);
-    }
+    const newChat = new Chat({ users: [proposer, owner] });
+    await newChat.save();
   
     // Configura el transportador de correo
     let transporter = nodemailer.createTransport({
