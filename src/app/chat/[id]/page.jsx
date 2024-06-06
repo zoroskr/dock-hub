@@ -1,16 +1,20 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 
 const ChatInterface = () => {
   const [currentMessage, setCurrentMessage] = useState("");
   const [messages, setMessages] = useState([]);
+  const [chatId, setChatId] = useState(); // Añadir un estado para almacenar la información del chat [1
   const router = useRouter();
-  const chatId = router.query; // Asume que la ruta es algo como /chat/[id]
+  const params = useParams();
+
+  // const chatId = params.id; // Asume que la ruta es algo como /chat/[id]
 
   const sendMessage = async () => {
     if (currentMessage.trim() !== "") {
-      const newMessage = { sender: "User", content: currentMessage, chatId: "66621bee42945890c5dbabc4" };
+      const newMessage = { sender: "User", content: currentMessage, chatId: params.id };
       const response = await fetch("http://localhost:3000/api/messages", {
         method: "POST",
         headers: {
@@ -29,28 +33,30 @@ const ChatInterface = () => {
 
   useEffect(() => {
     const loadMessages = async () => {
-      const response = await fetch(`http://localhost:3000/api/messages/66621bee42945890c5dbabc4`);
+      const response = await fetch(`http://localhost:3000/api/messages/${params.id}`);
       if (response.ok) {
         const data = await response.json();
         console.log(data.messages);
-  
+
         const responseAllMessages = await fetch(`http://localhost:3000/api/messages`);
         if (responseAllMessages.ok) {
           const allMessages = await responseAllMessages.json();
-  
+
           const filteredMessages = allMessages.filter((message) => data.messages.includes(message._id));
-  
+
           setMessages(filteredMessages);
         }
       }
+      setChatId(params.id);
+      console.log(params.id);
     };
-  
+
     // Cargar los mensajes inmediatamente después de que el componente se monte
     loadMessages();
-  
+
     // Configurar un intervalo para cargar nuevos mensajes cada 5 segundos
     const intervalId = setInterval(loadMessages, 2000);
-  
+
     // Limpiar el intervalo cuando el componente se desmonte
     return () => clearInterval(intervalId);
   }, []);
