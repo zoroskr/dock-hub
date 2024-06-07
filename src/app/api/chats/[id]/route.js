@@ -22,3 +22,21 @@ export async function GET(request, { params }) {
     return NextResponse.json({ error: "Error fetching chat" }, { status: 500 });
   }
 }
+
+export async function PUT(request, { params }) {
+  try {
+    await connectDB();
+    const { id } = params;
+    if (!id) {
+      return NextResponse.json({ error: "ID is required" }, { status: 400 });
+    }
+    const data = await request.json();
+    const chat = await Chat.findByIdAndUpdate(id, data, { new: true });
+    if (!chat) {
+      return NextResponse.json({ error: "chat not found" }, { status: 404 });
+    }
+    return NextResponse.json(chat);
+  } catch (error) {
+    return NextResponse.json({ error: "Error updating chat" }, { status: 500 });
+  }
+}

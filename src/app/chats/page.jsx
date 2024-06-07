@@ -9,17 +9,14 @@ const Page = () => {
 
   useEffect(() => {
     const loadChats = async () => {
-      let obtenerUser = await getUser(localStorage.getItem("id"));
-      console.log("🚀 ~ loadChats ~ obtenerUser:", obtenerUser);
       const chatsUser = await getFullChatsUser();
-      console.log("🚀 ~ loadChats ~ chatsUser:", chatsUser);
       setChats(chatsUser);
       setLoading(false); // Deja de cargar después de obtener los chats
     };
     loadChats();
   }, []);
 
-  // Retorna los chats con los datos de un chat, ultimo mensaje
+  // Retorna los datos de los chats más el ultimo mensaje y el receptor
   const getFullChatsUser = async () => {
     const user = await getUser(localStorage.getItem("id"));
     const chatsPromises = user.chats.map(async (chatId) => {
@@ -28,21 +25,11 @@ const Page = () => {
         const chat = await response.json();
         const receiverUserId = chat.users[0] === user._id ? chat.users[1] : chat.users[0];
         const receiverUser = await getUser(receiverUserId);
-        console.log("🚀 ~ messagesPromises ~ chat.messages:", chat.messages);
-        const messagesPromises = chat.messages.map(async (messageId) => {
-          const response = await fetch(`http://localhost:3000/api/messages/${messageId}`);
-          if (response.ok) {
-            return response.json();
-          }
-        });
-        const messages = await Promise.all(messagesPromises);
-        console.log("🚀 ~ ultimo ~ ultimo:", messages[messages.length - 1]);
-        const lastMessage = messages[messages.length - 1];
+        const lastMessage = chat.messages[chat.messages.length - 1];
         return { ...chat, lastMessage, receiverUser };
       }
     });
     const chatsUser = await Promise.all(chatsPromises);
-    console.log("🚀 ~ getFullChatsUser ~ chatsUser:", chatsUser);
     return chatsUser;
   };
 
