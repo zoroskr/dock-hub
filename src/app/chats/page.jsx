@@ -11,24 +11,38 @@ const Page = () => {
     const loadChats = async () => {
       let obtenerUser = await getUser(localStorage.getItem("id"));
       console.log("🚀 ~ loadChats ~ obtenerUser:", obtenerUser);
-      const chatsUser = await getChatsUser();
-      console.log("🚀 ~ loadChats ~ chatsUser:", chatsUser)
+      const chatsUser = await getFullChatsUser();
+      console.log("🚀 ~ loadChats ~ chatsUser:", chatsUser);
       setChats(chatsUser);
       setLoading(false); // Deja de cargar después de obtener los chats
     };
     loadChats();
   }, []);
 
-  const getChatsUser = async () => {
+  // Retorna los chats con los datos de un chat, ultimo mensaje
+  const getFullChatsUser = async () => {
     const user = await getUser(localStorage.getItem("id"));
     const chatsPromises = user.chats.map(async (chatId) => {
       const response = await fetch(`http://localhost:3000/api/chats/${chatId}`);
       if (response.ok) {
-        return response.json();
+        const chat = await response.json();
+        const receiverUserId = chat.users[0] === user._id ? chat.users[1] : chat.users[0];
+        const receiverUser = await getUser(receiverUserId);
+        console.log("🚀 ~ messagesPromises ~ chat.messages:", chat.messages);
+        const messagesPromises = chat.messages.map(async (messageId) => {
+          const response = await fetch(`http://localhost:3000/api/messages/${messageId}`);
+          if (response.ok) {
+            return response.json();
+          }
+        });
+        const messages = await Promise.all(messagesPromises);
+        console.log("🚀 ~ ultimo ~ ultimo:", messages[messages.length - 1]);
+        const lastMessage = messages[messages.length - 1];
+        return { ...chat, lastMessage, receiverUser };
       }
     });
     const chatsUser = await Promise.all(chatsPromises);
-    console.log("🚀 ~ getChatsUser ~ chatsUser:", chatsUser);
+    console.log("🚀 ~ getFullChatsUser ~ chatsUser:", chatsUser);
     return chatsUser;
   };
 
@@ -45,8 +59,8 @@ const Page = () => {
                 <li key={chat._id} className="w-full">
                   <Link href={`/chats/${chat._id}`} className="flex justify-center">
                     <div className="flex flex-col bg-custom-yellow2 text-black rounded-xl p-3 m-3 w-2/3 duration-300 hover:scale-105">
-                      <span>user: {chat.users[1]}</span>
-                      <span>chat ID: {chat._id}</span>
+                      <span className="font-bold">{chat.receiverUser.fullName}</span>
+                      <span>{chat.lastMessage ? chat.lastMessage.content : null}</span>
                     </div>
                   </Link>
                 </li>
@@ -62,4 +76,3 @@ const Page = () => {
 };
 
 export default Page;
-
