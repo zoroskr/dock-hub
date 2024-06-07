@@ -69,43 +69,47 @@ const ChatInterface = () => {
 
 
   return (
-    <div className="flex justify-end w-full items-center min-h-screen">
-      <div className="flex flex-col w-full max-w-4xl p-10">
-        <ul className="flex justify-center p-3">
-          {chats.map((chat) => (
-            <li key={chat._id} className="m-4 cursor-pointer">
-              {chat._id}
-            </li>
-          ))}
-        </ul>
-        <div className="w-full max-w-lg rounded-xl bg-gray-400">
-          <div className="text-center text-2xl bg-gray-800 text-white font-semibold rounded-t-xl p-3">
-            {otherUser ? `${otherUser.fullName}` : 'Cargando usuario...'}
-          </div>
-          <div className="overflow-auto p-4 bg-gray-800">
-            {messages.map((message, index) => (
-              <div key={index} className={`flex ${user && message.sender === user.fullName ? 'justify-end' : 'justify-start'}`}>
-                <div className={`bg-custom-yellow text-black p-3 m-4 rounded-xl max-w-xs`}>
-                  <div className="text-sm mb-1 text-black font-bold justify-end">{message.sender}</div>
-                  <div>{message.content}</div>
-                </div>
-              </div>
+        <div className="flex flex-col w-full justify-center items-center p-10">
+          <ul className="flex justify-center p-3 overflow-auto">
+            {chats.map((chat) => (
+              <li key={chat._id} className="m-4 cursor-pointer">
+                {chat._id}
+              </li>
             ))}
+          </ul>
+          <div className="w-full max-w-lg max-h-96 rounded-xl bg-gray-400 flex flex-col">
+            <div className="text-center text-2xl bg-gray-800 text-white font-semibold rounded-t-xl p-3">
+              {otherUser ? `${otherUser.fullName}` : 'Cargando usuario...'}
+            </div>
+            <div className="overflow-auto p-4 bg-gray-800">
+              {messages.map((message, index) => (
+                <div
+                  key={index}
+                  className={`flex ${user && message.sender === user.fullName ? 'justify-end' : 'justify-start'}`}
+                >
+                  <div className={`bg-custom-yellow text-black p-3 m-4 rounded-xl max-w-xs`}>
+                    <div className="text-sm mb-1 text-black font-bold justify-end">{message.sender}</div>
+                    <div className="overflow-auto break-words">{message.content}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <form onSubmit={sendMessage} className="flex p-4 bg-white border-t border-gray-200 rounded-b-xl">
+              <input
+                className="flex-grow px-4 py-2 mr-4 rounded-xl border border-gray-300"
+                placeholder="Escribe un mensaje..."
+                value={currentMessage}
+                onChange={(e) => setCurrentMessage(e.target.value)}
+              />
+              <button
+                type="submit"
+                className="px-4 py-2 rounded-xl bg-gray-800 duration-300   hover:bg-gray-500 text-white"
+              >
+                Enviar
+              </button>
+            </form>
           </div>
-          <form onSubmit={sendMessage} className="flex p-4 bg-white border-t border-gray-200 rounded-b-xl">
-            <input
-              className="flex-grow px-4 py-2 mr-4 rounded-xl border border-gray-300"
-              placeholder="Escribe un mensaje..."
-              value={currentMessage}
-              onChange={(e) => setCurrentMessage(e.target.value)}
-            />
-            <button type="submit" className="px-4 py-2 rounded-xl bg-gray-800 duration-300   hover:bg-gray-500 text-white">
-              Enviar
-            </button>
-          </form>
         </div>
-      </div>
-    </div>
   );
 };
 
