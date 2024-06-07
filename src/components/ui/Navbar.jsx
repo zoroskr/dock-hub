@@ -48,6 +48,9 @@ const Navbar = () => {
                 {isLoggedIn ? (
                 <>
                   <li>
+                    <Link href="/chats" className="block text-md text-white duration-300 hover:scale-110" aria-current="page">Mis chats</Link>
+                  </li>
+                  <li>
                     <Avatar 
                       handleLogout={handleLogout}
                     >Mi usuario</Avatar>

@@ -67,6 +67,11 @@ const Avatar = ({ handleLogout }) => {
               ) : (
                 <>
                   <li>
+                    <Link href="/chats" className="block px-4 py-2 hover:bg-gray-100">
+                      Ver mis chats
+                    </Link>
+                  </li>
+                  <li>
                     <Link href="/publicar" className="block px-4 py-2 hover:bg-gray-100">
                       Crear Publicación
                     </Link>
