@@ -9,6 +9,7 @@ import {
 } from "@/app/services/users.api";
 
 import Swal from "sweetalert2";
+import { Label, Select } from "flowbite-react";
 
 const UserForm = ({ user, title, userId = false }) => {
   const form = useRef(user);
@@ -107,14 +108,9 @@ const UserForm = ({ user, title, userId = false }) => {
     <div className="flex justify-center items-center h-screen mt-16 mb-16">
       <div className="max-w-lg w-full bg-gray-900 rounded-xl p-6">
         <form ref={form} className="max-w-sm mx-auto" onSubmit={handleSubmit}>
-          <h1 className="text-xl font-bold leading-tight tracking-tight text-white md:text-2xl dark:text-white">
-            {title}
-          </h1>
+          <h1 className="text-xl font-bold leading-tight tracking-tight text-white md:text-2xl dark:text-white">{title}</h1>
           <div className="mb-5 mt-3">
-            <label
-              for="fullname"
-              className="block mb-2 text-sm font-medium text-white dark:text-white"
-            >
+            <label for="fullname" className="block mb-2 text-sm font-medium text-white dark:text-white">
               Nombre
             </label>
             <input
@@ -128,10 +124,7 @@ const UserForm = ({ user, title, userId = false }) => {
           </div>
 
           <div className="mb-5">
-            <label
-              for="DNI"
-              className="block mb-2 text-sm font-medium text-white dark:text-white"
-            >
+            <label for="DNI" className="block mb-2 text-sm font-medium text-white dark:text-white">
               DNI
             </label>
             <input
@@ -145,10 +138,7 @@ const UserForm = ({ user, title, userId = false }) => {
           </div>
 
           <div className="mb-5">
-            <label
-              for="address"
-              className="block mb-2 text-sm font-medium text-white dark:text-white"
-            >
+            <label for="address" className="block mb-2 text-sm font-medium text-white dark:text-white">
               Dirección
             </label>
             <input
@@ -162,10 +152,32 @@ const UserForm = ({ user, title, userId = false }) => {
           </div>
 
           <div className="mb-5">
-            <label
-              for="email"
-              className="block mb-2 text-sm font-medium text-white dark:text-white"
-            >
+            <label htmlFor="age" className="block mb-2 text-sm font-medium text-white dark:text-white">
+              Edad
+            </label>
+            <input
+              type="number"
+              id="age"
+              name="age"
+              min="18"
+              className="shadow-sm bg-gray-50 border border-gray-300 text-black text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+              required
+            />
+          </div>
+
+          <div className="max-w-md">
+            <div className="mb-2 block">
+              <Label htmlFor="type" value="Tipo de residencia" className="text-white" />
+            </div>
+            <Select name="type" id="type" className="custom-select" required>
+              <option>Argentino</option>
+              <option>Resid</option>
+              <option>Inmuebles</option>
+            </Select>
+          </div>
+
+          <div className="mb-5">
+            <label for="email" className="block mb-2 text-sm font-medium text-white dark:text-white">
               Email
             </label>
             <input
@@ -180,27 +192,7 @@ const UserForm = ({ user, title, userId = false }) => {
           </div>
 
           <div className="mb-5">
-            <label
-              htmlFor="age"
-              className="block mb-2 text-sm font-medium text-white dark:text-white"
-            >
-              Edad
-            </label>
-            <input
-              type="number"
-              id="age"
-              name="age"
-              min="18"
-              className="shadow-sm bg-gray-50 border border-gray-300 text-black text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-              required
-            />
-          </div>
-
-          <div className="mb-5">
-            <label
-              for="password"
-              className="block mb-2 text-sm font-medium text-white dark:text-white"
-            >
+            <label for="password" className="block mb-2 text-sm font-medium text-white dark:text-white">
               Contraseña
             </label>
             <input
@@ -212,10 +204,7 @@ const UserForm = ({ user, title, userId = false }) => {
             />
           </div>
           <div className="mb-5">
-            <label
-              for="repeat-password"
-              className="block mb-2 text-sm font-medium text-white dark:text-white"
-            >
+            <label for="repeat-password" className="block mb-2 text-sm font-medium text-white dark:text-white">
               Repetir contraseña
             </label>
             <input
@@ -236,10 +225,7 @@ const UserForm = ({ user, title, userId = false }) => {
                 disabled={userId}
                 className="text-blue-500 rounded-xl focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:text-blue-500 dark:shadow-sm-light"
               />
-              <label
-                for="isOwner"
-                className="text-white dark:text-white font-semibold"
-              >
+              <label for="isOwner" className="text-white dark:text-white font-semibold">
                 Soy cliente en Yate Mate
               </label>
             </div>
