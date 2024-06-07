@@ -8,6 +8,7 @@ const ChatInterface = () => {
   const [messages, setMessages] = useState([]);
   const [chat, setChat] = useState(null);
   const [user, setUser] = useState({});
+  const [otherUser, setOtherUser] = useState({});
   const [chats, setChats] = useState([]);
   const params = useParams();
 
@@ -41,7 +42,11 @@ const ChatInterface = () => {
         if (chatResponse.ok) {
           const chatData = await chatResponse.json();
           setChat(chatData);
-
+          
+          const idOtroUsuario = chatData.users.find((userId) => userId != usuario._id);
+          const otroUsuario = await getUser(idOtroUsuario);
+          setOtherUser(otroUsuario);
+          
           const messagesResponse = await fetch(`http://localhost:3000/api/messages`);
           if (messagesResponse.ok) {
             const allMessages = await messagesResponse.json();
@@ -62,7 +67,6 @@ const ChatInterface = () => {
 
   if (!chat) return <div className="font-bold">Cargando...</div>;
 
-  const otherUser = chat.users.find((chatUser) => chatUser._id !== user._id);
 
   return (
     <div className="flex justify-end w-full items-center min-h-screen">
@@ -80,7 +84,7 @@ const ChatInterface = () => {
           </div>
           <div className="overflow-auto p-4 bg-gray-800">
             {messages.map((message, index) => (
-              <div key={index} className={`flex ${message.sender === user.fullName ? 'justify-end' : 'justify-start'}`}>
+              <div key={index} className={`flex ${user && message.sender === user.fullName ? 'justify-end' : 'justify-start'}`}>
                 <div className={`bg-custom-yellow text-black p-3 m-4 rounded-xl max-w-xs`}>
                   <div className="text-sm mb-1 text-black font-bold justify-end">{message.sender}</div>
                   <div>{message.content}</div>
