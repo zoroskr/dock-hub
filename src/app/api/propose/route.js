@@ -21,7 +21,7 @@ export async function POST(request) {
     let transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: 'ivanskrt1@gmail.com',
+        user: 'test@test.com',
         pass: 'cawt heob hzhr feqh'
       }
     });
@@ -45,5 +45,5 @@ export async function POST(request) {
     });
   
   
-    return NextResponse.json({proposer, owner});
+    return NextResponse.json({proposer, owner, newChat});
   }

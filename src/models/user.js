@@ -11,6 +11,7 @@ const schema = new mongoose.Schema({
   verified: Boolean,
   confirmationToken: String,
   favorites: [String],
+  chats: [String],
 });
 
 export default mongoose.models.User || mongoose.model('User', schema);

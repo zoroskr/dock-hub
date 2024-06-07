@@ -15,7 +15,7 @@ export async function GET() {
 let transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: 'ivanskrt1@gmail.com', //TU EMAIL
+    user: 'test@test.com', //TU EMAIL
     pass: 'cawt heob hzhr feqh' //GENERAR CONTRASEÑA POR GOOGLE APP PASSWORD
   }
 });
