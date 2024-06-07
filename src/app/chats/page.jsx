@@ -30,20 +30,22 @@ const page = () => {
   }, []);
 
   return (
-    <div className="bg-gray-900 m-8 text-white text-center">
-      <h1 className="">Chats</h1>
-      <ul>
-        {chats.map((chat) => (
-          <li key={chat._id}>
-            <Link href={`/chats/${chat._id}`}>
-                <div className="flex flex-col bg-blue-500 m-5">
-                  <span>user:{chat.users[1]}</span>
-                  <span>chat ID:{chat._id}</span>
-                </div> 
-            </Link>
-          </li>
-        ))}
-      </ul>
+    <div className="flex justify-center items-center min-h-screen">
+      <div className="bg-gray-900 text-white text-center w-full max-w-2xl m-8 p-6 rounded-2xl">
+        <h1 className="font-bold p-3 text-xl">Chats</h1>
+        <ul className="flex flex-col items-center">
+          {chats.map((chat) => (
+            <li key={chat._id} className="w-full">
+              <Link href={`/chats/${chat._id}`} className="flex justify-center">
+                <div className="flex flex-col bg-custom-yellow2 text-black rounded-xl p-3 m-3 w-2/3 duration-300 hover:scale-105">
+                  <span>user: {chat.users[1]}</span>
+                  <span>chat ID: {chat._id}</span>
+                </div>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };
