@@ -12,6 +12,7 @@ const schema = new mongoose.Schema({
   confirmationToken: String,
   favorites: [String],
   chats: [String],
+  resident: Boolean, // Argentino residente o no
 });
 
 export default mongoose.models.User || mongoose.model('User', schema);

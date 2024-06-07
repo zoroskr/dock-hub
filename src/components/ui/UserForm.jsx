@@ -21,10 +21,12 @@ const UserForm = ({ user, title, userId = false }) => {
       form.current.elements.fullName.value = user.fullName || "";
       form.current.elements.DNI.value = user.DNI || "";
       form.current.elements.address.value = user.address || "";
-      form.current.elements.email.value = user.email || "";
+        form.current.elements.email.value = user.email || "";
+        form.current.elements.age.value = user.age || "";
       form.current.elements.password.value = user.password || "";
       form.current.elements["repeat-password"].value = user.password || "";
       form.current.elements.isOwner.checked = user.isOwner || false;
+      form.current.elements.isResident.checked = user.isResident || false;
     }
   }, [user]);
 
@@ -49,6 +51,7 @@ const UserForm = ({ user, title, userId = false }) => {
       age: formData.get("age"),
       type: t,
       verified: false,
+      resident: formData.get("isResident") === "on"
     };
     console.log("user", user);
 
@@ -165,17 +168,6 @@ const UserForm = ({ user, title, userId = false }) => {
             />
           </div>
 
-          <div className="max-w-md">
-            <div className="mb-2 block">
-              <Label htmlFor="type" value="Tipo de residencia" className="text-white" />
-            </div>
-            <Select name="type" id="type" className="custom-select" required>
-              <option>Argentino</option>
-              <option>Resid</option>
-              <option>Inmuebles</option>
-            </Select>
-          </div>
-
           <div className="mb-5">
             <label for="email" className="block mb-2 text-sm font-medium text-white dark:text-white">
               Email
@@ -227,6 +219,21 @@ const UserForm = ({ user, title, userId = false }) => {
               />
               <label for="isOwner" className="text-white dark:text-white font-semibold">
                 Soy cliente en Yate Mate
+              </label>
+            </div>
+          </div>
+
+          <div className="mb-5">
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                id="isResident"
+                name="isResident"
+                disabled={userId}
+                className="text-blue-500 rounded-xl focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:text-blue-500 dark:shadow-sm-light"
+              />
+              <label for="isResident" className="text-white dark:text-white font-semibold">
+                Soy Argentino Residente
               </label>
             </div>
           </div>
