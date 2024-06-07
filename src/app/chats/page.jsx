@@ -5,29 +5,32 @@ import Link from "next/link";
 
 const Page = () => {
   const [chats, setChats] = useState([]);
-  const [user, setUser] = useState({});
   const [loading, setLoading] = useState(true); // Estado para rastrear la carga
 
   useEffect(() => {
     const loadChats = async () => {
       let obtenerUser = await getUser(localStorage.getItem("id"));
       console.log("🚀 ~ loadChats ~ obtenerUser:", obtenerUser);
-
-      setUser(obtenerUser);
-      const getChats = await fetch(`http://localhost:3000/api/chats`);
-      console.log("🚀 ~ loadChats ~ getChats:", getChats);
-      if (getChats.ok) {
-        const chats = await getChats.json();
-        console.log("🚀 ~ CHATS DE UN USER ~ CHATS DE UN USER:", chats);
-        const filteredChats = chats.filter((chat) => chat.users.includes(obtenerUser._id));
-        console.log("🚀 ~ loadChats ~ user:", obtenerUser);
-
-        setChats(filteredChats);
-      }
+      const chatsUser = await getChatsUser();
+      console.log("🚀 ~ loadChats ~ chatsUser:", chatsUser)
+      setChats(chatsUser);
       setLoading(false); // Deja de cargar después de obtener los chats
     };
     loadChats();
   }, []);
+
+  const getChatsUser = async () => {
+    const user = await getUser(localStorage.getItem("id"));
+    const chatsPromises = user.chats.map(async (chatId) => {
+      const response = await fetch(`http://localhost:3000/api/chats/${chatId}`);
+      if (response.ok) {
+        return response.json();
+      }
+    });
+    const chatsUser = await Promise.all(chatsPromises);
+    console.log("🚀 ~ getChatsUser ~ chatsUser:", chatsUser);
+    return chatsUser;
+  };
 
   return (
     <div className="flex justify-center items-center min-h-screen">

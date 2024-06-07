@@ -77,7 +77,7 @@ const ChatInterface = () => {
               </li>
             ))}
           </ul>
-          <div className="w-full max-w-lg max-h-96 rounded-xl bg-gray-400 flex flex-col">
+          <div className="w-full max-w-lg max-h-[40rem] rounded-xl bg-gray-400 flex flex-col">
             <div className="text-center text-2xl bg-gray-800 text-white font-semibold rounded-t-xl p-3">
               {otherUser ? `${otherUser.fullName}` : 'Cargando usuario...'}
             </div>

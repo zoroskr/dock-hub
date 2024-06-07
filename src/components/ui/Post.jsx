@@ -12,7 +12,6 @@ const Post = ({ post, showProposeButton, isFavorite = false, showStar = true, on
   const [isExpanded, setIsExpanded] = useState(false);
   const [needsTruncate, setNeedsTruncate] = useState(false);
   const [star, setStar] = useState(isFavorite);
-  const [loggedUser, setLoggedUser] = useState({});
   const router = useRouter();
 
   const loggedUserId = localStorage.getItem("id");
@@ -22,11 +21,6 @@ const Post = ({ post, showProposeButton, isFavorite = false, showStar = true, on
   const descriptionRef = useRef(null);
 
   useEffect(() => {
-    const setUser = async () => {
-      const user = await getUser(loggedUserId);
-      setLoggedUser(user);
-    };
-    setUser();
     if (descriptionRef.current) {
       setNeedsTruncate(descriptionRef.current.scrollHeight > descriptionRef.current.clientHeight);
     }
@@ -61,7 +55,6 @@ const Post = ({ post, showProposeButton, isFavorite = false, showStar = true, on
   };
 
   const sendEmail = async (postData) => {
-    let data;
     try {
       // Asume que tienes una ruta de API que maneja el envío de correos
       const response = await fetch("api/propose", {
@@ -75,14 +68,20 @@ const Post = ({ post, showProposeButton, isFavorite = false, showStar = true, on
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
-
-      
-      data = await response.json();
-      loggedUser.chats.push(data.newChat._id);
+      const data = await response.json();
       console.log(data);
+      const loggedUser = await getUser(loggedUserId);
+      loggedUser.chats.push(data.newChat._id);
+      const otherUser = await getUser(post.owner);
+      otherUser.chats.push(data.newChat._id);
+      await updateUser(post.owner, otherUser);
+      await updateUser(loggedUserId, loggedUser);
+      console.log("loggedUser", loggedUser);
       Swal.fire({
         title: "Propuesta enviada!",
         icon: "success",
+      }).then(() => {
+        router.push(`/chats/${data.newChat._id}`);
       });
     } catch (error) {
       console.error("Error:", error);
@@ -91,7 +90,6 @@ const Post = ({ post, showProposeButton, isFavorite = false, showStar = true, on
         icon: "error",
       });
     }
-    router.push(`/chats/${data.newChat._id}`);
   };
 
   const handleFavorite = async () => {
