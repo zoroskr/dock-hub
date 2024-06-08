@@ -67,7 +67,7 @@ export default function Home() {
           ) : posts && posts.length > 0 ? (
             posts.map((post) => (
               <div className="p-2" key={post._id}>
-                <Post post={post} showProposeButton={true} isFavorite={true} showStar={false} onRemoveFavorite={onRemoveFavorite} />
+                <Post post={post} showProposeButton={true} isFavorite={true} onRemoveFavorite={onRemoveFavorite} />
               </div>
             ))
           ) : (

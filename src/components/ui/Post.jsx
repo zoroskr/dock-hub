@@ -8,7 +8,7 @@ import { Button } from "flowbite-react";
 import { deletePost, updatePost } from "@/app/services/posts.api";
 import { useRouter } from "next/navigation";
 
-const Post = ({ post, showProposeButton, isFavorite = false, showStar = true, onRemoveFavorite }) => {
+const Post = ({ post, showProposeButton, isFavorite = false, onRemoveFavorite }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [needsTruncate, setNeedsTruncate] = useState(false);
   const [star, setStar] = useState(isFavorite);
@@ -161,11 +161,9 @@ const Post = ({ post, showProposeButton, isFavorite = false, showStar = true, on
               {post.name}
             </h5>
           </a>
-          {showStar && (
-            <span className="text-2xl cursor-pointer" onClick={handleFavorite}>
-              <Image src={star ? "/icons8-star.svg" : "/icons8-starWhite.svg"} alt="star" width={20} height={20}></Image>
-            </span>
-          )}
+          <span className="text-2xl cursor-pointer" onClick={handleFavorite}>
+            <Image src={star ? "/icons8-star.svg" : "/icons8-starWhite.svg"} alt="star" width={20} height={20}></Image>
+          </span>
         </div>
         {showOwnerButtons && (
           <>
@@ -236,14 +234,6 @@ const Post = ({ post, showProposeButton, isFavorite = false, showStar = true, on
               {post.state === "Pausado" ? "Resumir" : "Pausar"}
             </Button>
           </div>
-        )}
-        {showStar ? null : (
-          <button
-            onClick={() => onRemoveFavorite(post._id)}
-            className="inline-flex items-center mx-auto mb-2 mt-1 px-3 py-2 text-sm font-medium text-center rounded-xl duration-300 hover:bg-gray-300 border-solid border-2 border-black"
-          >
-            Eliminar de favoritos
-          </button>
         )}
       </div>
     </div>
