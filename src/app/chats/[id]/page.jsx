@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import { Button } from "flowbite-react";
 import { useParams } from "next/navigation";
 import { getUser } from "../../services/users.api";
 import { updateChat } from "@/app/services/chats.api";
@@ -100,10 +101,15 @@ const ChatInterface = () => {
             value={currentMessage}
             onChange={(e) => setCurrentMessage(e.target.value)}
           />
-          <button type="submit" className="px-4 py-2 rounded-xl bg-gray-800 duration-300   hover:bg-gray-500 text-white">
-            Enviar
-          </button>
-          <button className="px-4 py-2 rounded-xl bg-red-800 duration-300 hover:bg-red-500 text-white" onClick={() => deleteChat(params.id)}>Eliminar</button>
+          <div className="flex flex-1">
+            <button type="submit" className="w-1/2 p-1 mx-1 rounded-xl bg-gray-800 duration-300 hover:bg-gray-500 text-white">
+              Enviar
+            </button>
+            <Button type="button" className="w-1/2 p-1 mx-1 rounded-xl bg-gray-800 duration-300 hover:bg-gray-500 text-white">
+              Aceptar intercambio
+            </Button>
+            <button className="px-4 py-2 rounded-xl bg-red-800 duration-300 hover:bg-red-500 text-white" onClick={() => deleteChat(params.id)}>Eliminar</button>
+          </div>
         </form>
       </div>
     </div>
