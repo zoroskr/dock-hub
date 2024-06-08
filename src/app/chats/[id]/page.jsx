@@ -26,6 +26,23 @@ const ChatInterface = () => {
     }
   };
 
+  const deleteChat = async (chatId) => {
+    window.location.href = "http://localhost:3000/chats";
+    try {
+      const response = await fetch(`http://localhost:3000/api/chats/${chatId}`, {
+        method: 'DELETE', // Asegúrate de que el método sea el correcto para tu API
+      });
+      if (response.ok) {
+        console.log("Chat eliminado con éxito");
+        // Aquí puedes redirigir al usuario o actualizar el estado para reflejar que el chat fue eliminado
+      } else {
+        console.error("Error al eliminar el chat");
+      }
+    } catch (error) {
+      console.error("Error al eliminar el chat:", error);
+    }
+  };
+
   useEffect(() => {
     const loadChatAndMessages = async () => {
       try {
@@ -86,6 +103,7 @@ const ChatInterface = () => {
           <button type="submit" className="px-4 py-2 rounded-xl bg-gray-800 duration-300   hover:bg-gray-500 text-white">
             Enviar
           </button>
+          <button className="px-4 py-2 rounded-xl bg-red-800 duration-300 hover:bg-red-500 text-white" onClick={() => deleteChat(params.id)}>Eliminar</button>
         </form>
       </div>
     </div>
