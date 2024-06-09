@@ -39,7 +39,7 @@ const ChatInterface = () => {
     e.preventDefault();
     try {
       const chat = await getChat(params.id);
-      if ((!chat.agree.includes(localStorage.getItem("id"))) && chat.agree.length == 1) {
+      if (!chat.agree.includes(localStorage.getItem("id")) && chat.agree.length == 1) {
         let admin = await getAdmin();
         admin = await updateUser(admin._id, { ...admin, chats: [...admin.chats, params.id] });
         const updatedChat = await updateChat(params.id, {
@@ -195,68 +195,38 @@ const ChatInterface = () => {
               value={currentMessage}
               onChange={(e) => setCurrentMessage(e.target.value)}
               rows={1} // Ajusta este valor según el tamaño que desees
-              style={{ resize: 'none' }} // Evita que el textarea sea redimensionable
+              style={{ resize: "none" }} // Evita que el textarea sea redimensionable
             />
             <div className="flex">
-                <button
-                  type="submit"
-                  className="w-1/3 flex-1 p-1 mx-1 rounded-xl bg-gray-800 duration-300 hover:bg-gray-500 text-white"
-                >
-                  Enviar
-                </button>
-                <Button
-                  type="button"
-                  className="w-1/3 flex-1 p-1 mx-1 rounded-xl bg-gray-800 duration-300 hover:bg-gray-500 text-white"
-                  onClick={acceptTrade}
-                >
-                  Aceptar intercambio
-                </Button>
-              </div>
+              <button type="submit" className="w-1/3 flex-1 p-1 mx-1 rounded-xl bg-gray-800 duration-300 hover:bg-gray-500 text-white">
+                Enviar
+              </button>
+              <Button
+                type="button"
+                className="w-1/3 flex-1 p-1 mx-1 rounded-xl bg-gray-800 duration-300 hover:bg-gray-500 text-white"
+                onClick={acceptTrade}
+              >
+                Aceptar intercambio
+              </Button>
+            </div>
           </form>
-          <div className="flex flex-1 p-4 bg-white border-t border-gray-200">
-            <button
-              className="px-4 py-2 rounded-xl bg-red-800 duration-300 hover:bg-red-500 text-white"
-              onClick={() => {
-                deleteChat(params.id);
-                route.push("/chats");
-              }}
-            >
-              Eliminar
-            </button>
-            {localStorage.getItem("type") === "Admin" && (
-              <>
-                <Button
-                  type="button"
-                  className="w-1/2 p-1 mx-1 rounded-xl bg-gray-800 duration-300 hover:bg-gray-500 text-white"
-                  onClick={handleAuthorizeClick}
-                >
-                  Autorizar intercambio
-                </Button>
-                {showDateTimeForm && (
-                  <div className="flex flex-col items-center mt-2">
-                    <input
-                      type="date"
-                      value={date}
-                      className="px-4 py-2 mr-4 rounded-xl border border-gray-300"
-                      onChange={handleDateChange}
-                    />
-                    <input
-                      type="time"
-                      value={time}
-                      className="px-4 py-2 mr-4 rounded-xl border border-gray-300"
-                      onChange={handleTimeChange}
-                    />
-                    <Button
-                      type="button"
-                      className="px-4 py-2 mt-2 rounded-xl bg-gray-800 text-white"
-                      onClick={handleSubmitDateTime}
-                    >
-                      Enviar
-                    </Button>
-                  </div>
-                )}
-              </div>
-            )}
+
+          <Button
+            type="button"
+            className="w-1/2 p-1 mx-1 rounded-xl bg-gray-800 duration-300 hover:bg-gray-500 text-white"
+            onClick={handleAuthorizeClick}
+          >
+            Autorizar intercambio
+          </Button>
+          {showDateTimeForm && (
+            <div className="flex flex-col items-center mt-2">
+              <input type="date" value={date} className="px-4 py-2 mr-4 rounded-xl border border-gray-300" onChange={handleDateChange} />
+              <input type="time" value={time} className="px-4 py-2 mr-4 rounded-xl border border-gray-300" onChange={handleTimeChange} />
+              <Button type="button" className="px-4 py-2 mt-2 rounded-xl bg-gray-800 text-white" onClick={handleSubmitDateTime}>
+                Enviar
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     </>
