@@ -229,7 +229,7 @@ const ChatInterface = () => {
                 </Button>
               </div>
           </form>
-          {localStorage.getItem("type") === "admin" && (
+          {localStorage.getItem("type") === "Admin" && (
               <div className="flex flex-1 p-4 bg-white border-t border-gray-200">
                 <Button
                   type="button"
