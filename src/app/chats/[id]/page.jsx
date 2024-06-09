@@ -39,7 +39,7 @@ const ChatInterface = () => {
     e.preventDefault();
     try {
       const chat = await getChat(params.id);
-      if (!chat.agree.includes(localStorage.getItem("id")) && chat.agree.length == 1) {
+      if ((!chat.agree.includes(localStorage.getItem("id"))) && (chat.agree.length == 1)) {
         let admin = await getAdmin();
         admin = await updateUser(admin._id, { ...admin, chats: [...admin.chats, params.id] });
         const updatedChat = await updateChat(params.id, {
