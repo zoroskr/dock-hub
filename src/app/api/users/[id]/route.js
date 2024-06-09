@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 
 export async function GET(request, { params }) {
   try {
+    // por qué me retorna todos los users si no paso el id??
     await connectDB();
     const { id } = params;
     if (!id) {
