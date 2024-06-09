@@ -178,10 +178,21 @@ const ChatInterface = () => {
           </p>
         )}
       </div>
-      <div className="flex flex-col w-full justify-center items-center p-10">
-        <div className="w-full max-w-lg max-h-[40rem] rounded-xl bg-gray-400 flex flex-col">
-          <div className="text-center text-2xl bg-gray-800 text-white font-semibold rounded-t-xl p-3">
-            {otherUser ? `${otherUser.fullName}` : "Cargando usuario..."}
+      <div className="flex flex-col w-full justify-center rounded-t-xl items-center p-10">
+        <div className="w-full max-w-2xl max-h-[40rem] rounded-xl bg-gray-400 flex flex-col">
+          <div className="flex">
+            <div className="w-4/5 text-center text-2xl bg-gray-800 text-white font-semibold rounded-tl-xl p-3">
+              {otherUser ? `${otherUser.fullName}` : "Cargando usuario..."}
+            </div>
+            <button
+              className="w-1/5 justify-end p-3 bg-red-800 duration-300 hover:bg-red-500 text-white rounded-tr-xl"
+              onClick={() => {
+                deleteChat(params.id);
+                route.push("/chats");
+              }}
+            >
+              Eliminar
+            </button>
           </div>
           <div className="overflow-auto p-4 bg-gray-800">
             {chat.messages.map((message, index) => (
@@ -194,37 +205,32 @@ const ChatInterface = () => {
             ))}
           </div>
           <form onSubmit={sendMessage} className="flex p-4 bg-white border-t border-gray-200 rounded-b-xl">
-            <input
-              className="flex-grow px-4 py-2 mr-4 rounded-xl border border-gray-300"
+            <textarea
+              className="flex-grow overflow-auto break-words px-4 py-2 mr-4 rounded-xl border border-gray-300"
               placeholder="Escribe un mensaje..."
               value={currentMessage}
               onChange={(e) => setCurrentMessage(e.target.value)}
+              rows={1} // Ajusta este valor según el tamaño que desees
+              style={{ resize: 'none' }} // Evita que el textarea sea redimensionable
             />
-            <div className="flex flex-1">
-              <button type="submit" className="w-1/2 p-1 mx-1 rounded-xl bg-gray-800 duration-300 hover:bg-gray-500 text-white">
-                Enviar
-              </button>
-              <Button
-                type="button"
-                className="w-1/2 p-1 mx-1 rounded-xl bg-gray-800 duration-300 hover:bg-gray-500 text-white"
-                onClick={acceptTrade}
-              >
-                Aceptar intercambio
-              </Button>
-            </div>
+            <div className="flex">
+                <button
+                  type="submit"
+                  className="w-1/3 flex-1 p-1 mx-1 rounded-xl bg-gray-800 duration-300 hover:bg-gray-500 text-white"
+                >
+                  Enviar
+                </button>
+                <Button
+                  type="button"
+                  className="w-1/3 flex-1 p-1 mx-1 rounded-xl bg-gray-800 duration-300 hover:bg-gray-500 text-white"
+                  onClick={acceptTrade}
+                >
+                  Aceptar intercambio
+                </Button>
+              </div>
           </form>
-          <div className="flex flex-1 p-4 bg-white border-t border-gray-200">
-            <button
-              className="px-4 py-2 rounded-xl bg-red-800 duration-300 hover:bg-red-500 text-white"
-              onClick={() => {
-                deleteChat(params.id);
-                route.push("/chats");
-              }}
-            >
-              Eliminar
-            </button>
-            {localStorage.getItem("type") === "admin" && (
-              <>
+          {localStorage.getItem("type") === "admin" && (
+              <div className="flex flex-1 p-4 bg-white border-t border-gray-200">
                 <Button
                   type="button"
                   className="w-1/2 p-1 mx-1 rounded-xl bg-gray-800 duration-300 hover:bg-gray-500 text-white"
@@ -246,14 +252,17 @@ const ChatInterface = () => {
                       className="px-4 py-2 mr-4 rounded-xl border border-gray-300"
                       onChange={handleTimeChange}
                     />
-                    <Button type="button" className="px-4 py-2 mt-2 rounded-xl bg-gray-800 text-white" onClick={handleSubmitDateTime}>
+                    <Button
+                      type="button"
+                      className="px-4 py-2 mt-2 rounded-xl bg-gray-800 text-white"
+                      onClick={handleSubmitDateTime}
+                    >
                       Enviar
                     </Button>
                   </div>
                 )}
-              </>
+              </div>
             )}
-          </div>
         </div>
       </div>
     </>
