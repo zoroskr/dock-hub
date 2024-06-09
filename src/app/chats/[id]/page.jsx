@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "flowbite-react";
 import { useParams } from "next/navigation";
-import { getUser } from "../../services/users.api";
-import { updateChat } from "@/app/services/chats.api";
+import { getUser, getAdmin, updateUser } from "../../services/users.api";
+import { updateChat, getChat } from "@/app/services/chats.api";
 
 const ChatInterface = () => {
   const [currentMessage, setCurrentMessage] = useState("");
@@ -26,6 +26,22 @@ const ChatInterface = () => {
       }
     }
   };
+
+  const acceptTrade = async (e) => {
+    e.preventDefault();
+    try {
+    const chat = await getChat(params.id);
+    if ((!chat.agree.includes(localStorage.getItem("id")) && (chat.agree.length == 1))) {
+        let admin = await getAdmin();
+        admin = await updateUser(admin._id, {...admin, chats: [...admin.chats, params.id]});
+        const updatedChat = await updateChat(params.id, {users: [...chat.users, admin], agree: [...chat.agree, localStorage.getItem("id")]});      
+    } else {
+      const updatedChat = await updateChat(params.id, {agree: [localStorage.getItem("id")]});
+    }
+  } catch (error){
+    console.error("Error accepting trade: ", error);
+  }
+  }
 
   useEffect(() => {
     const loadChatAndMessages = async () => {
@@ -88,7 +104,7 @@ const ChatInterface = () => {
             <button type="submit" className="w-1/2 p-1 mx-1 rounded-xl bg-gray-800 duration-300 hover:bg-gray-500 text-white">
               Enviar
             </button>
-            <Button type="button" className="w-1/2 p-1 mx-1 rounded-xl bg-gray-800 duration-300 hover:bg-gray-500 text-white">
+            <Button type="button" className="w-1/2 p-1 mx-1 rounded-xl bg-gray-800 duration-300 hover:bg-gray-500 text-white" onClick={acceptTrade}>
               Aceptar intercambio
             </Button>
           </div>

@@ -26,6 +26,20 @@ export const getUser = async (id) => {
   }
 }
 
+export const getAdmin = async () => {
+  try {
+    const response = await fetch(`http://localhost:3000/api/users`);
+    if (!response.ok) {
+      throw new Error('No se pudo obtener el usuario');
+    }
+    const data = await response.json();
+    const result = data.find(user => user.type == "Admin");
+    return result;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 export const getUserByEmail = async (email) => {
   try {
     const response = await fetch(`http://localhost:3000/api/users`);
