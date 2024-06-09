@@ -14,7 +14,7 @@ export async function POST(request) {
     let proposer = await User.findOne({ email: data.proposer.email });
     let owner = await User.findOne({ email: data.owner.email });
     
-    const newChat = new Chat({ users: [proposer, owner] });
+    const newChat = new Chat({ users: [proposer, owner]});
     await newChat.save();
   
     // Configura el transportador de correo
