@@ -23,6 +23,7 @@ const PostsForm = ({
 
   useEffect(() => {
     if (form.current) {
+      form.current.elements.plate.value = post.plate || "";
       form.current.elements.name.value = post.name || "";
       form.current.elements.description.value = post.description || "";
       form.current.elements.image.value = post.image || "";
@@ -113,7 +114,7 @@ const PostsForm = ({
             <Label htmlFor="name" value="Plate" />
           </div>
           <div className="rounded-xl overflow-hidden">
-            <TextInput name="plate" type="text" placeholder="Id del bien" required shadow />
+            <TextInput name="plate" type="text" placeholder="Identificador único del bien" required shadow />
           </div>
         </div>
 

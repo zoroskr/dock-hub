@@ -6,6 +6,7 @@ import { getUser, getAdmin, updateUser } from "../../services/users.api";
 import { updateChat, getChat, deleteChat } from "@/app/services/chats.api";
 import { useRouter } from "next/navigation";
 import { verifyUser } from "@/app/services/verify.api";
+import Swal from "sweetalert2";
 
 const ChatInterface = () => {
   const [currentMessage, setCurrentMessage] = useState("");
@@ -23,7 +24,7 @@ const ChatInterface = () => {
   const params = useParams();
 
   useEffect(() => {
-    const type = localStorage.getItem('type');
+    const type = localStorage.getItem("type");
     setUserType(type);
   }, []);
 
@@ -45,25 +46,95 @@ const ChatInterface = () => {
     e.preventDefault();
     try {
       const chat = await getChat(params.id);
-      if ((!chat.agree.includes(localStorage.getItem("id"))) && (chat.agree.length == 1)) {
+      if (chat.agree.length === 2) {
+        Swal.fire({
+          icon: "success",
+          title: "Intercambio aceptado",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        return;
+      }
+      if (!chat.agree.includes(localStorage.getItem("id")) && chat.agree.length == 1) {
         let admin = await getAdmin();
         admin = await updateUser(admin._id, { ...admin, chats: [...admin.chats, params.id] });
-        const updatedChat = await updateChat(params.id, {
+        await updateChat(params.id, {
           users: [...chat.users, admin],
           agree: [...chat.agree, localStorage.getItem("id")],
         });
       } else {
-        const updatedChat = await updateChat(params.id, { agree: [localStorage.getItem("id")] });
+        await updateChat(params.id, { agree: [localStorage.getItem("id")] });
       }
+      Swal.fire({
+        icon: "success",
+        title: "Intercambio aceptado",
+        showConfirmButton: false,
+        timer: 1500,
+      });
     } catch (error) {
       console.error("Error accepting trade: ", error);
     }
   };
 
-  const   handleAuthorizeClick = async () => {
+  const verify = async (user) => {
+    let data;
     try {
-      const result = await verifyUser({ dni: otherUser.DNI, id_bien: "any" });
-      if (result.status === "ok") {
+      const response = await fetch("http://localhost:3000/api/verify", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(user),
+      });
+      data = await response.json();
+      if (data.message === "Forbidden") {
+        return "Forbidden";
+      }
+      if (data.message === "El bien se encuentra inhibido") {
+        return "Bien inhibido";
+      }
+      if (data.status === "inhabilitado" && data.message !== "El bien se encuentra inhibido") return "Embargado";
+      return "ok";
+    } catch (error) {
+      console.error("Error verifying user:", error);
+    }
+  };
+
+  const handleAuthorizeClick = async () => {
+    let data;
+    try {
+      const usuariosInvolucrados = chat.users.filter((userId) => userId !== user._id);
+      console.log("🚀 ~ handleAuthorizeClick ~ usuariosInvolucrados:", usuariosInvolucrados)
+      const involucrado1 = await getUser(usuariosInvolucrados[0]);
+      const involucrado2 = await getUser(usuariosInvolucrados[1]);
+      const verifiedInvolucrado1 = await verify({ dni: involucrado1.DNI, id_bien: "any" });
+      const verifiedInvolucrado2 = await verify({ dni: involucrado2.DNI, id_bien: "any" });
+
+      if (verifiedInvolucrado1 === "Forbidden" || verifiedInvolucrado2 === "Forbidden") {
+        Swal.fire({
+          icon: "error",
+          title: "Error de conexión",
+          text: "No fue posible conectarse al servidor de la AFIP, inténtalo de nuevo más tarde.",
+        });
+        return;
+      }
+      if (verifiedInvolucrado1 === "Bien inhibido") {
+        Swal.fire({
+          icon: "error",
+          title: "Error de validación",
+          text: "El bien se encuentra inhibido",
+        });
+        return;
+      }
+      if (verifiedInvolucrado1 === "Embargado" || verifiedInvolucrado2 === "Embargado") {
+        Swal.fire({
+          icon: "error",
+          title: "Error de validación",
+          text: "Alguno de los involucrados cuenta con inhibición general de bienes",
+        });
+        return;
+      }
+      if ((verifiedInvolucrado1 === "ok" && (verifiedInvolucrado2 === "ok") || verifiedInvolucrado2 === "Bien inhibido")) {
         setShowDateTimeForm(true);
       }
     } catch (error) {
@@ -171,7 +242,9 @@ const ChatInterface = () => {
       <div className="flex flex-col w-full h-[30rem]  justify-center rounded-t-xl items-center p-10">
         <div className="w-full max-w-2xl max-h-[30rem] overflow-auto rounded-xl bg-gray-400 flex flex-col">
           <div className="flex">
-            <div className={`text-center text-2xl bg-gray-800 text-white font-semibold p-3 ${userType !== "Admin" ? "w-4/5 rounded-tl-xl" : "w-full rounded-t-xl"}`}>
+            <div
+              className={`text-center text-2xl bg-gray-800 text-white font-semibold p-3 ${userType !== "Admin" ? "w-4/5 rounded-tl-xl" : "w-full rounded-t-xl"}`}
+            >
               {otherUser ? `${otherUser.fullName}` : "Cargando usuario..."}
             </div>
             {userType !== "Admin" && (
@@ -204,13 +277,10 @@ const ChatInterface = () => {
                 value={currentMessage}
                 onChange={(e) => setCurrentMessage(e.target.value)}
                 rows={1} // Ajusta este valor según el tamaño que desees
-                style={{ resize: 'none' }} // Evita que el textarea sea redimensionable
+                style={{ resize: "none" }} // Evita que el textarea sea redimensionable
               />
               <div className="flex">
-                <button
-                  type="submit"
-                  className="w-1/3 flex-1 p-1 mx-1 rounded-xl bg-gray-800 duration-300 hover:bg-gray-500 text-white"
-                >
+                <button type="submit" className="w-1/3 flex-1 p-1 mx-1 rounded-xl bg-gray-800 duration-300 hover:bg-gray-500 text-white">
                   Enviar
                 </button>
                 <Button
@@ -226,18 +296,8 @@ const ChatInterface = () => {
             <div className="flex flex-1 p-4 rounded-b-xl bg-white border-t border-gray-200">
               {showDateTimeForm ? (
                 <div className="flex flex-col w-full justify-center gap-3 items-center mt-2">
-                  <input
-                    type="date"
-                    value={date}
-                    className="p-3 rounded-xl border border-gray-300"
-                    onChange={handleDateChange}
-                  />
-                  <input
-                    type="time"
-                    value={time}
-                    className="p-3 rounded-xl border border-gray-300"
-                    onChange={handleTimeChange}
-                  />
+                  <input type="date" value={date} className="p-3 rounded-xl border border-gray-300" onChange={handleDateChange} />
+                  <input type="time" value={time} className="p-3 rounded-xl border border-gray-300" onChange={handleTimeChange} />
                   <Button
                     type="button"
                     className="p-2 rounded-xl bg-gray-800 text-white duration-200 hover:bg-gray-700"
@@ -247,7 +307,9 @@ const ChatInterface = () => {
                   </Button>
                 </div>
               ) : exchangeInfo ? (
-                <div className="flex rounded-2xl bg-green-800 mx-auto items-center justify-center p-4 text-white font-bold">Este intercambio fue autorizado.</div> // Div en blanco
+                <div className="flex rounded-2xl bg-green-800 mx-auto items-center justify-center p-4 text-white font-bold">
+                  Este intercambio fue autorizado.
+                </div> // Div en blanco
               ) : (
                 <div className="flex w-full items-center justify-center">
                   <Button
