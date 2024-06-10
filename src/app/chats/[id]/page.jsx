@@ -298,6 +298,7 @@ const ChatInterface = () => {
                 <div className="flex flex-col w-full justify-center gap-3 items-center mt-2">
                   <input type="date" value={date} className="p-3 rounded-xl border border-gray-300" onChange={handleDateChange} />
                   <input type="time" value={time} className="p-3 rounded-xl border border-gray-300" onChange={handleTimeChange} />
+                  <input type="text" placeholder="Lugar de intercambio" className="p-3 rounded-xl border border-gray-300"/>
                   <Button
                     type="button"
                     className="p-2 rounded-xl bg-gray-800 text-white duration-200 hover:bg-gray-700"
