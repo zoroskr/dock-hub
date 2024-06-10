@@ -152,7 +152,27 @@ const ChatInterface = () => {
 
   const handleSubmitDateTime = async (e) => {
     e.preventDefault(); // Previene el comportamiento por defecto del formulario
+    // Si no se ingresa una fecha y hora completa, no es válido
+    console.log("🚀 ~ handleSubmitDateTime ~ date:", date);
+    if (date === "" || time === "") {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Por favor, ingrese una fecha y hora válida",
+      });
+      return;
+    }
 
+    const fechaIngresada = new Date(`${date}T${time}`);
+    const fechaActual = new Date();
+    if (fechaIngresada <= fechaActual) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "La fecha y hora ingresadas deben ser posteriores a la fecha y hora actuales",
+      });
+      return;
+    }
     try {
       const response = await fetch(`http://localhost:3000/api/intercambio/${params.id}`, {
         // Corregido: eliminado el `}` al final de la URL
