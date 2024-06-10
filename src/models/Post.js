@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 
 const schema = new mongoose.Schema({
+  plate: String,
   name: String,
   description: String,
   image: String,
