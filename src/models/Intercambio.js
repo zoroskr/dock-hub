@@ -13,6 +13,10 @@ const intercambioSchema = new mongoose.Schema({
   chatId: {
     type: String, 
     required: true
+  },
+  place: {
+    type: String,
+    required: true
   }
 }, { timestamps: true }); // Añade automáticamente campos para createdAt y updatedAt
 

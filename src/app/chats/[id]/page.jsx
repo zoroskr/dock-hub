@@ -16,6 +16,7 @@ const ChatInterface = () => {
   const [showDateTimeForm, setShowDateTimeForm] = useState(false);
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
+  const [place, setPlace] = useState("");
   const [exchangeInfo, setExchangeInfo] = useState("");
   const route = useRouter();
   const [userType, setUserType] = useState(null); // Nuevo estado para almacenar el tipo de usuario
@@ -150,6 +151,10 @@ const ChatInterface = () => {
     setTime(e.target.value);
   };
 
+  const handlePlaceChange = (e) => {
+    setPlace(e.target.value);
+  };
+
   const handleSubmitDateTime = async (e) => {
     e.preventDefault(); // Previene el comportamiento por defecto del formulario
 
@@ -164,6 +169,7 @@ const ChatInterface = () => {
           date: date,
           time: time,
           chatId: params.id,
+          place: place
         }),
       });
 
@@ -229,13 +235,14 @@ const ChatInterface = () => {
 
   const fecha = exchangeInfo ? new Date(exchangeInfo.date).toLocaleDateString() : "";
   const hora = exchangeInfo ? exchangeInfo.time : "";
+  const lugar = exchangeInfo ? exchangeInfo.place : "";
 
   return (
     <>
       <div className="w-1/2 p-2 mx-auto mt-3 rounded-xl flex items-center justify-center">
         {exchangeInfo && (
           <p className="text-black font-bold text-lg">
-            La fecha del intercambio será: {fecha} y la hora es {hora}
+            La fecha del intercambio será: {fecha} y la hora es {hora} en {lugar}
           </p>
         )}
       </div>
@@ -298,6 +305,7 @@ const ChatInterface = () => {
                 <div className="flex flex-col w-full justify-center gap-3 items-center mt-2">
                   <input type="date" value={date} className="p-3 rounded-xl border border-gray-300" onChange={handleDateChange} />
                   <input type="time" value={time} className="p-3 rounded-xl border border-gray-300" onChange={handleTimeChange} />
+                  <input type="text" value={place} className="p-3 rounded-xl border border-gray-300" onChange={handlePlaceChange} placeholder="Lugar del intercambio"/>
                   <Button
                     type="button"
                     className="p-2 rounded-xl bg-gray-800 text-white duration-200 hover:bg-gray-700"

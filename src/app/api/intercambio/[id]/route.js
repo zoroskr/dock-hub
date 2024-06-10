@@ -32,7 +32,8 @@ export async function POST(request) {
   const newIntercambio = new Intercambio({
     date: data.date,
     time: data.time,
-    chatId: data.chatId
+    chatId: data.chatId,
+    place: data.place
   });
 
   // Guardar la nueva instancia en la base de datos
