@@ -8,17 +8,23 @@ import { Button } from "flowbite-react";
 import { deletePost, updatePost } from "@/app/services/posts.api";
 import { useRouter } from "next/navigation";
 
+
 const Post = ({ post, showProposeButton, isFavorite = false, onRemoveFavorite }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [needsTruncate, setNeedsTruncate] = useState(false);
   const [star, setStar] = useState(isFavorite);
   const router = useRouter();
-
+  const [userType, setUserType] = useState(null); // Nuevo estado para almacenar el tipo de usuario
   const loggedUserId = localStorage.getItem("id");
   const showButton = loggedUserId && loggedUserId !== post.owner;
   const showOwnerButtons = loggedUserId && loggedUserId === post.owner;
 
   const descriptionRef = useRef(null);
+
+  useEffect(() => {
+    const type = localStorage.getItem('type');
+    setUserType(type);
+  }, []);
 
   useEffect(() => {
     if (descriptionRef.current) {
@@ -193,7 +199,7 @@ const Post = ({ post, showProposeButton, isFavorite = false, onRemoveFavorite })
             </div>
           )}
         </div>
-        {showButton && showProposeButton && post.state != "Pausado" && (
+        {showButton && showProposeButton && userType !== "Admin" && post.state != "Pausado" && (
           <button
             onClick={handleSubmit}
             className="inline-flex items-center mx-auto mb-2 mt-1 px-3 py-2 text-sm font-medium text-center text-white bg-gray-800 rounded-xl duration-300 hover:bg-gray-700"

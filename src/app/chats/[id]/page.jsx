@@ -17,9 +17,15 @@ const ChatInterface = () => {
   const [time, setTime] = useState("");
   const [exchangeInfo, setExchangeInfo] = useState("");
   const route = useRouter();
+  const [userType, setUserType] = useState(null); // Nuevo estado para almacenar el tipo de usuario
 
   // const [chats, setChats] = useState([]);
   const params = useParams();
+
+  useEffect(() => {
+    const type = localStorage.getItem('type');
+    setUserType(type);
+  }, []);
 
   const sendMessage = async (e) => {
     e.preventDefault();
@@ -54,7 +60,7 @@ const ChatInterface = () => {
     }
   };
 
-  const handleAuthorizeClick = async () => {
+  const   handleAuthorizeClick = async () => {
     try {
       const response = await fetch("http://localhost:3000/api/verify", {
         method: "POST",
@@ -171,28 +177,30 @@ const ChatInterface = () => {
 
   return (
     <>
-      <div>
+      <div className="w-1/2 p-2 mx-auto mt-3 rounded-xl flex items-center justify-center">
         {exchangeInfo && (
-          <p>
+          <p className="text-black font-bold text-lg">
             La fecha del intercambio será: {fecha} y la hora es {hora}
           </p>
         )}
       </div>
-      <div className="flex flex-col w-full justify-center rounded-t-xl items-center p-10">
-        <div className="w-full max-w-2xl max-h-[40rem] rounded-xl bg-gray-400 flex flex-col">
+      <div className="flex flex-col w-full h-[30rem]  justify-center rounded-t-xl items-center p-10">
+        <div className="w-full max-w-2xl max-h-[30rem] overflow-auto rounded-xl bg-gray-400 flex flex-col">
           <div className="flex">
-            <div className="w-4/5 text-center text-2xl bg-gray-800 text-white font-semibold rounded-tl-xl p-3">
+            <div className={`text-center text-2xl bg-gray-800 text-white font-semibold p-3 ${userType !== "Admin" ? "w-4/5 rounded-tl-xl" : "w-full rounded-t-xl"}`}>
               {otherUser ? `${otherUser.fullName}` : "Cargando usuario..."}
             </div>
-            <button
-              className="w-1/5 justify-end p-3 bg-red-800 duration-300 hover:bg-red-500 text-white rounded-tr-xl"
-              onClick={() => {
-                deleteChat(params.id);
-                route.push("/chats");
-              }}
-            >
-              Eliminar
-            </button>
+            {userType !== "Admin" && (
+              <button
+                className="w-1/5 justify-end p-3 bg-red-800 duration-300 hover:bg-red-500 text-white rounded-tr-xl"
+                onClick={() => {
+                  deleteChat(params.id);
+                  route.push("/chats");
+                }}
+              >
+                Eliminar
+              </button>
+            )}
           </div>
           <div className="overflow-auto p-4 bg-gray-800">
             {chat.messages.map((message, index) => (
@@ -204,16 +212,17 @@ const ChatInterface = () => {
               </div>
             ))}
           </div>
-          <form onSubmit={sendMessage} className="flex p-4 bg-white border-t border-gray-200 rounded-b-xl">
-            <textarea
-              className="flex-grow overflow-auto break-words px-4 py-2 mr-4 rounded-xl border border-gray-300"
-              placeholder="Escribe un mensaje..."
-              value={currentMessage}
-              onChange={(e) => setCurrentMessage(e.target.value)}
-              rows={1} // Ajusta este valor según el tamaño que desees
-              style={{ resize: 'none' }} // Evita que el textarea sea redimensionable
-            />
-            <div className="flex">
+          {userType !== "Admin" && !showDateTimeForm ? (
+            <form onSubmit={sendMessage} className="flex p-4 bg-white border-t border-gray-200 rounded-b-xl">
+              <textarea
+                className="flex-grow overflow-auto break-words px-4 py-2 mr-4 rounded-xl border border-gray-300"
+                placeholder="Escribe un mensaje..."
+                value={currentMessage}
+                onChange={(e) => setCurrentMessage(e.target.value)}
+                rows={1} // Ajusta este valor según el tamaño que desees
+                style={{ resize: 'none' }} // Evita que el textarea sea redimensionable
+              />
+              <div className="flex">
                 <button
                   type="submit"
                   className="w-1/3 flex-1 p-1 mx-1 rounded-xl bg-gray-800 duration-300 hover:bg-gray-500 text-white"
@@ -228,41 +237,46 @@ const ChatInterface = () => {
                   Aceptar intercambio
                 </Button>
               </div>
-          </form>
-          {localStorage.getItem("type") === "admin" && (
-              <div className="flex flex-1 p-4 bg-white border-t border-gray-200">
-                <Button
-                  type="button"
-                  className="w-1/2 p-1 mx-1 rounded-xl bg-gray-800 duration-300 hover:bg-gray-500 text-white"
-                  onClick={handleAuthorizeClick}
-                >
-                  Autorizar intercambio
-                </Button>
-                {showDateTimeForm && (
-                  <div className="flex flex-col items-center mt-2">
-                    <input
-                      type="date"
-                      value={date}
-                      className="px-4 py-2 mr-4 rounded-xl border border-gray-300"
-                      onChange={handleDateChange}
-                    />
-                    <input
-                      type="time"
-                      value={time}
-                      className="px-4 py-2 mr-4 rounded-xl border border-gray-300"
-                      onChange={handleTimeChange}
-                    />
-                    <Button
-                      type="button"
-                      className="px-4 py-2 mt-2 rounded-xl bg-gray-800 text-white"
-                      onClick={handleSubmitDateTime}
-                    >
-                      Enviar
-                    </Button>
-                  </div>
-                )}
-              </div>
-            )}
+            </form>
+          ) : (
+            <div className="flex flex-1 p-4 rounded-b-xl bg-white border-t border-gray-200">
+              {showDateTimeForm ? (
+                <div className="flex flex-col w-full justify-center gap-3 items-center mt-2">
+                  <input
+                    type="date"
+                    value={date}
+                    className="p-3 rounded-xl border border-gray-300"
+                    onChange={handleDateChange}
+                  />
+                  <input
+                    type="time"
+                    value={time}
+                    className="p-3 rounded-xl border border-gray-300"
+                    onChange={handleTimeChange}
+                  />
+                  <Button
+                    type="button"
+                    className="p-2 rounded-xl bg-gray-800 text-white duration-200 hover:bg-gray-700"
+                    onClick={handleSubmitDateTime}
+                  >
+                    Enviar
+                  </Button>
+                </div>
+              ) : exchangeInfo ? (
+                <div className="flex rounded-2xl bg-green-800 mx-auto items-center justify-center p-4 text-white font-bold">Este intercambio fue autorizado.</div> // Div en blanco
+              ) : (
+                <div className="flex w-full items-center justify-center">
+                  <Button
+                    type="button"
+                    className="w-1/2 p-1 text-xl rounded-xl bg-gray-800 duration-300 hover:bg-gray-500 text-white"
+                    onClick={handleAuthorizeClick}
+                  >
+                    Autorizar intercambio
+                  </Button>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </>
