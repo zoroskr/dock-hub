@@ -55,7 +55,7 @@ const ChatInterface = () => {
         });
         return;
       }
-      if (!chat.agree.includes(localStorage.getItem("id")) && chat.agree.length == 1) {
+      if ((!chat.agree.includes(localStorage.getItem("id"))) && (chat.agree.length == 1)) {
         let admin = await getAdmin();
         admin = await updateUser(admin._id, { ...admin, chats: [...admin.chats, params.id] });
         await updateChat(params.id, {
