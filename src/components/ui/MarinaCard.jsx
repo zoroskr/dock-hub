@@ -1,26 +1,8 @@
 "use client";
 
 import React, { use, useState } from "react";
-import ActionButton from "@/components/ui/ActionButton";
-import Swal from "sweetalert2";
-import { createReservation } from "@/app/services/reservations.api";
-import { getUser } from "@/app/services/users.api";
-import { useRouter } from "next/navigation";
 
-const MarinaCard = ({ amarra, title, startDate, endDate }) => {
-  const router = useRouter();
-
-  const overlaps = (dateLapse, anotherDateLapse) => {
-    const start = new Date(dateLapse.startDate);
-    const end = new Date(dateLapse.endDate);
-    const anotherStart = new Date(anotherDateLapse.startDate);
-    const anotherEnd = new Date(anotherDateLapse.endDate);
-
-    return !((anotherStart < start && anotherEnd < start) || (anotherStart > end && anotherEnd > end));
-  };
-
-  
-
+const MarinaCard = ({ amarra }) => {
   return (
     <div
       className="max-w-sm bg-custom-gray rounded-xl shadow dark:bg-gray-800 dark:border-gray-700 cursor-pointer"

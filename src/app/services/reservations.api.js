@@ -1,3 +1,16 @@
+export const getReservations = async () => {
+  try {
+    const response = await fetch('http://localhost:3000/api/reservations');
+    if (!response.ok) {
+      throw new Error('No se pudo obtener la lista de reservas');
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 export const createReservation = async (reservation) => {
   console.log("🚀 ~ createReservation ~ reservation:", reservation)
   

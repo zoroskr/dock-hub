@@ -4,9 +4,13 @@ import User from "@/models/user";
 import { NextResponse } from "next/server";
 
 export async function GET() {
-  await connectDB();
-  const reservations = await Reservation.find();
-  return NextResponse.json(reservations);
+  try {
+    await connectDB();
+    const reservations = await Reservation.find().populate("owner").populate("amarra");
+    return NextResponse.json(reservations);
+  } catch (error) {
+    return NextResponse.json({ error: "Error fetching reservations" }, { status: 500 });
+  }
 }
 
 export async function POST(request) {
