@@ -1,6 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react'
 import Post from '@/components/ui/Post'
+import Title from '@/components/ui/Title';
 
 const page = () => {
   const [posts, setPosts] = useState([]);
@@ -28,7 +29,7 @@ const page = () => {
   return (
     <>
       <div className='flex flex-col items-center gap-14 min-h-screen w-full'>
-        <h1 className='text-3xl font-bold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white p-6'>Mis publicaciones</h1>
+        <Title text='Mis Publicaciones' />
         <div className="flex flex-wrap justify-center gap-4">
           {loading 
             ? <span className='text-3xl mt-auto mb-auto ml-auto mr-auto text-left p-3 col-span-3 font-medium'>Cargando Publicaciones...</span> 

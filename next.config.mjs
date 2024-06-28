@@ -1,7 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['localhost:3000', 'localhost', 'imgur.com', 'i.imgur.com'],
+    remotePatterns: [
+      { protocol: "http", hostname: "localhost", port: "3000" },
+      { protocol: "http", hostname: "localhost" },
+      { protocol: "https", hostname: "imgur.com" },
+      { protocol: "https", hostname: "i.imgur.com" },
+    ],
   },
 };
 

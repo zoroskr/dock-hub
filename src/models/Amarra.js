@@ -8,7 +8,7 @@ const amarraSchema = new mongoose.Schema({
   },
   dailyRate: Number,
   image: String,
-  state: Boolean,
+  isAvailable: Boolean,
 });
 
 export default mongoose.models.Amarra || mongoose.model('Amarra', amarraSchema);
