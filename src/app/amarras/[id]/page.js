@@ -14,7 +14,6 @@ import ActionButton from "@/components/ui/ActionButton";
 import Swal from "sweetalert2";
 import { createReservation } from "@/app/services/reservations.api";
 import { getUser } from "@/app/services/users.api";
-import { set } from "mongoose";
 
 const page = () => {
   const [amarra, setAmarra] = useState();
@@ -24,9 +23,7 @@ const page = () => {
   const params = useParams();
 
   const onChange = (dates) => {
-    console.log("🚀 ~ onChange ~ dates:", dates);
     const [start, end] = dates;
-
     setStartDate(start);
     setEndDate(end);
   };
@@ -42,35 +39,36 @@ const page = () => {
     fetchAmarra();
   }, [loading]);
 
+  const overlaps = (anotherDateLapse) => {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const anotherStart = new Date(anotherDateLapse.startDate);
+    const anotherEnd = new Date(anotherDateLapse.endDate);
+
+    return !((anotherStart < start && anotherEnd < start) || (anotherStart > end && anotherEnd > end));
+  };
+
   const handleSubmit = async () => {
     try {
-      console.log("🚀 ~ handleSubmit ~ startDate", startDate);
       const user = await getUser(localStorage.getItem("id"));
-      console.log("🚀 ~ handleSubmit ~ user:", user);
-      const reservaActual = user.reservations.find((r) => new Date(r.dateLapse.endDate) >= new Date());
+      const reservasActivas = user.reservations.filter((r) => new Date(r.dateLapse.endDate) >= new Date());
+      const isOverlaps = reservasActivas.some((r) => overlaps(r.dateLapse));
+      console.log("🚀 ~ handleSubmit ~ isOverlaps:", isOverlaps)
 
-      if (reservaActual && overlaps(reservaActual.dateLapse, amarra.availability)) {
-        console.log("🚀 ~ handleSubmit ~ amarra.availability:", amarra.availability);
-        console.log("🚀 ~ handleSubmit ~ reservaActual:", reservaActual);
-
-        throw new Error("Tienes una reserva que se superpone con esta fecha");
+      if (isOverlaps) {
+        throw new Error("Tienes una reserva que se superpone con el periodo seleccionado");
       }
 
       const newReservation = {
-        location: amarra.location,
-        dateLapse: {
-          startDate: new Date(amarra.availability.startDate),
-          endDate: new Date(amarra.availability.endDate),
-        },
-        cost: amarra.dailyRate, // Cambiar a costo total
-        image: "https://i.imgur.com/A4j1U5Y.jpeg",
         owner: localStorage.getItem("id"),
+        amarra: amarra._id,
+        dateLapse: {
+          startDate: new Date(startDate),
+          endDate: new Date(endDate),
+        },
       };
       const data = await createReservation(newReservation);
-      await updateAmarra(amarra._id, { isAvailable: false });
-      if (!data) {
-        throw new Error("Error al crear la reserva");
-      }
+      updateAmarra(amarra._id, { isAvailable: false });
       Swal.fire({
         title: "Reserva exitosa",
         text: "Tu reserva ha sido registrada",
@@ -86,17 +84,6 @@ const page = () => {
         confirmButtonText: "Ok",
       });
     }
-  };
-
-  const overlaps = (dateLapse, anotherDateLapse) => {
-    // const start = new Date(dateLapse.startDate);
-    // const end = new Date(dateLapse.endDate);
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-    const anotherStart = new Date(anotherDateLapse.startDate);
-    const anotherEnd = new Date(anotherDateLapse.endDate);
-
-    return !((anotherStart < start && anotherEnd < start) || (anotherStart > end && anotherEnd > end));
   };
 
   return (
@@ -148,7 +135,7 @@ const page = () => {
                 showDisabledMonthNavigation
                 monthsShown={2}
               />
-              <ActionButton text="Reservar alquiler" handleSubmit={handleSubmit} />
+              <ActionButton text="Reservar alquiler" handleSubmit={handleSubmit} isDisabled={endDate} />
             </div>
           </div>
         </div>
