@@ -1,14 +1,18 @@
 import mongoose from 'mongoose';
 
 const schema = new mongoose.Schema({
-  location: String,
+  amarra: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Amarra",
+  },
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
   dateLapse: {
     startDate: Date,
     endDate: Date,
   },
-  cost: Number,
-  image: String,
-  owner: String,
 });
 
 export default mongoose.models.Reservation || mongoose.model("Reservation", schema);

@@ -17,7 +17,6 @@ export async function POST(request) {
     const { owner } = reservationData;
 
     if (!owner) {
-      
       return NextResponse.json({ error: "User ID is required" }, { status: 400 });
     }
 

@@ -2,6 +2,7 @@ import { connectDB } from "@/libs/mongodb";
 import User from "@/models/user";
 import Reservation from "@/models/Reservation";
 import { NextResponse } from "next/server";
+import Amarra from "@/models/Amarra";
 
 export async function GET(request, { params }) {
   try {
@@ -16,15 +17,20 @@ export async function GET(request, { params }) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    // Paso 2: Consulta los documentos relacionados (reservaciones)
-    // Asumiendo que tienes un campo en el usuario que almacena los IDs de las reservaciones
+    // obtener los datos referenciados
     const reservations = await Reservation.find({ _id: { $in: user.reservations } });
 
-    // Paso 3: Combina los resultados
-    // Esto depende de cómo quieras estructurar los datos, un ejemplo simple sería:
+    const marinasPromises = reservations.map(async (reservation) => {
+      const amarra = await Amarra.findById(reservation.amarra);
+      const owner = user;
+      return { ...reservation.toObject(), amarra, owner };
+    });
+
+    const reservationsWithMarinas = await Promise.all(marinasPromises);
+
     const userWithReservations = {
       ...user.toObject(),
-      reservations,
+      reservations: reservationsWithMarinas,
     };
 
     return NextResponse.json(userWithReservations);
