@@ -22,7 +22,7 @@ const page = () => {
       <div className="grid grid-cols-3 gap-2 place-items-center">
         {amarras &&
           amarras.map((amarra) => (
-            amarra.isAvailable && <MarinaCard key={amarra._id} amarra={amarra} />
+            <MarinaCard key={amarra._id} amarra={amarra} />
           ))}
       </div>
     </div>

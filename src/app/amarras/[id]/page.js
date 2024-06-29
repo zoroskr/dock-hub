@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 import { getAmarra, updateAmarra } from "@/app/services/amarras.api";
 import MarinaCard from "@/components/ui/MarinaCard";
@@ -21,6 +21,7 @@ const page = () => {
   const [endDate, setEndDate] = useState();
   const [loading, setLoading] = useState(true);
   const params = useParams();
+  const router = useRouter();
 
   const onChange = (dates) => {
     const [start, end] = dates;
@@ -33,7 +34,7 @@ const page = () => {
       const data = await getAmarra(params.id);
       setAmarra(data);
       setStartDate(new Date(data.availability.startDate));
-      setEndDate(new Date(data.availability.endDate));
+      setEndDate(addDays(new Date(data.availability.startDate), 5));
       setLoading(false);
     };
     fetchAmarra();
@@ -48,12 +49,18 @@ const page = () => {
     return !((anotherStart < start && anotherEnd < start) || (anotherStart > end && anotherEnd > end));
   };
 
+  const addDays = (date, days) => {
+    const result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return result;
+  };
+
   const handleSubmit = async () => {
     try {
       const user = await getUser(localStorage.getItem("id"));
       const reservasActivas = user.reservations.filter((r) => new Date(r.dateLapse.endDate) >= new Date());
       const isOverlaps = reservasActivas.some((r) => overlaps(r.dateLapse));
-      console.log("🚀 ~ handleSubmit ~ isOverlaps:", isOverlaps)
+      console.log("🚀 ~ handleSubmit ~ isOverlaps:", isOverlaps);
 
       if (isOverlaps) {
         throw new Error("Tienes una reserva que se superpone con el periodo seleccionado");
@@ -67,14 +74,16 @@ const page = () => {
           endDate: new Date(endDate),
         },
       };
-      const data = await createReservation(newReservation);
-      updateAmarra(amarra._id, { isAvailable: false });
+      await createReservation(newReservation);
+      
+      updateAmarra(amarra._id, { availability: {startDate: newReservation.dateLapse.endDate} });
       Swal.fire({
         title: "Reserva exitosa",
         text: "Tu reserva ha sido registrada",
         icon: "success",
         confirmButtonText: "Ok",
       });
+      router.push(`/reservations`);
     } catch (error) {
       console.error("Error:", error);
       Swal.fire({
@@ -95,7 +104,7 @@ const page = () => {
         <div className="">
           <span>Seleccione el periodo</span>
           <div className="grid grid-cols-2 place-items-center">
-            <MarinaCard title="Reservar alquiler" amarra={amarra} startDate={startDate} endDate={endDate} />
+            <MarinaCard title="Reservar alquiler" amarra={amarra} />
             <div className="grid">
               <DatePicker
                 renderCustomHeader={({ monthDate, customHeaderCount, decreaseMonth, increaseMonth }) => (
@@ -135,7 +144,7 @@ const page = () => {
                 showDisabledMonthNavigation
                 monthsShown={2}
               />
-              <ActionButton text="Reservar alquiler" handleSubmit={handleSubmit} isDisabled={endDate} />
+              <ActionButton text="Reservar alquiler" handleSubmit={handleSubmit} isDisabled={endDate ? false : true} />
             </div>
           </div>
         </div>

@@ -1,8 +1,16 @@
 "use client";
 
-import React, { use, useState } from "react";
+import React from "react";
+import { useRouter } from "next/navigation";
+
+const addDays = (date, days) => {
+  const result = new Date(date);
+  result.setDate(result.getDate() + days);
+  return result;
+};
 
 const MarinaCard = ({ amarra }) => {
+  const router = useRouter();
   return (
     <div
       className="max-w-sm bg-custom-gray rounded-xl shadow dark:bg-gray-800 dark:border-gray-700 cursor-pointer"
@@ -15,8 +23,7 @@ const MarinaCard = ({ amarra }) => {
         <div>
           <h1 className="text-xl font-bold">{amarra.location}</h1>
           <p className="text-sm">
-            Del {new Date(amarra.availability.startDate).toLocaleDateString()} al{" "}
-            {new Date(amarra.availability.endDate).toLocaleDateString()}
+            Del {new Date(amarra.availability.startDate).toLocaleDateString()} al {addDays(new Date(amarra.availability.startDate), 5).toLocaleDateString()}
           </p>
         </div>
         <span className="text-sm ">${amarra.dailyRate} USD por día</span>
