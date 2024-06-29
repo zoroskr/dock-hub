@@ -64,7 +64,7 @@ const Navbar = () => {
                   </li>
                   <li>
                     <Link
-                      href="/reservas"
+                      href="/reservations"
                       className="block py-2 px-3 text-md text-white md:bg-transparent md:text-white-700 md:p-0 dark:text-white md:dark:text-blue-500 duration-300 hover:scale-110"
                       aria-current="page"
                     >
@@ -78,6 +78,11 @@ const Navbar = () => {
                   <li>
                     <Link href="/chats" className="block text-md text-white duration-300 hover:scale-110" aria-current="page">
                       Mis chats
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/reservations" className="block text-md text-white duration-300 hover:scale-110" aria-current="page">
+                      Mis reservas
                     </Link>
                   </li>
                   <li>
