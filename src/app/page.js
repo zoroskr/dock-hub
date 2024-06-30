@@ -84,6 +84,16 @@ export default function Home() {
     }
   };
 
+  const aplicarFiltros = async (e) => {
+    const selectOrdenador = document.getElementById('ordenador');
+    const valor = selectOrdenador.value;
+    let posts = await getPosts();
+    if (valor == "viejos"){
+      posts = posts.reverse();  
+    }
+    setPosts(posts);
+  }
+
   return (
     <>
       <form className="w-1/2 ml-auto mr-auto p-3" onSubmit={handleSubmit} ref={form}>
@@ -115,14 +125,28 @@ export default function Home() {
             placeholder="Buscar Embarcaciones, Vehiculos..."
           />
           <button
-            type="submit"
+            type="button"
             className="text-white absolute right-2.5 bottom-2.5 rounded-xl bg-gray-800 duration-300 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
           >
             Buscar
           </button>
         </div>
       </form>
-
+      <div>
+        Ordenar Por
+        <select
+        name="ordenador"
+        id="ordenador">
+          <option value="nuevos">Más nuevas</option>
+          <option value="viejos">Más antiguas</option>
+        </select>
+        <button
+        className="text-white rounded-xl bg-gray-800 duration-300 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+        onClick={aplicarFiltros}
+        >
+          Aplicar
+        </button>
+      </div>
       <div className="max-w-screen-xl flex flex-wrap justify-between">
         <div className="w-1/5 p-2 sticky top-0 h-screen flex items-center">
           <div className="aspect-w-16 aspect-h-9 mb-4">
