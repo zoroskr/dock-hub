@@ -28,6 +28,8 @@ const PostsForm = ({
       form.current.elements.description.value = post.description || "";
       form.current.elements.image.value = post.image || "";
       form.current.elements.type.value = post.type || "";
+      form.current.elements.isAdapted.checked = post.adapted || false;
+
     }
   }, [post]);
 
@@ -58,6 +60,7 @@ const PostsForm = ({
       type: formData.get("type"),
       owner: localStorage.getItem("id"),
       state: "Activo",
+      adapted: formData.get("isAdapted") === "on"
     };
 
     const owner = await getUser(newPost.owner);
@@ -150,6 +153,17 @@ const PostsForm = ({
             <option>Aeronaves</option>
             <option>Inmuebles</option>
           </Select>
+        </div>
+        <div className="max-w-md">
+        <input
+          type="checkbox"
+          id="isAdapted"
+          name="isAdapted"
+          className="text-blue-500 rounded-xl focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:text-blue-500 dark:shadow-sm-light"
+        />
+        <label for="isAdapted" className="text-white dark:text-white font-semibold">
+          Está adaptado para personas con capacidad disminuida
+        </label>
         </div>
 
         <Button type="submit" className="bg-custom-yellow text-black rounded-xl border-gray-900 duration-500 hover:scale-105">

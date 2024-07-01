@@ -10,6 +10,12 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState('No hay publicaciones disponibles');
   const [favoritesPosts, setFavoritesPosts] = useState([]);
+  const [selectedOptions, setSelectedOptions] = useState({
+    Embarcaciones: false,
+    Vehiculos: false,
+    Aeronaves: false,
+    Inmuebles: false,
+  });
 
   const form = useRef(null);
 
@@ -84,15 +90,39 @@ export default function Home() {
     }
   };
 
-  const aplicarFiltros = async (e) => {
+  const aplicarFiltros = async () => {
     const selectOrdenador = document.getElementById('ordenador');
-    const valor = selectOrdenador.value;
     let posts = await getPosts();
-    if (valor == "viejos"){
-      posts = posts.reverse();  
+    posts = posts.filter(p => p.owner !== localStorage.getItem('id'));
+
+    if (!localStorage.getItem('id')  || localStorage.getItem('verified') === 'false' && localStorage.getItem('type') !== 'Admin') {
+      posts = posts.filter(p => p.type === 'Embarcaciones');
     }
-    setPosts(posts);
-  }
+
+    posts = posts.filter(p => p.state === 'Activo');
+
+    const activeFilters = Object.keys(selectedOptions).filter(option => selectedOptions[option]);
+    let filteredPosts = posts.filter(post => {
+      return activeFilters.every(filter => {
+        if (filter === 'adaptados') {
+          return post.adapted === true;
+        } else {
+          return post.type.toLowerCase() === filter.toLowerCase();
+        }
+      });
+    });
+    
+    setPosts(filteredPosts);
+    
+  };
+
+  const handleCheckboxChange = (event) => {
+    const { id, checked } = event.target;
+    setSelectedOptions(prevState => ({
+      ...prevState,
+      [id]: checked,
+    }));
+  };
 
   return (
     <>
@@ -135,11 +165,32 @@ export default function Home() {
       <div>
         Ordenar Por
         <select
-        name="ordenador"
-        id="ordenador">
+          name="ordenador"
+          id="ordenador">
           <option value="nuevos">Más nuevas</option>
           <option value="viejos">Más antiguas</option>
         </select>
+        {localStorage.getItem("type") === "Titular" && localStorage.getItem("verified") === "true" &&
+          <div id="checkboxList">
+            <div>
+              <input type="checkbox" id="Embarcaciones" onChange={handleCheckboxChange}/>
+              <label for="Embarcaciones">Embarcaciones</label>
+            </div>
+            <div>
+              <input type="checkbox" id="Vehículos" onChange={handleCheckboxChange}/>
+              <label for="Vehículos">Vehiculos</label>
+            </div>
+            <div>
+              <input type="checkbox" id="Aeronaves" onChange={handleCheckboxChange}/>
+              <label for="Aeronaves">Aeronaves</label>
+            </div>
+            <div>
+              <input type="checkbox" id="Inmuebles" onChange={handleCheckboxChange}/>
+              <label for="Inmuebles">Inmuebles</label>
+            </div>
+          </div>}
+          <input type="checkbox" id="adaptados" onChange={handleCheckboxChange}/>
+          <label for="adaptados">Aptos para discapacitados</label>
         <button
         className="text-white rounded-xl bg-gray-800 duration-300 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         onClick={aplicarFiltros}
