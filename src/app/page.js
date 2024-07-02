@@ -126,77 +126,80 @@ export default function Home() {
 
   return (
     <>
-      <form className="w-1/2 ml-auto mr-auto p-3" onSubmit={handleSubmit} ref={form}>
-        <label htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">
-          Search
-        </label>
-        <div className="relative rounded-xl bg-custom-gray">
-          <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-            <svg
-              className="w-4 h-4 text-gray-500 dark:text-gray-400"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 20 20"
+      <div className='flex'>
+        <form className="w-1/2 mt-auto mb-auto ml-auto p-3" onSubmit={handleSubmit} ref={form}>
+          <label htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">
+            Search
+          </label>
+          <div className="relative rounded-xl bg-custom-gray">
+            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+              <svg
+                className="w-4 h-4 text-gray-500 dark:text-gray-400"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+                />
+              </svg>
+            </div>
+            <input
+              type="search"
+              id="default-search"
+              className="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-xl bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 break-words overflow-y-auto"
+              placeholder="Buscar Embarcaciones, Vehiculos..."
+            />
+            <button
+              type="button"
+              className="text-white absolute right-2.5 bottom-2.5 rounded-xl bg-gray-800 duration-300 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             >
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-              />
-            </svg>
+              Buscar
+            </button>
           </div>
-          <input
-            type="search"
-            id="default-search"
-            className="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-xl bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 break-words overflow-y-auto"
-            placeholder="Buscar Embarcaciones, Vehiculos..."
-          />
+        </form>
+        <div className='flex w-1/2 mr-auto p-3 items-center justify-evenly text-sm'>
+          <div className='flex items-center justify-between'>
+            <div className='mr-1 text-xs'>Ordenar Por</div>
+            <select
+              name="ordenador"
+              id="ordenador"
+              className='rounded-xl text-xs justify-evenly'>
+              <option value="nuevos">Más nuevas</option>
+              <option value="viejos">Más antiguas</option>
+            </select>
+          </div>
+          {localStorage.getItem("type") === "Titular" && localStorage.getItem("verified") === "true" &&
+            <div id="checkboxList" className="text-xs font-medium">
+            {['Embarcaciones', 'Vehículos', 'Aeronaves', 'Inmuebles'].map(item => (
+              <div key={item} className="flex items-center">
+                <input
+                  type="checkbox"
+                  id={item}
+                  className="m-1 rounded-xl focus:outline-none"
+                  style={{ outline: 'none', boxShadow: 'none' }}
+                  onChange={handleCheckboxChange}
+                />
+                <label htmlFor={item}>{item}</label>
+              </div>
+            ))}
+          </div>}
+            <div>
+              <input type="checkbox" id="adaptados" className='rounded-xl focus:outline-none' style={{ outline: 'none', boxShadow: 'none' }} onChange={handleCheckboxChange}/>
+              <label for="adaptados" className='ml-1 text-xs font-medium' >Aptos para discapacitados</label>
+            </div>
           <button
-            type="button"
-            className="text-white absolute right-2.5 bottom-2.5 rounded-xl bg-gray-800 duration-300 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          className="text-white rounded-xl bg-gray-800 duration-300 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          onClick={aplicarFiltros}
           >
-            Buscar
+            Aplicar
           </button>
         </div>
-      </form>
-      <div>
-        Ordenar Por
-        <select
-          name="ordenador"
-          id="ordenador">
-          <option value="nuevos">Más nuevas</option>
-          <option value="viejos">Más antiguas</option>
-        </select>
-        {localStorage.getItem("type") === "Titular" && localStorage.getItem("verified") === "true" &&
-          <div id="checkboxList">
-            <div>
-              <input type="checkbox" id="Embarcaciones" onChange={handleCheckboxChange}/>
-              <label for="Embarcaciones">Embarcaciones</label>
-            </div>
-            <div>
-              <input type="checkbox" id="Vehículos" onChange={handleCheckboxChange}/>
-              <label for="Vehículos">Vehiculos</label>
-            </div>
-            <div>
-              <input type="checkbox" id="Aeronaves" onChange={handleCheckboxChange}/>
-              <label for="Aeronaves">Aeronaves</label>
-            </div>
-            <div>
-              <input type="checkbox" id="Inmuebles" onChange={handleCheckboxChange}/>
-              <label for="Inmuebles">Inmuebles</label>
-            </div>
-          </div>}
-          <input type="checkbox" id="adaptados" onChange={handleCheckboxChange}/>
-          <label for="adaptados">Aptos para discapacitados</label>
-        <button
-        className="text-white rounded-xl bg-gray-800 duration-300 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-        onClick={aplicarFiltros}
-        >
-          Aplicar
-        </button>
       </div>
       <div className="max-w-screen-xl flex flex-wrap justify-between">
         <div className="w-1/5 p-2 sticky top-0 h-screen flex items-center">
