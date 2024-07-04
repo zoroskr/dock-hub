@@ -42,7 +42,7 @@ const Navbar = () => {
         <div className="hidden w-full md:block md:w-auto" id="navbar-default">
           <>
             <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-900 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 dark:text-white md:dark:text-blue-500 items-center max-h-16">
-              <li style={{visibility:"hidden"}}>
+              <li /*style={{visibility:"hidden"}}*/>
                 <Link
                   href="/"
                   className="block py-2 px-3 text-md text-white md:bg-transparent md:text-white-700 md:p-0 dark:text-white md:dark:text-blue-500 duration-300 hover:scale-110"
@@ -83,11 +83,6 @@ const Navbar = () => {
                   <li>
                     <Link href="/chats" className="block text-md text-white duration-300 hover:scale-110" aria-current="page">
                       Mis chats
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/reservations" className="block text-md text-white duration-300 hover:scale-110" aria-current="page">
-                      Mis reservas
                     </Link>
                   </li>
                   <li>

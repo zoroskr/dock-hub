@@ -17,12 +17,12 @@ const page = () => {
   }, []);
 
   return (
-    <div>
+    <div className="w-full place-items-center mb-3">
       <Title text="Amarras disponibles" />
-      <div className="grid grid-cols-3 gap-2 place-items-center">
+      <div className="w-4/5 grid grid-cols-3 gap-3 mt-5 mx-auto">
         {amarras &&
           amarras.map((amarra) => (
-            <MarinaCard key={amarra._id} amarra={amarra} />
+            <MarinaCard key={amarra._id} amarra={amarra} mueveOno={true}/>
           ))}
       </div>
     </div>

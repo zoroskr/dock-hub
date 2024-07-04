@@ -175,23 +175,27 @@ export default function Home() {
             </select>
           </div>
           {localStorage.getItem("type") === "Titular" && localStorage.getItem("verified") === "true" &&
-            <div id="checkboxList" className="text-xs font-medium">
-            {['Embarcaciones', 'Vehículos', 'Aeronaves', 'Inmuebles'].map(item => (
-              <div key={item} className="flex items-center">
-                <input
-                  type="checkbox"
-                  id={item}
-                  className="m-1 rounded-xl focus:outline-none"
-                  style={{ outline: 'none', boxShadow: 'none' }}
-                  onChange={handleCheckboxChange}
-                />
-                <label htmlFor={item}>{item}</label>
+            <div id="checkboxList" className='text-sm font-medium'>
+              <div>
+                <input type="checkbox" id="Embarcaciones" className='m-1 rounded-xl focus:outline-none' style={{ outline: 'none', boxShadow: 'none' }} onChange={handleCheckboxChange}/>
+                <label for="Embarcaciones">Embarcaciones</label>
               </div>
-            ))}
-          </div>}
+              <div>
+                <input type="checkbox" id="Vehículos" className='m-1 rounded-xl focus:outline-none' style={{ outline: 'none', boxShadow: 'none' }} onChange={handleCheckboxChange}/>
+                <label for="Vehículos">Vehiculos</label>
+              </div>
+              <div>
+                <input type="checkbox" id="Aeronaves" className='m-1 rounded-xl focus:outline-none' style={{ outline: 'none', boxShadow: 'none' }} onChange={handleCheckboxChange}/>
+                <label for="Aeronaves">Aeronaves</label>
+              </div>
+              <div>
+                <input type="checkbox" id="Inmuebles" className='m-1 rounded-xl focus:outline-none' style={{ outline: 'none', boxShadow: 'none' }} onChange={handleCheckboxChange}/>
+                <label for="Inmuebles">Inmuebles</label>
+              </div>
+            </div>}
             <div>
               <input type="checkbox" id="adaptados" className='rounded-xl focus:outline-none' style={{ outline: 'none', boxShadow: 'none' }} onChange={handleCheckboxChange}/>
-              <label for="adaptados" className='ml-1 text-xs font-medium' >Aptos para discapacitados</label>
+              <label for="adaptados" className='m-1 text-sm font-medium' >Aptos para discapacitados</label>
             </div>
           <button
           className="text-white rounded-xl bg-gray-800 duration-300 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"

@@ -82,6 +82,11 @@ const Avatar = ({ handleLogout }) => {
                     </Link>
                   </li>
                   <li>
+                    <Link href="/reservations" className="block px-4 py-2 hover:bg-gray-100">
+                      Mis reservas
+                    </Link>
+                  </li>
+                  <li>
                     <Link href={`/editarperfil/${localStorage.getItem("id")}`} className="block px-4 py-2 hover:bg-gray-100">
                       Editar Perfil
                     </Link>

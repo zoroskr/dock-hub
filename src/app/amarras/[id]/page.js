@@ -97,18 +97,17 @@ const page = () => {
 
   return (
     <>
-      <Title text="Amarra" />
+      <Title text="Alquiler de Amarra" />
       {loading ? (
         <Loading />
       ) : (
-        <div className="">
-          <span>Seleccione el periodo</span>
-          <div className="grid grid-cols-2 place-items-center">
-            <MarinaCard title="Reservar alquiler" amarra={amarra} />
-            <div className="grid">
+          <div className="w-3/4 grid grid-cols-2 place-items-center mt-8 mx-auto">
+            <MarinaCard title="Reservar amarra" amarra={amarra} mueveOno={false} />
+            <div className="grid gap-2">
+              <span className="font-medium text-lg w-full mx-auto text-center">Seleccione el periodo</span>
               <DatePicker
                 renderCustomHeader={({ monthDate, customHeaderCount, decreaseMonth, increaseMonth }) => (
-                  <div>
+                  <div className="rounded-2xl">
                     <button
                       aria-label="Previous Month"
                       className={"react-datepicker__navigation react-datepicker__navigation--previous"}
@@ -144,10 +143,9 @@ const page = () => {
                 showDisabledMonthNavigation
                 monthsShown={2}
               />
-              <ActionButton text="Reservar alquiler" handleSubmit={handleSubmit} isDisabled={endDate ? false : true} />
+              <ActionButton text="Alquilar amarra" handleSubmit={handleSubmit} isDisabled={endDate ? false : true} />
             </div>
           </div>
-        </div>
       )}
     </>
   );
