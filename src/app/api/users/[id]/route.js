@@ -3,6 +3,8 @@ import User from "@/models/user";
 import Reservation from "@/models/Reservation";
 import { NextResponse } from "next/server";
 import Amarra from "@/models/Amarra";
+import Marina from "@/models/Marina";
+import Boat from "@/models/Boat";
 
 export async function GET(request, { params }) {
   try {
@@ -28,9 +30,30 @@ export async function GET(request, { params }) {
 
     const reservationsWithMarinas = await Promise.all(marinasPromises);
 
+    const amarras = await Amarra.find({ _id: { $in: user.amarras } });
+
+    const amarrasWithMarinasPromises = amarras.map(async (amarra) => {
+      const marina = await Marina.findById(amarra.marina);
+      return { ...amarra.toObject(), marina };
+    });
+    const amarrasWithMarinas = await Promise.all(amarrasWithMarinasPromises);
+
+    const amarrasWithMarinasAndBoatsPromises = amarrasWithMarinas.map(async (amarra) => {
+      const boat = await Boat.findById(amarra.boat);
+      return { ...amarra, boat };
+    });
+    const amarrasWithMarinasAndBoats = await Promise.all(amarrasWithMarinasAndBoatsPromises);
+
+    const amarrasWithMarinasAndBoatsAndReservationsPromises = amarrasWithMarinasAndBoats.map(async (amarra) => {
+      const reservations = await Reservation.find({ amarra: amarra._id });
+      return { ...amarra, reservations };
+    });
+    const amarrasWithMarinasAndBoatsAndReservations = await Promise.all(amarrasWithMarinasAndBoatsAndReservationsPromises);
+
     const userWithReservations = {
       ...user.toObject(),
       reservations: reservationsWithMarinas,
+      amarras: amarrasWithMarinasAndBoatsAndReservations,
     };
 
     return NextResponse.json(userWithReservations);

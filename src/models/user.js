@@ -10,10 +10,12 @@ const schema = new mongoose.Schema({
   type: String, // "Titular", "Regular", "Admin"
   verified: Boolean,
   confirmationToken: String,
+  resident: Boolean, // Argentino residente o no
   favorites: [String],
   chats: [String],
   reservations: [{ type: mongoose.Schema.Types.ObjectId, ref: "Reservation" }],
-  resident: Boolean, // Argentino residente o no
+  boats: [{ type: mongoose.Schema.Types.ObjectId, ref: "Boat" }],
+  amarras: [{ type: mongoose.Schema.Types.ObjectId, ref: "Amarra" }],
 });
 
 export default mongoose.models.User || mongoose.model('User', schema);

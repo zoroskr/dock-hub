@@ -33,8 +33,8 @@ const page = () => {
     const fetchAmarra = async () => {
       const data = await getAmarra(params.id);
       setAmarra(data);
-      setStartDate(new Date(data.availability.startDate));
-      setEndDate(addDays(new Date(data.availability.startDate), 5));
+      // setStartDate(new Date(data.availabilityDates[0].startDate));
+      // setEndDate(addDays(new Date(data.availability.startDate), 5));
       setLoading(false);
     };
     fetchAmarra();
@@ -76,7 +76,8 @@ const page = () => {
       };
       await createReservation(newReservation);
       
-      updateAmarra(amarra._id, { availability: {startDate: newReservation.dateLapse.endDate} });
+      // const availabilityDates = [...amarra.availabilityDates, { startDate: new Date(startDate), endDate: new Date(endDate) }];
+      // updateAmarra(amarra._id, { availabilityDates });
       Swal.fire({
         title: "Reserva exitosa",
         text: "Tu reserva ha sido registrada",
@@ -134,8 +135,8 @@ const page = () => {
                 )}
                 selected={startDate}
                 onChange={onChange}
-                minDate={new Date(amarra.availability.startDate)}
-                maxDate={new Date(amarra.availability.endDate)}
+                // minDate={new Date(amarra.availability.startDate)}
+                // maxDate={new Date(amarra.availability.endDate)}
                 startDate={startDate}
                 endDate={endDate}
                 selectsRange
