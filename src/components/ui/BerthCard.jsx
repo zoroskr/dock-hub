@@ -3,13 +3,7 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 
-const addDays = (date, days) => {
-  const result = new Date(date);
-  result.setDate(result.getDate() + days);
-  return result;
-};
-
-const MarinaCard = ({ amarra, mueveOno }) => {
+const BerthCard = ({ amarra, mueveOno }) => {
   const router = useRouter();
   return (
     <div
@@ -23,8 +17,8 @@ const MarinaCard = ({ amarra, mueveOno }) => {
         <div className="p-2">
           <h1 className="text-xl font-bold">{amarra.location}</h1>
           <p className="text-sm">
-            {/* Del {new Date(amarra.availability.startDate).toLocaleDateString()} al{" "}
-            {addDays(new Date(amarra.availability.startDate), 5).toLocaleDateString()} */}
+            Del {new Date(amarra.availabilityDates[0].startDate).toLocaleDateString()} al{" "}
+            {new Date(amarra.availabilityDates[amarra.availabilityDates.length - 1].endDate).toLocaleDateString()}
           </p>
         </div>
         <div className="flex w-full justify-between">
@@ -45,4 +39,4 @@ const MarinaCard = ({ amarra, mueveOno }) => {
   );
 };
 
-export default MarinaCard;
+export default BerthCard;

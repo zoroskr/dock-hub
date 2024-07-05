@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 
 import { getAmarra, updateAmarra } from "@/app/services/amarras.api";
-import MarinaCard from "@/components/ui/MarinaCard";
+import BerthCard from "@/components/ui/BerthCard";
 
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -14,6 +14,7 @@ import ActionButton from "@/components/ui/ActionButton";
 import Swal from "sweetalert2";
 import { createReservation } from "@/app/services/reservations.api";
 import { getUser } from "@/app/services/users.api";
+import { setHours, setMinutes, setSeconds, setMilliseconds } from "date-fns";
 
 const page = () => {
   const [amarra, setAmarra] = useState();
@@ -22,44 +23,58 @@ const page = () => {
   const [loading, setLoading] = useState(true);
   const params = useParams();
   const router = useRouter();
+  const [minDate, setMinDate] = useState();
+  const [maxDate, setMaxDate] = useState();
 
   const onChange = (dates) => {
     const [start, end] = dates;
     setStartDate(start);
     setEndDate(end);
+    console.log("🚀 ~ onChange ~ end:", end);
+    console.log("🚀 ~ onChange ~ start:", start);
   };
 
   useEffect(() => {
     const fetchAmarra = async () => {
       const data = await getAmarra(params.id);
       setAmarra(data);
-      // setStartDate(new Date(data.availabilityDates[0].startDate));
-      // setEndDate(addDays(new Date(data.availability.startDate), 5));
+      const minDate = new Date(data.availabilityDates[0].startDate);
+      const newMinDate = minDate > new Date() ? minDate : new Date();
+      const lastDate = new Date(data.availabilityDates[data.availabilityDates.length - 1].endDate);
+      setMinDate(newMinDate);
+      setMaxDate(lastDate);
+      // setStartDate(newMinDate);
+      // setEndDate(lastDate);
       setLoading(false);
     };
     fetchAmarra();
   }, [loading]);
 
   const overlaps = (anotherDateLapse) => {
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-    const anotherStart = new Date(anotherDateLapse.startDate);
-    const anotherEnd = new Date(anotherDateLapse.endDate);
-
+    const start = normalizeDate(startDate).getTime();
+    const end = normalizeDate(endDate).getTime();
+    const anotherStart = normalizeDate(anotherDateLapse.startDate).getTime();
+    const anotherEnd = normalizeDate(anotherDateLapse.endDate).getTime();
     return !((anotherStart < start && anotherEnd < start) || (anotherStart > end && anotherEnd > end));
   };
 
-  const addDays = (date, days) => {
-    const result = new Date(date);
-    result.setDate(result.getDate() + days);
-    return result;
+  // Normaliza la fecha para que sea a las 00:00:00.000
+  const normalizeDate = (date) => {
+    return setMilliseconds(setSeconds(setMinutes(setHours(new Date(date), 0), 0), 0), 0);
   };
 
   const handleSubmit = async () => {
     try {
+      console.log("🚀 ~ handleSubmit ~ startDate:", startDate);
+      console.log("🚀 ~ handleSubmit ~ endDate:", endDate);
+
+      if (startDate.getTime() == endDate.getTime()) {
+        throw new Error("La fecha de inicio y fin no pueden ser iguales");
+      }
+
       const user = await getUser(localStorage.getItem("id"));
       const reservasActivas = user.reservations.filter((r) => new Date(r.dateLapse.endDate) >= new Date());
-      const isOverlaps = reservasActivas.some((r) => overlaps(r.dateLapse));
+      const isOverlaps = user.reservations.some((r) => overlaps(r.dateLapse));
       console.log("🚀 ~ handleSubmit ~ isOverlaps:", isOverlaps);
 
       if (isOverlaps) {
@@ -75,9 +90,6 @@ const page = () => {
         },
       };
       await createReservation(newReservation);
-      
-      // const availabilityDates = [...amarra.availabilityDates, { startDate: new Date(startDate), endDate: new Date(endDate) }];
-      // updateAmarra(amarra._id, { availabilityDates });
       Swal.fire({
         title: "Reserva exitosa",
         text: "Tu reserva ha sido registrada",
@@ -102,51 +114,56 @@ const page = () => {
       {loading ? (
         <Loading />
       ) : (
-          <div className="w-3/4 grid grid-cols-2 place-items-center mt-8 mx-auto">
-            <MarinaCard title="Reservar amarra" amarra={amarra} mueveOno={false} />
-            <div className="grid gap-2">
-              <span className="font-medium text-lg w-full mx-auto text-center">Seleccione el periodo</span>
-              <DatePicker
-                renderCustomHeader={({ monthDate, customHeaderCount, decreaseMonth, increaseMonth }) => (
-                  <div className="rounded-2xl">
-                    <button
-                      aria-label="Previous Month"
-                      className={"react-datepicker__navigation react-datepicker__navigation--previous"}
-                      style={customHeaderCount === 1 ? { visibility: "hidden" } : null}
-                      onClick={decreaseMonth}
-                    >
-                      <span className={"react-datepicker__navigation-icon react-datepicker__navigation-icon--previous"}>{"<"}</span>
-                    </button>
-                    <span className="react-datepicker__current-month">
-                      {monthDate.toLocaleString("en-US", {
-                        month: "long",
-                        year: "numeric",
-                      })}
-                    </span>
-                    <button
-                      aria-label="Next Month"
-                      className={"react-datepicker__navigation react-datepicker__navigation--next"}
-                      style={customHeaderCount === 0 ? { visibility: "hidden" } : null}
-                      onClick={increaseMonth}
-                    >
-                      <span className={"react-datepicker__navigation-icon react-datepicker__navigation-icon--next"}>{">"}</span>
-                    </button>
-                  </div>
-                )}
-                selected={startDate}
-                onChange={onChange}
-                // minDate={new Date(amarra.availability.startDate)}
-                // maxDate={new Date(amarra.availability.endDate)}
-                startDate={startDate}
-                endDate={endDate}
-                selectsRange
-                inline
-                showDisabledMonthNavigation
-                monthsShown={2}
-              />
-              <ActionButton text="Alquilar amarra" handleSubmit={handleSubmit} isDisabled={endDate ? false : true} />
-            </div>
+        <div className="w-3/4 grid grid-cols-2 place-items-center mt-8 mx-auto">
+          <BerthCard title="Reservar amarra" amarra={amarra} mueveOno={false} />
+          <div className="grid gap-2">
+            <span className="font-medium text-lg w-full mx-auto text-center">Seleccione el periodo</span>
+            <DatePicker
+              renderCustomHeader={({ monthDate, customHeaderCount, decreaseMonth, increaseMonth }) => (
+                <div className="rounded-2xl">
+                  <button
+                    aria-label="Previous Month"
+                    className={"react-datepicker__navigation react-datepicker__navigation--previous"}
+                    style={customHeaderCount === 1 ? { visibility: "hidden" } : null}
+                    onClick={decreaseMonth}
+                  >
+                    <span className={"react-datepicker__navigation-icon react-datepicker__navigation-icon--previous"}>{"<"}</span>
+                  </button>
+                  <span className="react-datepicker__current-month">
+                    {monthDate.toLocaleString("en-US", {
+                      month: "long",
+                      year: "numeric",
+                    })}
+                  </span>
+                  <button
+                    aria-label="Next Month"
+                    className={"react-datepicker__navigation react-datepicker__navigation--next"}
+                    style={customHeaderCount === 0 ? { visibility: "hidden" } : null}
+                    onClick={increaseMonth}
+                  >
+                    <span className={"react-datepicker__navigation-icon react-datepicker__navigation-icon--next"}>{">"}</span>
+                  </button>
+                </div>
+              )}
+              selected={startDate}
+              onChange={onChange}
+              minDate={minDate}
+              maxDate={maxDate}
+              startDate={startDate}
+              endDate={endDate}
+              // este reduce es para excluir los periodos de reserva hechas para la amarra
+              excludeDateIntervals={amarra.reservations.reduce((acc, curr) => {
+                acc.push({ start: normalizeDate(curr.dateLapse.startDate), end: normalizeDate(curr.dateLapse.endDate) });
+                return acc;
+              }, [])}
+              selectsRange
+              inline
+              showDisabledMonthNavigation
+              monthsShown={2}
+            />
+            <ActionButton text="Alquilar amarra" handleSubmit={handleSubmit} isDisabled={endDate ? false : true} />
           </div>
+        </div>
       )}
     </>
   );

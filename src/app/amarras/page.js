@@ -1,6 +1,6 @@
 "use client";
 
-import MarinaCard from "@/components/ui/MarinaCard";
+import BerthCard from "@/components/ui/BerthCard";
 import Title from "@/components/ui/Title";
 import React, { useEffect, useState } from "react";
 
@@ -22,7 +22,7 @@ const page = () => {
       <div className="w-4/5 grid grid-cols-3 gap-3 mt-5 mx-auto">
         {amarras &&
           amarras.map((amarra) => (
-            <MarinaCard key={amarra._id} amarra={amarra} mueveOno={true}/>
+            <BerthCard key={amarra._id} amarra={amarra} mueveOno={true}/>
           ))}
       </div>
     </div>
