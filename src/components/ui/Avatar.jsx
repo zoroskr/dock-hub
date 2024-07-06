@@ -54,7 +54,10 @@ const Avatar = ({ handleLogout }) => {
               {isAdmin ? (
                 <>
                   <li>
-                    <Link href={`/editarperfil/${localStorage.getItem("id")}`} className="block px-3 py-2 hover:bg-gray-100">
+                    <Link
+                      href={`/editarperfil/${localStorage.getItem("id")}`}
+                      className="block px-3 py-2 hover:bg-gray-100"
+                    >
                       Editar Perfil
                     </Link>
                   </li>
@@ -81,13 +84,23 @@ const Avatar = ({ handleLogout }) => {
                       Ver mis favoritos
                     </Link>
                   </li>
+                  {localStorage.getItem("type") === "Titular" && (
+                    <li>
+                      <Link href="/mis-amarras" className="block px-4 py-2 hover:bg-gray-100">
+                        Mis amarras
+                      </Link>
+                    </li>
+                  )}
                   <li>
                     <Link href="/reservations" className="block px-4 py-2 hover:bg-gray-100">
                       Mis reservas
                     </Link>
                   </li>
                   <li>
-                    <Link href={`/editarperfil/${localStorage.getItem("id")}`} className="block px-4 py-2 hover:bg-gray-100">
+                    <Link
+                      href={`/editarperfil/${localStorage.getItem("id")}`}
+                      className="block px-4 py-2 hover:bg-gray-100"
+                    >
                       Editar Perfil
                     </Link>
                   </li>

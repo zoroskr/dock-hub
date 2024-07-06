@@ -29,7 +29,7 @@ const page = () => {
           {amarras && amarras.length > 0 ? (
             <div className="w-4/5 grid grid-cols-3 gap-3 mt-5 mx-auto">
               {amarras.map((amarra) => (
-                <BerthCard key={amarra._id} amarra={amarra} />
+                <BerthCard key={amarra._id} amarra={amarra} mueveOno={true} />
               ))}
             </div>
           ) : (
