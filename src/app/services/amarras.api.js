@@ -18,6 +18,22 @@ export const getAmarra = async (id) => {
   }
 }
 
+export const createAmarra = async (newAmarra) => {
+  try {
+    const response = await fetch(`http://localhost:3000/api/amarras`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newAmarra),
+    });
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 export const updateAmarra = async (id, newFields) => {
   try {
     const response = await fetch(`http://localhost:3000/api/amarras/${id}`, {
