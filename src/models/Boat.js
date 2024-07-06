@@ -4,8 +4,9 @@ const boatSchema = new mongoose.Schema({
   plate: String,
   name: String,
   type: String,
-  length: Number,
+  description: String,
   image: String,
+  adapted: Boolean,
   owner: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 });
 
