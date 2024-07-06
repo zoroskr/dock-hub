@@ -10,11 +10,6 @@ import { getUser } from "../services/users.api";
 const page = () => {
   const [reservations, setReservations] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [absence, setAbsence] = useState(false);
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-
-
 
   useEffect(() => {
     const fetchReservations = async () => {
