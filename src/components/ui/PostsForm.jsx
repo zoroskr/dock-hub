@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Button, Label, Select, TextInput, Textarea } from "flowbite-react";
 import { useParams, useRouter } from "next/navigation";
 import { createPost, updatePost } from "@/app/services/posts.api";
@@ -22,6 +22,9 @@ const PostsForm = ({
   const form = useRef(post);
   const params = useParams();
   const router = useRouter();
+  // Dentro de PostsForm, agrega estos estados al principio del componente
+  const [lat, setLat] = useState(-34.92145); // Valor inicial arbitrario
+  const [lng, setLng] = useState(-57.95453); // Valor inicial arbitrario
 
   useEffect(() => {
     if (form.current) {
@@ -62,7 +65,9 @@ const PostsForm = ({
       type: formData.get("type"),
       owner: localStorage.getItem("id"),
       state: "Activo",
-      adapted: formData.get("isAdapted") === "on"
+      adapted: formData.get("isAdapted") === "on",
+      latitud: lat,
+      longitud: lng,
     };
 
     const owner = await getUser(newPost.owner);
@@ -167,9 +172,11 @@ const PostsForm = ({
           Está adaptado para personas con capacidad disminuida
         </label>
         </div>
-
-        <div className="text-xs text-white">Haz click sobre el marcador azul</div>        
-        <Map lat={-34.92145} lng={-57.95453}/>
+        
+        <Map lat={lat} lng={lng} onPositionChange={(newLat, newLng) => {
+          setLat(newLat);
+          setLng(newLng);
+        }}/>
 
         <Button type="submit" className="bg-custom-yellow text-black rounded-xl border-gray-900 duration-500 hover:scale-105">
           {title}
