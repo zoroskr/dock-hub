@@ -9,6 +9,8 @@ import ActionButton from "./ActionButton";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { setHours, setMinutes, setSeconds, setMilliseconds } from "date-fns";
+import { createPost, getPost } from "@/app/services/posts.api";
+import { getBoat } from "@/app/services/boats.api";
 
 const CardAmarra = ({ amarra, mueveOno, onAmarraUpdated }) => {
   const [absence, setAbsence] = useState(false);
@@ -33,6 +35,46 @@ const CardAmarra = ({ amarra, mueveOno, onAmarraUpdated }) => {
       // showConfirmButton: false,
     });
     onAmarraUpdated();
+  };
+
+  const handlePublish = async () => {
+    try {
+      const boat = await getBoat(amarra.boat._id);
+      // const exist = await getPost(boat.plate);
+      // console.log("🚀 ~ handlePublish ~ exist:", exist)
+      // if (!exist) {
+      //   throw new Error("Ya existe una publicación para esta embarcación");
+      // }
+      const post = {
+        plate: boat.plate,
+        name: boat.name,
+        description: boat.description,
+        image: boat.image,
+        owner: boat.owner,
+        type: boat.type,
+        state: "Activo",
+        adapted: boat.adapted,
+        latitud: amarra.latitud || 0,
+        longitud: amarra.longitud || 0,
+      };
+
+      const newPost = await createPost(post);
+      if (!newPost) {
+        throw new Error("Error al publicar la embarcación");
+      }
+      Swal.fire({
+        icon: "success",
+        title: "¡Listo!",
+        text: "Se ha publicado la embarcación",
+      });
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Hubo un error al publicar la embarcación. Por favor, inténtalo de nuevo.",
+      });
+    }
+    // router.push(`/boats/${amarra.boat._id}`);
   };
 
   // Normaliza la fecha para que sea a las 00:00:00.000
@@ -91,10 +133,7 @@ const CardAmarra = ({ amarra, mueveOno, onAmarraUpdated }) => {
             <img src={amarra.boat.image} alt={amarra.location} className="rounded-xl" />
             <p>Plate: {amarra.boat.plate}</p>
           </div>
-          <ActionButton
-            text="Publicar para intercambiar"
-            handleSubmit={() => router.push(`/boats/${amarra.boat._id}`)}
-          />
+          <ActionButton text="Publicar para intercambiar" handleSubmit={handlePublish} />
         </section>
       </div>
     </div>

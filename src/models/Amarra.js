@@ -14,6 +14,8 @@ const amarraSchema = new mongoose.Schema({
   dailyRate: Number,
   image: String,
   isAvailable: Boolean,
+  lat: Number,
+  long: Number,
   availabilityDates: [dateLapseSchema],
   boat: { type: mongoose.Schema.Types.ObjectId, ref: "Boat" },
   marina: { type: mongoose.Schema.Types.ObjectId, ref: "Marina" },
