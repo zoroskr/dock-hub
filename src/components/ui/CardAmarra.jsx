@@ -9,14 +9,18 @@ import ActionButton from "./ActionButton";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { setHours, setMinutes, setSeconds, setMilliseconds } from "date-fns";
+import { set } from "mongoose";
 
-const CardAmarra = ({ amarra, mueveOno }) => {
+const CardAmarra = ({ amarra, mueveOno, onAmarraUpdated }) => {
   const [absence, setAbsence] = useState(false);
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
+  const router = useRouter();
 
   const handleClick = () => {
     setAbsence(true);
+    setStartDate(null);
+    setEndDate(null);
   };
 
   const handleAbsence = async () => {
@@ -27,7 +31,9 @@ const CardAmarra = ({ amarra, mueveOno }) => {
       icon: "success",
       title: "¡Listo!",
       text: "Se ha notificado la ausencia",
+      // showConfirmButton: false,
     });
+    onAmarraUpdated();
   };
 
   // Normaliza la fecha para que sea a las 00:00:00.000
@@ -35,7 +41,6 @@ const CardAmarra = ({ amarra, mueveOno }) => {
     return setMilliseconds(setSeconds(setMinutes(setHours(new Date(date), 0), 0), 0), 0);
   };
 
-  const router = useRouter();
   return (
     <div
       className={`max-w-sm bg-custom-gray rounded-xl shadow dark:bg-gray-800 dark:border-gray-700 duration-500 ${mueveOno ? "hover:scale-105" : ""}`}
@@ -87,7 +92,10 @@ const CardAmarra = ({ amarra, mueveOno }) => {
             <img src={amarra.boat.image} alt={amarra.location} className="rounded-xl" />
             <p>Plate: {amarra.boat.plate}</p>
           </div>
-          <ActionButton text="Publicar para intercambiar" handleSubmit={() => router.push(`/boats/${amarra.boat._id}`)} />
+          <ActionButton
+            text="Publicar para intercambiar"
+            handleSubmit={() => router.push(`/boats/${amarra.boat._id}`)}
+          />
         </section>
       </div>
     </div>
