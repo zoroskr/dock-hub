@@ -8,7 +8,7 @@ export const getBoats = async () => {
     }
   }
   
-  export const geBoat = async (id) => {
+  export const getBoat = async (id) => {
     try {
       const response = await fetch(`http://localhost:3000/api/boats/${id}`);
       const data = await response.json();
