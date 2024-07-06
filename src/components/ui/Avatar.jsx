@@ -91,6 +91,13 @@ const Avatar = ({ handleLogout }) => {
                       </Link>
                     </li>
                   )}
+                  {localStorage.getItem("type") === "Titular" && (
+                    <li>
+                      <Link href="/publicarEmbarcacion" className="block px-4 py-2 hover:bg-gray-100">
+                        Publicar embarcacion
+                      </Link>
+                    </li>
+                  )}
                   <li>
                     <Link href="/reservations" className="block px-4 py-2 hover:bg-gray-100">
                       Mis reservas
