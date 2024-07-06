@@ -6,28 +6,25 @@ import "@/components/ui/Map.css";
 import MarkerIcon from "../assets/venue_location_icon.svg";
 
 const DraggableMarker = ({ onPositionChange, initialLat, initialLng }) => {
-  const initialPosition = { lat: initialLat, lng: initialLng }; // Usar initialLat y initialLng para la posición inicial
   const [draggable, setDraggable] = useState(false);
-  const [position, setPosition] = useState(initialPosition); // Establecer la posición inicial basada en props
   const markerRef = useRef(null);
+
   const eventHandlers = useMemo(
     () => ({
       dragend() {
         const marker = markerRef.current;
         if (marker != null) {
           const newPosition = marker.getLatLng();
-          setPosition(newPosition);
-          if (onPositionChange) {
-            onPositionChange(newPosition);
-          }
+          onPositionChange(newPosition.lat, newPosition.lng); // Corregido para llamar correctamente a onPositionChange
         }
       },
     }),
     [onPositionChange]
   );
-  const toggleDraggable = useCallback(() => {
+
+  const toggleDraggable = () => {
     setDraggable((d) => !d);
-  }, []);
+  };
 
   return (
     <Marker
@@ -43,38 +40,29 @@ const DraggableMarker = ({ onPositionChange, initialLat, initialLng }) => {
       }
       draggable={draggable}
       eventHandlers={eventHandlers}
-      position={position}
+      position={{ lat: initialLat, lng: initialLng }}
       ref={markerRef}
     >
       <Popup minWidth={90}>
-        <span onClick={toggleDraggable}>{draggable ? "Puedes mover el marcador" : "Haz click sobre el texto para poder situarlo"}</span>
+        <span onClick={toggleDraggable}>
+          {draggable ? "Puedes mover el marcador" : "Haz click sobre el texto para poder situarlo"}
+        </span>
+        <p>Latitud: {initialLat} Longitud: {initialLng}</p>
       </Popup>
     </Marker>
   );
 };
 
-const DraggableMarkerMap = ({ lat, lng }) => {
-  const initialPosition = { lat, lng };
-  const [currentPosition, setCurrentPosition] = useState(initialPosition); // Estado para almacenar la posición actual
-
-  const handlePositionChange = (newPosition) => {
-    console.log("Nueva posición del marcador:", newPosition);
-    setCurrentPosition(newPosition); // Actualizar la posición actual
-  };
-
+const DraggableMarkerMap = ({ lat, lng, onPositionChange }) => {
   return (
     <>
-      <MapContainer center={initialPosition} zoom={13} scrollWheelZoom={false}>
+      <MapContainer center={{ lat, lng }} zoom={13} scrollWheelZoom={false}>
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        <DraggableMarker onPositionChange={handlePositionChange} initialLat={lat} initialLng={lng} />
-        </MapContainer>
-      <div style={{ marginTop: "20px", textAlign: "center" }}>
-        {/* Mostrar la posición actual */}
-        <p className="text-white">Latitud: {currentPosition.lat}, Longitud: {currentPosition.lng}</p>
-      </div>
+        <DraggableMarker onPositionChange={onPositionChange} initialLat={lat} initialLng={lng} />
+      </MapContainer>
     </>
   );
 };
