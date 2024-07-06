@@ -9,7 +9,6 @@ import ActionButton from "./ActionButton";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { setHours, setMinutes, setSeconds, setMilliseconds } from "date-fns";
-import { set } from "mongoose";
 
 const CardAmarra = ({ amarra, mueveOno, onAmarraUpdated }) => {
   const [absence, setAbsence] = useState(false);
