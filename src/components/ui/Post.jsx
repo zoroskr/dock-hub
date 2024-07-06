@@ -7,6 +7,9 @@ import Swal from "sweetalert2";
 import { Button } from "flowbite-react";
 import { deletePost, updatePost } from "@/app/services/posts.api";
 import { useRouter } from "next/navigation";
+import Map from "@/components/ui/Map";
+import DraggableMarkerMap from "@/components/ui/Map";
+import MapDisplay from "./MapSinDrag";
 
 
 const Post = ({ post, showProposeButton, isFavorite = false, onRemoveFavorite }) => {
@@ -158,6 +161,14 @@ const Post = ({ post, showProposeButton, isFavorite = false, onRemoveFavorite })
     window.location.reload();
   };
 
+  console.log("loggedUserId:", loggedUserId);
+  console.log("post.owner:", post.owner);
+  console.log("showButton:", showButton);
+  console.log("showProposeButton:", showProposeButton);
+  console.log("userType:", userType);
+  console.log("post.state:", post.state);
+  console.log("Debe mostrar el botón:", showButton && showProposeButton && userType !== "Admin" && post.state !== "Pausado");
+
   return (
     <div className="max-w-sm bg-custom-gray rounded-xl shadow dark:bg-gray-800 dark:border-gray-700 duration-500 hover:scale-105">
       <div className="p-5 flex flex-col justify-between">
@@ -199,12 +210,12 @@ const Post = ({ post, showProposeButton, isFavorite = false, onRemoveFavorite })
             </div>
           )}
         </div>
-        {post.lat && post.lng && (
-        <div className="p-5">
-          <Map lat={post.lat} lng={post.lng} />
-        </div>
-        )}
-        {showButton && showProposeButton && userType !== "Admin" && post.state != "Pausado" && (
+          
+        <div className="w-full mb-2 justify-center rounded-xl">
+          <MapDisplay lat={post.latitud} lng={post.longitud}/>
+        </div> 
+
+        {showButton && showProposeButton && userType !== "Admin" && post.state !== "Pausado" && (
           <button
             onClick={handleSubmit}
             className="inline-flex items-center mx-auto mb-2 mt-1 px-3 py-2 text-sm font-medium text-center text-white bg-gray-800 rounded-xl duration-300 hover:bg-gray-700"

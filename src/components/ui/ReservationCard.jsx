@@ -16,18 +16,20 @@ const ReservationCard = ({ reservation }) => {
     return days;
   };
 
+  console.log(reservation);
+
   return (
-    <div className="max-w-sm bg-custom-gray rounded-xl shadow dark:bg-gray-800 dark:border-gray-700">
+    <div className="max-w-sm bg-custom-gray mx-auto rounded-xl shadow dark:bg-gray-800 dark:border-gray-700">
       <div className="p-5 grid place-items-center">
         <h3 className="text-xl font-bold text-center text-custom-gray dark:text-gray-100">
           {reservation.amarra.location}
         </h3>
-        <p>
-          Período: Del {convertToDate(reservation.dateLapse.startDate)} al{" "}
+        <p className="text-sm">
+          Del {convertToDate(reservation.dateLapse.startDate)} al{" "}
           {convertToDate(reservation.dateLapse.endDate)}
         </p>
-        <p>{reservation.amarra.dailyRate} USD por día</p>
-        <p>
+        <p className="text-sm"> {reservation.amarra.dailyRate} USD por día</p>
+        <p className="text-sm">
           {reservation.amarra.dailyRate * calculateDays(reservation.dateLapse)} USD por{" "}
           {calculateDays(reservation.dateLapse)} días
         </p>

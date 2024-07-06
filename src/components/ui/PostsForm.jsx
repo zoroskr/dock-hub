@@ -172,7 +172,7 @@ const PostsForm = ({
           Está adaptado para personas con capacidad disminuida
         </label>
         </div>
-        
+
         <Map lat={lat} lng={lng} onPositionChange={(newLat, newLng) => {
           setLat(newLat);
           setLng(newLng);
