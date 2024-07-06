@@ -199,6 +199,11 @@ const Post = ({ post, showProposeButton, isFavorite = false, onRemoveFavorite })
             </div>
           )}
         </div>
+        {post.lat && post.lng && (
+        <div className="p-5">
+          <Map lat={post.lat} lng={post.lng} />
+        </div>
+        )}
         {showButton && showProposeButton && userType !== "Admin" && post.state != "Pausado" && (
           <button
             onClick={handleSubmit}
@@ -216,7 +221,8 @@ const Post = ({ post, showProposeButton, isFavorite = false, onRemoveFavorite })
             </svg>
           </button>
         )}
-        {post.state === "Pausado" && <p>Esta publicacion se encuentra pausada</p>}
+
+        {post.state === "Pausado" && <p className="text-sm font-semibold mb-1 mx-auto">Esta publicacion se encuentra pausada</p>}
 
         {showOwnerButtons && (
           <div className="flex justify-between gap-2">

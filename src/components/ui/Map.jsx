@@ -22,13 +22,17 @@ const DraggableMarker = ({ onPositionChange, initialLat, initialLng }) => {
           }
         }
       },
+      click() { // Línea agregada
+        setDraggable(true); // Línea agregada
+      },
     }),
     [onPositionChange]
   );
+  /*
   const toggleDraggable = useCallback(() => {
     setDraggable((d) => !d);
   }, []);
-
+  */
   return (
     <Marker
       icon={
@@ -47,7 +51,7 @@ const DraggableMarker = ({ onPositionChange, initialLat, initialLng }) => {
       ref={markerRef}
     >
       <Popup minWidth={90}>
-        <span onClick={toggleDraggable}>{draggable ? "Puedes mover el marcador" : "Haz click sobre el texto para poder situarlo"}</span>
+        <span>{draggable ? "Puedes mover el marcador" : "Haz click sobre el marcador para poder moverlo"}</span> {/* Línea modificada */}
       </Popup>
     </Marker>
   );
@@ -64,16 +68,17 @@ const DraggableMarkerMap = ({ lat, lng }) => {
 
   return (
     <>
-      <MapContainer center={initialPosition} zoom={13} scrollWheelZoom={false}>
+      <MapContainer className="rounded-xl" center={initialPosition} zoom={13} scrollWheelZoom={false}>
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         <DraggableMarker onPositionChange={handlePositionChange} initialLat={lat} initialLng={lng} />
         </MapContainer>
-      <div style={{ marginTop: "20px", textAlign: "center" }}>
+      <div className="mt-2 text-sm">
         {/* Mostrar la posición actual */}
-        <p className="text-white">Latitud: {currentPosition.lat}, Longitud: {currentPosition.lng}</p>
+        <p className="text-white">Latitud: {currentPosition.lat}</p>
+        <p className="text-white">Longitud: {currentPosition.lng}</p>
       </div>
     </>
   );

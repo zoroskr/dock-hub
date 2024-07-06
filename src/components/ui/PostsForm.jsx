@@ -106,10 +106,10 @@ const PostsForm = ({
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen max-w-lg w-full">
+    <div className="flex justify-center mt-3 mb-3 items-center min-h-screen max-w-lg w-full">
       <form
         ref={form}
-        className="flex w-full flex-col gap-4 rounded-xl bg-gray-900 border-gray-200 dark:bg-gray-900 shadow-md p-7 items-center"
+        className="flex w-full flex-col gap-3 rounded-xl bg-gray-900 border-gray-200 dark:bg-gray-900 shadow-md p-5 items-center"
         onSubmit={handleSubmit}
       >
         <h1 className="text-2xl font-bold text-white">{title}</h1>
@@ -135,17 +135,17 @@ const PostsForm = ({
           <div className="mb-2 block">
             <Label htmlFor="description" value="Descripción" />
           </div>
-          <Textarea name="description" placeholder="Descripción de las características!" required rows={4} className="rounded-xl" />
+          <Textarea name="description" placeholder="Descripción de las características!" required rows={3} className="rounded-xl" />
         </div>
 
         <div className="max-w-md w-full">
-          <div className="mb-2 block">
+          <div className="mb-1 block">
             <Label htmlFor="image" value="Link a imagen" />
           </div>
           <TextInput className="rounded-xl overflow-hidden" name="image" type="url" placeholder="Link a la imagen del bien" />
         </div>
 
-        <div className="max-w-md">
+        <div className="max-w-md mx-auto">
           <div className="mb-2 block">
             <Label htmlFor="type" value="Selecciona el tipo de bien" className="text-white" />
           </div>
@@ -163,10 +163,12 @@ const PostsForm = ({
           name="isAdapted"
           className="text-blue-500 rounded-xl focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:text-blue-500 dark:shadow-sm-light"
         />
-        <label htmlFor="isAdapted" className="text-white dark:text-white font-semibold">
+        <label htmlFor="isAdapted" className="text-white dark:text-white font-semibold text-sm">
           Está adaptado para personas con capacidad disminuida
         </label>
         </div>
+
+        <div className="text-xs text-white">Haz click sobre el marcador azul</div>        
         <Map lat={-34.92145} lng={-57.95453}/>
 
         <Button type="submit" className="bg-custom-yellow text-black rounded-xl border-gray-900 duration-500 hover:scale-105">
