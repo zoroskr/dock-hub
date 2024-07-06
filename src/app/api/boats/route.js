@@ -4,6 +4,13 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
   await connectDB();
-  const chats = await Boat.find();
-  return NextResponse.json(chats);
+  const boats = await Boat.find();
+  return NextResponse.json(boats);
 }
+
+export async function POST(request) {
+    await connectDB();
+    const data = await request.json();
+    const boat = await Boat.create(data);
+    return NextResponse.json(boat);
+}  
