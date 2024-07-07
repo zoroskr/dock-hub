@@ -14,27 +14,50 @@ import { getBoat } from "@/app/services/boats.api";
 
 const CardAmarra = ({ amarra, mueveOno, onAmarraUpdated }) => {
   const [absence, setAbsence] = useState(false);
-  const [startDate, setStartDate] = useState();
-  const [endDate, setEndDate] = useState();
+  const [dateRange, setDateRange] = useState([null, null]);
+  const [startDate, endDate] = dateRange;
   const router = useRouter();
+
+  const includesDate = (anotherDateLapse) => {
+    const selectStartDate = normalizeDate(startDate).getTime();
+    const selectEndDate = normalizeDate(endDate).getTime();
+    const anotherStartDate = normalizeDate(anotherDateLapse.startDate).getTime();
+    const anotherEndDate = normalizeDate(anotherDateLapse.endDate).getTime();
+    return anotherStartDate >= selectStartDate && anotherEndDate <= selectEndDate;
+  };
 
   const handleClick = () => {
     setAbsence(true);
-    setStartDate(null);
-    setEndDate(null);
   };
 
   const handleAbsence = async () => {
-    const availabilityDates = [...amarra.availabilityDates, { startDate, endDate }];
-    await updateAmarra(amarra._id, { availabilityDates });
-    setAbsence(false);
-    Swal.fire({
-      icon: "success",
-      title: "¡Listo!",
-      text: "Se ha notificado la ausencia",
-      // showConfirmButton: false,
-    });
-    onAmarraUpdated();
+    try {
+      if (startDate.getTime() == endDate.getTime()) {
+        throw new Error("La fecha de inicio y fin no pueden ser iguales");
+      }
+
+      if (amarra.reservations.some((r) => includesDate(r.dateLapse))) {
+        throw new Error("No puedes seleccionar un periodo que incluya periodos excluidos");
+      }
+
+      const availabilityDates = [...amarra.availabilityDates, { startDate, endDate }];
+      await updateAmarra(amarra._id, { availabilityDates });
+      setAbsence(false);
+      onAmarraUpdated();
+      setDateRange([null, null]);
+
+      Swal.fire({
+        icon: "success",
+        title: "¡Listo!",
+        text: "Se ha notificado la ausencia",
+      });
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: error.message,
+      });
+    }
   };
 
   const handlePublish = async () => {
@@ -71,10 +94,10 @@ const CardAmarra = ({ amarra, mueveOno, onAmarraUpdated }) => {
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: "Hubo un error al publicar la embarcación. Por favor, inténtalo de nuevo.",
+        text: error.message,
       });
     }
-    // router.push(`/boats/${amarra.boat._id}`);
+    router.push("/posts");
   };
 
   // Normaliza la fecha para que sea a las 00:00:00.000
@@ -95,35 +118,26 @@ const CardAmarra = ({ amarra, mueveOno, onAmarraUpdated }) => {
         {absence && (
           <>
             <p>Período de ausencia:</p>
-            <label htmlFor="startDate">Desde:</label>
+
             <DatePicker
-              selected={startDate}
-              onChange={(date) => setStartDate(date)}
-              selectsStart
+              selectsRange={true}
               startDate={startDate}
-              endDate={endDate}
               minDate={new Date()}
+              endDate={endDate}
+              onChange={(update) => {
+                setDateRange(update);
+              }}
               excludeDateIntervals={amarra.availabilityDates.reduce((acc, curr) => {
                 acc.push({ start: normalizeDate(curr.startDate), end: normalizeDate(curr.endDate) });
                 return acc;
               }, [])}
+              withPortal
             />
-            <label htmlFor="endDate">Hasta:</label>
-            <DatePicker
-              selected={endDate}
-              onChange={(date) => setEndDate(date)}
-              selectsEnd
-              startDate={startDate}
-              endDate={endDate}
-              minDate={new Date()}
-              // maxDate={amarra.dateLapse.endDate}
-              // este reduce retorna un array de objetos con los periodos de ausencias
-              excludeDateIntervals={amarra.availabilityDates.reduce((acc, curr) => {
-                acc.push({ start: normalizeDate(curr.startDate), end: normalizeDate(curr.endDate) });
-                return acc;
-              }, [])}
+            <ActionButton
+              handleSubmit={handleAbsence}
+              text="Notificar"
+              isDisabled={startDate && endDate ? false : true}
             />
-            <ActionButton handleSubmit={handleAbsence} text="Notificar" />
           </>
         )}
 

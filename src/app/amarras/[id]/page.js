@@ -23,26 +23,17 @@ const page = () => {
   const [loading, setLoading] = useState(true);
   const params = useParams();
   const router = useRouter();
-  const [minDate, setMinDate] = useState();
-  const [maxDate, setMaxDate] = useState();
 
   const onChange = (dates) => {
     const [start, end] = dates;
     setStartDate(start);
     setEndDate(end);
-    console.log("🚀 ~ onChange ~ end:", end);
-    console.log("🚀 ~ onChange ~ start:", start);
   };
 
   useEffect(() => {
     const fetchAmarra = async () => {
       const data = await getAmarra(params.id);
       setAmarra(data);
-      const minDate = new Date(data.availabilityDates[0].startDate);
-      const newMinDate = minDate > new Date() ? minDate : new Date();
-      const lastDate = new Date(data.availabilityDates[data.availabilityDates.length - 1].endDate);
-      setMinDate(newMinDate);
-      setMaxDate(lastDate);
       // setStartDate(newMinDate);
       // setEndDate(lastDate);
       setLoading(false);
@@ -50,12 +41,23 @@ const page = () => {
     fetchAmarra();
   }, [loading]);
 
+  const includesDate = (anotherDateLapse) => {
+    const selectStartDate = normalizeDate(startDate).getTime();
+    const selectEndDate = normalizeDate(endDate).getTime();
+    const anotherStartDate = normalizeDate(anotherDateLapse.startDate).getTime();
+    const anotherEndDate = normalizeDate(anotherDateLapse.endDate).getTime();
+    return anotherStartDate >= selectStartDate && anotherEndDate <= selectEndDate;
+  };
+
   const overlaps = (anotherDateLapse) => {
-    const start = normalizeDate(startDate).getTime();
-    const end = normalizeDate(endDate).getTime();
-    const anotherStart = normalizeDate(anotherDateLapse.startDate).getTime();
-    const anotherEnd = normalizeDate(anotherDateLapse.endDate).getTime();
-    return !((anotherStart < start && anotherEnd < start) || (anotherStart > end && anotherEnd > end));
+    const selectStartDate = normalizeDate(startDate).getTime();
+    const selectEndDate = normalizeDate(endDate).getTime();
+    const anotherStartDate = normalizeDate(anotherDateLapse.startDate).getTime();
+    const anotherEndDate = normalizeDate(anotherDateLapse.endDate).getTime();
+    return !(
+      (anotherStartDate < selectStartDate && anotherEndDate < selectStartDate) ||
+      (anotherStartDate > selectEndDate && anotherEndDate > selectEndDate)
+    );
   };
 
   // Normaliza la fecha para que sea a las 00:00:00.000
@@ -65,17 +67,20 @@ const page = () => {
 
   const handleSubmit = async () => {
     try {
-      console.log("🚀 ~ handleSubmit ~ startDate:", startDate);
-      console.log("🚀 ~ handleSubmit ~ endDate:", endDate);
-
       if (startDate.getTime() == endDate.getTime()) {
         throw new Error("La fecha de inicio y fin no pueden ser iguales");
       }
 
       const user = await getUser(localStorage.getItem("id"));
-      const reservasActivas = user.reservations.filter((r) => new Date(r.dateLapse.endDate) >= new Date());
-      const isOverlaps = user.reservations.some((r) => overlaps(r.dateLapse));
-      console.log("🚀 ~ handleSubmit ~ isOverlaps:", isOverlaps);
+      const reservasActivas = user.reservations.filter(
+        (r) => new Date(r.dateLapse.endDate).getTime() >= new Date().getTime(),
+      );
+
+      if (amarra.reservations.some((r) => includesDate(r.dateLapse))) {
+        throw new Error("No puedes seleccionar un periodo que incluya periodos excluidos");
+      }
+
+      const isOverlaps = reservasActivas.some((r) => overlaps(r.dateLapse));
 
       if (isOverlaps) {
         throw new Error("Tienes una reserva que se superpone con el periodo seleccionado");
@@ -127,7 +132,9 @@ const page = () => {
                     style={customHeaderCount === 1 ? { visibility: "hidden" } : null}
                     onClick={decreaseMonth}
                   >
-                    <span className={"react-datepicker__navigation-icon react-datepicker__navigation-icon--previous"}>{"<"}</span>
+                    <span className={"react-datepicker__navigation-icon react-datepicker__navigation-icon--previous"}>
+                      {"<"}
+                    </span>
                   </button>
                   <span className="react-datepicker__current-month">
                     {monthDate.toLocaleString("en-US", {
@@ -141,19 +148,29 @@ const page = () => {
                     style={customHeaderCount === 0 ? { visibility: "hidden" } : null}
                     onClick={increaseMonth}
                   >
-                    <span className={"react-datepicker__navigation-icon react-datepicker__navigation-icon--next"}>{">"}</span>
+                    <span className={"react-datepicker__navigation-icon react-datepicker__navigation-icon--next"}>
+                      {">"}
+                    </span>
                   </button>
                 </div>
               )}
               selected={startDate}
               onChange={onChange}
-              minDate={minDate}
-              maxDate={maxDate}
               startDate={startDate}
               endDate={endDate}
               // este reduce es para excluir los periodos de reserva hechas para la amarra
               excludeDateIntervals={amarra.reservations.reduce((acc, curr) => {
-                acc.push({ start: normalizeDate(curr.dateLapse.startDate), end: normalizeDate(curr.dateLapse.endDate) });
+                acc.push({
+                  start: normalizeDate(curr.dateLapse.startDate),
+                  end: normalizeDate(curr.dateLapse.endDate),
+                });
+                return acc;
+              }, [])}
+              includeDateIntervals={amarra.availabilityDates.reduce((acc, curr) => {
+                acc.push({
+                  start: normalizeDate(curr.startDate),
+                  end: normalizeDate(curr.endDate),
+                });
                 return acc;
               }, [])}
               selectsRange
