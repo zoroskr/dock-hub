@@ -7,9 +7,10 @@ import Swal from "sweetalert2";
 import { Button } from "flowbite-react";
 import { deletePost, updatePost } from "@/app/services/posts.api";
 import { useRouter } from "next/navigation";
-import Map from "@/components/ui/Map";
-import DraggableMarkerMap from "@/components/ui/Map";
-import MapDisplay from "./MapSinDrag";
+
+
+const MapDisplay = dynamic(() => import("./MapSinDrag"), { ssr: false });
+
 
 
 const Post = ({ post, showProposeButton, isFavorite = false, onRemoveFavorite }) => {
