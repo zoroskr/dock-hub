@@ -15,6 +15,7 @@ const page = () => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [allAmarras, setAllAmarras] = useState([]);
+  const [selectedMarina, setSelectedMarina] = useState("todos")
 
   useEffect(() => {
     const fetchAmarras = async () => {
@@ -34,11 +35,18 @@ const page = () => {
   };
 
   const aplicarFiltros = () => {
-    const amarrasFiltradas = allAmarras.filter((amarra) => 
-      amarra.availabilityDates.some(dateLapse => 
-        new Date(dateLapse.startDate) < startDate && new Date(dateLapse.endDate) > endDate
-      )
-    );
+    let amarrasFiltradas = allAmarras;
+    if (startDate && endDate){
+      amarrasFiltradas = allAmarras.filter((amarra) => 
+        amarra.availabilityDates.some(dateLapse => 
+          new Date(dateLapse.startDate) < startDate && new Date(dateLapse.endDate) > endDate
+        )
+      );
+    }
+    const puerto = document.getElementById("puerto").value
+    if (puerto != "todos") {
+      amarrasFiltradas = amarrasFiltradas.filter((a) => a.marina.name == puerto);
+    }
     setAmarras(amarrasFiltradas);
   };
 
@@ -46,7 +54,12 @@ const page = () => {
     setAmarras(allAmarras);
     setStartDate(null);
     setEndDate(null);
+    setSelectedMarina("todos");
   };
+
+  const handleSelectChange = (e) => {
+    setSelectedMarina(e.target.value);
+  }
 
   return (
     <>
@@ -64,6 +77,20 @@ const page = () => {
               inline
             />
           </div>
+          <div className="flex items-center justify-between">
+              <div className="mr-1 text-xs">Ubicadas en el puerto</div>
+              <select name="puerto" id="puerto" className="rounded-xl text-xs justify-evenly" value={selectedMarina} onChange={handleSelectChange}>
+                <option value="todos">Cualquiera</option>
+                <option value="Marina Norte">Marina Norte</option>
+                <option value="Marina Centro">Marina Centro</option>
+                <option value="Marina Sur">Marina Sur</option>
+                <option value="Marina Este">Marina Este</option>
+                <option value="Marina Oeste">Marina Oeste</option>
+                <option value="Marina Delta">Marina Delta</option>
+                <option value="Marina Bahía">Marina Bahía</option>
+                <option value="Marina Atlántico">Marina Atlántico</option>
+              </select>
+            </div>
           <div className="flex mt-2 gap-2 justify-center mx-auto">
             <button
               className="text-white rounded-xl bg-gray-800 duration-300 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"

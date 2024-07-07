@@ -16,12 +16,12 @@ const Navbar = () => {
 
   useEffect(() => {
     // Asegúrate de que el código solo se ejecuta en el cliente
-    // if (typeof window !== "undefined") {
-    //   const userId = localStorage.getItem("id");
-    //   const userType = localStorage.getItem("type");
-    //   setIsLoggedIn(!!userId);
-    //   setUserType(userType);
-    // }
+    if (typeof window !== "undefined") {
+      const userId = localStorage.getItem("id");
+      const userType = localStorage.getItem("type");
+      setIsLoggedIn(!!userId);
+      setUserType(userType);
+    }
   }, []);
 
   return (

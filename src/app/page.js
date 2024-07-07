@@ -98,6 +98,7 @@ export default function Home() {
 
   const aplicarFiltros = async () => {
     const selectOrdenador = document.getElementById("ordenador");
+    const valor = selectOrdenador.value;
     let posts = await getPosts();
     posts = posts.filter((p) => p.owner !== localStorage.getItem("id"));
 
@@ -120,6 +121,9 @@ export default function Home() {
         }
       });
     });
+    if (valor == "viejos"){
+      filteredPosts = filteredPosts.reverse();
+    }
 
     setPosts(filteredPosts);
   };
