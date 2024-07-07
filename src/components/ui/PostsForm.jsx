@@ -156,7 +156,6 @@ const PostsForm = ({
           </div>
           <Select name="type" id="type" className="custom-select" required>
             <option>Vehículos</option>
-            {localStorage.getItem("type") === "Titular" && localStorage.getItem("verified") === "true" && <option>Embarcaciones</option>}
             <option>Aeronaves</option>
             <option>Inmuebles</option>
           </Select>

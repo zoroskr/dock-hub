@@ -16,12 +16,12 @@ const Navbar = () => {
 
   useEffect(() => {
     // Asegúrate de que el código solo se ejecuta en el cliente
-    if (typeof window !== "undefined") {
-      const userId = localStorage.getItem("id");
-      const userType = localStorage.getItem("type");
-      setIsLoggedIn(!!userId);
-      setUserType(userType);
-    }
+    // if (typeof window !== "undefined") {
+    //   const userId = localStorage.getItem("id");
+    //   const userType = localStorage.getItem("type");
+    //   setIsLoggedIn(!!userId);
+    //   setUserType(userType);
+    // }
   }, []);
 
   return (
@@ -31,10 +31,11 @@ const Navbar = () => {
           <Image
             src="/logo_yatemate.png"
             width={100}
-            height={60}
+            height={100}
             className="rounded-md"
             alt="Flowbite Logo"
             style={{ borderRadius: "50%" }}
+            priority
           />
           {/* Puedes ajustar marginTop según el tamaño de tu logo */}
         </Link>

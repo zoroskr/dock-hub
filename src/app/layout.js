@@ -13,9 +13,6 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <head>
-        <link rel="icon" href="/logo_yatemate.png" />
-      </head>
       <body className={inter.className}>
         <Navbar></Navbar>
         {children}

@@ -113,7 +113,7 @@ const UserForm = ({ user, title, userId = false }) => {
         <form ref={form} className="max-w-sm mx-auto" onSubmit={handleSubmit}>
           <h1 className="text-xl font-bold leading-tight tracking-tight text-white md:text-2xl dark:text-white">{title}</h1>
           <div className="mb-5 mt-3">
-            <label for="fullname" className="block mb-2 text-sm font-medium text-white dark:text-white">
+            <label htmlFor="fullname" className="block mb-2 text-sm font-medium text-white dark:text-white">
               Nombre
             </label>
             <input
@@ -127,7 +127,7 @@ const UserForm = ({ user, title, userId = false }) => {
           </div>
 
           <div className="mb-5">
-            <label for="DNI" className="block mb-2 text-sm font-medium text-white dark:text-white">
+            <label htmlFor="DNI" className="block mb-2 text-sm font-medium text-white dark:text-white">
               DNI
             </label>
             <input
@@ -141,7 +141,7 @@ const UserForm = ({ user, title, userId = false }) => {
           </div>
 
           <div className="mb-5">
-            <label for="address" className="block mb-2 text-sm font-medium text-white dark:text-white">
+            <label htmlFor="address" className="block mb-2 text-sm font-medium text-white dark:text-white">
               Dirección
             </label>
             <input
@@ -169,7 +169,7 @@ const UserForm = ({ user, title, userId = false }) => {
           </div>
 
           <div className="mb-5">
-            <label for="email" className="block mb-2 text-sm font-medium text-white dark:text-white">
+            <label htmlFor="email" className="block mb-2 text-sm font-medium text-white dark:text-white">
               Email
             </label>
             <input
@@ -184,7 +184,7 @@ const UserForm = ({ user, title, userId = false }) => {
           </div>
 
           <div className="mb-5">
-            <label for="password" className="block mb-2 text-sm font-medium text-white dark:text-white">
+            <label htmlFor="password" className="block mb-2 text-sm font-medium text-white dark:text-white">
               Contraseña
             </label>
             <input
@@ -196,7 +196,7 @@ const UserForm = ({ user, title, userId = false }) => {
             />
           </div>
           <div className="mb-5">
-            <label for="repeat-password" className="block mb-2 text-sm font-medium text-white dark:text-white">
+            <label htmlFor="repeat-password" className="block mb-2 text-sm font-medium text-white dark:text-white">
               Repetir contraseña
             </label>
             <input
@@ -217,7 +217,7 @@ const UserForm = ({ user, title, userId = false }) => {
                 disabled={userId}
                 className="text-blue-500 rounded-xl focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:text-blue-500 dark:shadow-sm-light"
               />
-              <label for="isOwner" className="text-white dark:text-white font-semibold">
+              <label htmlFor="isOwner" className="text-white dark:text-white font-semibold">
                 Soy cliente en Yate Mate
               </label>
             </div>
@@ -232,7 +232,7 @@ const UserForm = ({ user, title, userId = false }) => {
                 disabled={userId}
                 className="text-blue-500 rounded-xl focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:text-blue-500 dark:shadow-sm-light"
               />
-              <label for="isResident" className="text-white dark:text-white font-semibold">
+              <label htmlFor="isResident" className="text-white dark:text-white font-semibold">
                 Soy Argentino Residente
               </label>
             </div>
