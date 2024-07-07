@@ -7,6 +7,7 @@ import Swal from "sweetalert2";
 import { Button } from "flowbite-react";
 import { deletePost, updatePost } from "@/app/services/posts.api";
 import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
 
 
 const MapDisplay = dynamic(() => import("./MapSinDrag"), { ssr: false });
