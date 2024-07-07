@@ -99,6 +99,7 @@ export default function Home() {
   const aplicarFiltros = async () => {
     const selectOrdenador = document.getElementById("ordenador");
     const valor = selectOrdenador.value;
+    const adaptadosCheckbox = document.getElementById("adaptados");
     let posts = await getPosts();
     posts = posts.filter((p) => p.owner !== localStorage.getItem("id"));
 
@@ -112,20 +113,17 @@ export default function Home() {
     posts = posts.filter((p) => p.state === "Activo");
 
     const activeFilters = Object.keys(selectedOptions).filter((option) => selectedOptions[option]);
-    let filteredPosts = posts.filter((post) => {
-      return activeFilters.every((filter) => {
-        if (filter === "adaptados") {
-          return post.adapted === true;
-        } else {
-          return post.type.toLowerCase() === filter.toLowerCase();
-        }
-      });
-    });
-    if (valor == "viejos"){
-      filteredPosts = filteredPosts.reverse();
+    if (activeFilters.length>0){
+      posts = posts.filter((p) => activeFilters.includes(p.type));
+    }
+    if (adaptadosCheckbox.checked){
+      posts = posts.filter((p) => p.adapted);
+    }
+    if (valor == "nuevos"){
+      posts = posts.reverse();
     }
 
-    setPosts(filteredPosts);
+    setPosts(posts);
   };
 
   const handleCheckboxChange = (event) => {
@@ -186,8 +184,8 @@ export default function Home() {
               <div className="flex items-center justify-between">
                 <div className="mr-1 text-xs">Ordenar Por</div>
                 <select name="ordenador" id="ordenador" className="rounded-xl text-xs justify-evenly">
-                  <option value="nuevos">Más nuevas</option>
                   <option value="viejos">Más antiguas</option>
+                  <option value="nuevos">Más nuevas</option>
                 </select>
               </div>
               {localStorage.getItem("type") === "Titular" && localStorage.getItem("verified") === "true" && (
@@ -240,7 +238,6 @@ export default function Home() {
                   id="adaptados"
                   className="rounded-xl focus:outline-none"
                   style={{ outline: "none", boxShadow: "none" }}
-                  onChange={handleCheckboxChange}
                 />
                 <label htmlFor="adaptados" className="m-1 text-sm font-medium">
                   Aptos para discapacitados

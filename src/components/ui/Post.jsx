@@ -163,13 +163,6 @@ const Post = ({ post, showProposeButton, isFavorite = false, onRemoveFavorite })
     window.location.reload();
   };
 
-  console.log("loggedUserId:", loggedUserId);
-  console.log("post.owner:", post.owner);
-  console.log("showButton:", showButton);
-  console.log("showProposeButton:", showProposeButton);
-  console.log("userType:", userType);
-  console.log("post.state:", post.state);
-  console.log("Debe mostrar el botón:", showButton && showProposeButton && userType !== "Admin" && post.state !== "Pausado");
 
   return (
     <div className="max-w-sm bg-custom-gray rounded-xl shadow dark:bg-gray-800 dark:border-gray-700 duration-500 hover:scale-105">
