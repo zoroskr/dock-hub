@@ -37,7 +37,9 @@ const page = () => {
           {amarras && amarras.length > 0 ? (
             amarras.map((amarra) => <CardAmarra key={amarra._id} amarra={amarra} onAmarraUpdated={onAmarraUpdated} />)
           ) : (
-            <EmptyList message="No tienes amarras" />
+            <div className="w-full p-20 flex items-center justify-center col-span-1 md:col-span-2 lg:col-span-3">
+              <EmptyList message="No tienes amarras"/>
+            </div>
           )}
         </div>
       )}
