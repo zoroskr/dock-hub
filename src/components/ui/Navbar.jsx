@@ -80,6 +80,12 @@ const Navbar = () => {
                       Amarras
                     </Link>
                   </li>
+                  {userType !== "Admin" && (
+                  <li>
+                    <Link href="/publicar" className="block text-md text-white duration-300 hover:scale-110" aria-current="page">
+                      Crear Publicación
+                    </Link>
+                  </li>)}
                   <li>
                     <Link href="/chats" className="block text-md text-white duration-300 hover:scale-110" aria-current="page">
                       Mis chats

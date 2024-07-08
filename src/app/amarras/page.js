@@ -18,13 +18,31 @@ const page = () => {
   const [selectedMarina, setSelectedMarina] = useState("todos")
 
   useEffect(() => {
+
     const fetchAmarras = async () => {
+      const ownerId = localStorage.getItem("id");
+      console.log(ownerId); 
+
       const data = await getAmarras();
-      const amarrasDisponibles = data.filter((amarra) => amarra.availabilityDates.length > 0);
+      console.log("Fetched Amarras:", data);
+  
+      // Filtrar amarras disponibles excluyendo aquellas cuyo bote pertenece al ownerId
+      const amarrasDisponibles = data.filter((amarra) => {
+        if (amarra.boat) {
+          console.log("Boat Owner ID:", amarra.boat.owner);
+        }
+  
+        return (
+          amarra.availabilityDates.length > 0 &&
+          (!amarra.boat || (amarra.boat && amarra.boat.owner !== ownerId))
+        );
+      });
+
       setAmarras(amarrasDisponibles);
       setAllAmarras(amarrasDisponibles);
       setLoading(false);
     };
+
     fetchAmarras();
   }, []);
 

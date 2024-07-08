@@ -47,9 +47,6 @@ const Avatar = ({ handleLogout }) => {
           style={{ top: "calc(100% + 8px)" }}
         >
           <div>
-            <div className="p-3">
-              <div>Mi cuenta</div>
-            </div>
             <ul className="py-1">
               {isAdmin ? (
                 <>
@@ -69,28 +66,6 @@ const Avatar = ({ handleLogout }) => {
                 </>
               ) : (
                 <>
-                  <li>
-                    <Link href="/publicar" className="block px-4 py-2 hover:bg-gray-100">
-                      Crear Publicación
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/posts" className="block px-4 py-2 hover:bg-gray-100">
-                      Ver mis publicaciones
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/favorites" className="block px-4 py-2 hover:bg-gray-100">
-                      Ver mis favoritos
-                    </Link>
-                  </li>
-                  {localStorage.getItem("type") === "Titular" && (
-                    <li>
-                      <Link href="/mis-amarras" className="block px-4 py-2 hover:bg-gray-100">
-                        Mis amarras
-                      </Link>
-                    </li>
-                  )}
                   {localStorage.getItem("type") === "Titular" && (
                     <li>
                       <Link href="/publicarEmbarcacion" className="block px-4 py-2 hover:bg-gray-100">
@@ -101,6 +76,23 @@ const Avatar = ({ handleLogout }) => {
                   <li>
                     <Link href="/reservations" className="block px-4 py-2 hover:bg-gray-100">
                       Mis reservas
+                    </Link>
+                  </li>
+                  {localStorage.getItem("type") === "Titular" && (
+                    <li>
+                      <Link href="/mis-amarras" className="block px-4 py-2 hover:bg-gray-100">
+                        Mis amarras
+                      </Link>
+                    </li>
+                  )}
+                  <li>
+                    <Link href="/posts" className="block px-4 py-2 hover:bg-gray-100">
+                      Ver mis publicaciones
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/favorites" className="block px-4 py-2 hover:bg-gray-100">
+                      Ver mis favoritos
                     </Link>
                   </li>
                   <li>
