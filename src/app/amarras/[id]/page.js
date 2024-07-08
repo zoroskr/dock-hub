@@ -14,7 +14,7 @@ import ActionButton from "@/components/ui/ActionButton";
 import Swal from "sweetalert2";
 import { createReservation } from "@/app/services/reservations.api";
 import { getUser } from "@/app/services/users.api";
-import { setHours, setMinutes, setSeconds, setMilliseconds } from "date-fns";
+import { setHours, setMinutes, setSeconds, setMilliseconds, addDays } from "date-fns";
 
 const page = () => {
   const [amarra, setAmarra] = useState();
@@ -74,7 +74,28 @@ const page = () => {
         (r) => new Date(r.dateLapse.endDate).getTime() >= new Date().getTime(),
       );
 
-      if (amarra.reservations.some((r) => includesDate(r.dateLapse))) {
+      const getDatesArray = (start, end) => {
+        const dates = [];
+        let currentDate = start;
+        while (currentDate <= end) {
+          dates.push(new Date(currentDate));
+          currentDate = addDays(currentDate, 1);
+        }
+        return dates;
+      };
+
+      const selectedDates = getDatesArray(normalizeDate(startDate), normalizeDate(endDate));
+      
+      const isUnavailable = selectedDates.some((date) => {
+        return !amarra.availabilityDates.some((period) => {
+          const availStartDate = normalizeDate(period.startDate).getTime();
+          const availEndDate = normalizeDate(period.endDate).getTime();
+          const currentDate = date.getTime();
+          return currentDate >= availStartDate && currentDate <= availEndDate;
+        });
+      });
+
+      if (amarra.reservations.some((r) => includesDate(r.dateLapse)) || isUnavailable) {
         throw new Error("No puedes seleccionar un periodo que incluya periodos excluidos");
       }
 

@@ -14,7 +14,6 @@ const CardAmarra = ({ amarra, mueveOno, onAmarraUpdated }) => {
   const [absence, setAbsence] = useState(false);
   const [dateRange, setDateRange] = useState([null, null]);
   const [startDate, endDate] = dateRange;
-  const router = useRouter();
 
   const includesDate = (anotherDateLapse) => {
     const selectStartDate = normalizeDate(startDate).getTime();
@@ -34,7 +33,7 @@ const CardAmarra = ({ amarra, mueveOno, onAmarraUpdated }) => {
         throw new Error("La fecha de inicio y fin no pueden ser iguales");
       }
 
-      if (amarra.reservations.some((r) => includesDate(r.dateLapse))) {
+      if (amarra.availabilityDates.some((dateLapse) => includesDate(dateLapse))) {
         throw new Error("No puedes seleccionar un periodo que incluya periodos excluidos");
       }
 
