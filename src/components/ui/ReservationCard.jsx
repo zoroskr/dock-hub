@@ -16,8 +16,6 @@ const ReservationCard = ({ reservation }) => {
     return days;
   };
 
-  console.log(reservation);
-
   return (
     <div className="max-w-sm bg-custom-gray mx-auto rounded-xl shadow dark:bg-gray-800 dark:border-gray-700">
       <div className="p-5 grid place-items-center">

@@ -48,12 +48,17 @@ export async function GET(request, { params }) {
       const reservations = await Reservation.find({ amarra: amarra._id });
       return { ...amarra, reservations };
     });
-    const amarrasWithMarinasAndBoatsAndReservations = await Promise.all(amarrasWithMarinasAndBoatsAndReservationsPromises);
+    const amarrasWithMarinasAndBoatsAndReservations = await Promise.all(
+      amarrasWithMarinasAndBoatsAndReservationsPromises,
+    );
+
+    const boats = await Boat.find({ _id: { $in: user.boats } });
 
     const userWithReservations = {
       ...user.toObject(),
       reservations: reservationsWithMarinas,
       amarras: amarrasWithMarinasAndBoatsAndReservations,
+      boats,
     };
 
     return NextResponse.json(userWithReservations);
