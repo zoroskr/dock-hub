@@ -9,8 +9,8 @@ export async function GET() {
 }
 
 export async function POST(request) {
-    await connectDB();
-    const data = await request.json();
-    const boat = await Boat.create(data);
-    return NextResponse.json(boat);
-}  
+  await connectDB();
+  const data = await request.json();
+  const boat = await Boat.create(data);
+  return NextResponse.json(boat);
+}

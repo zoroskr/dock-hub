@@ -34,8 +34,6 @@ const page = () => {
     const fetchAmarra = async () => {
       const data = await getAmarra(params.id);
       setAmarra(data);
-      // setStartDate(newMinDate);
-      // setEndDate(lastDate);
       setLoading(false);
     };
     fetchAmarra();
@@ -156,6 +154,7 @@ const page = () => {
               )}
               selected={startDate}
               onChange={onChange}
+              minDate={new Date()}
               startDate={startDate}
               endDate={endDate}
               // este reduce es para excluir los periodos de reserva hechas para la amarra

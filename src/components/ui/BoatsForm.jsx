@@ -5,9 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { createBoat, updateBoat } from "@/app/services/boats.api";
 import { verifyUser } from "@/app/services/verify.api";
 import Swal from "sweetalert2";
-import { getUser } from "@/app/services/users.api";
-import dynamic from "next/dynamic";
-const Map = dynamic(() => import("@/components/ui/Map"), { ssr: false });
+import { getUser, updateUser } from "@/app/services/users.api";
 
 const BoatsForm = ({
   boat = {
@@ -64,36 +62,23 @@ const BoatsForm = ({
       owner: localStorage.getItem("id"),
     };
 
-    const owner = await getUser(newBoat.owner);
-    console.log("🚀 ~ handleSubmit ~ newBoat.owner:", newBoat.owner)
-    
-    const result = await verifyUser({ dni: owner.DNI, id_bien: newBoat.plate });
-    if (!result) {
-      return;
-    }
-
     try {
-      if (params.id) {
-        await updateBoat(params.id, newBoat);
-        Swal.fire({
-          title: "Éxito",
-          text: "Embarcación actualizada correctamente",
-          icon: "success",
-          confirmButtonText: "Ok",
-        }).then(() => {
-          router.push("/boats");
-        });
-      } else {
-        await createBoat(newBoat);
-        Swal.fire({
-          title: "Éxito",
-          text: "Embarcación creada correctamente",
-          icon: "success",
-          confirmButtonText: "Ok",
-        }).then(() => {
-          router.push("/boats");
-        });
+      const owner = await getUser(newBoat.owner);
+
+      const result = await verifyUser({ dni: owner.DNI, id_bien: newBoat.plate });
+      if (!result) {
+        return;
       }
+      const createdBoat = await createBoat(newBoat);
+      await updateUser(owner._id, { boats: [...owner.boats, createdBoat._id] });
+      Swal.fire({
+        title: "Éxito",
+        text: "Embarcación creada correctamente",
+        icon: "success",
+        confirmButtonText: "Ok",
+      }).then(() => {
+        router.push("/boats");
+      });
     } catch (error) {
       Swal.fire({
         title: "Error",
@@ -144,28 +129,42 @@ const BoatsForm = ({
           <div className="mb-2 block">
             <Label htmlFor="description" value="Descripción" />
           </div>
-          <Textarea name="description" placeholder="Descripción de las características" required rows={4} className="rounded-xl" />
+          <Textarea
+            name="description"
+            placeholder="Descripción de las características"
+            required
+            rows={4}
+            className="rounded-xl"
+          />
         </div>
 
         <div className="max-w-md w-full">
           <div className="mb-2 block">
             <Label htmlFor="image" value="Link a imagen" />
           </div>
-          <TextInput className="rounded-xl overflow-hidden" name="image" type="url" placeholder="Link a la imagen del bien" />
+          <TextInput
+            className="rounded-xl overflow-hidden"
+            name="image"
+            type="url"
+            placeholder="Link a la imagen del bien"
+          />
         </div>
 
         <div className="max-w-md">
-        <input
-          type="checkbox"
-          id="isAdapted"
-          name="isAdapted"
-          className="text-blue-500 rounded-xl focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:text-blue-500 dark:shadow-sm-light"
-        />
-        <label htmlFor="isAdapted" className="text-white dark:text-white font-semibold">
-          Está adaptado para personas con capacidad disminuida
-        </label>
+          <input
+            type="checkbox"
+            id="isAdapted"
+            name="isAdapted"
+            className="text-blue-500 rounded-xl focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:text-blue-500 dark:shadow-sm-light"
+          />
+          <label htmlFor="isAdapted" className="text-white dark:text-white font-semibold">
+            Está adaptado para personas con capacidad disminuida
+          </label>
         </div>
-        <Button type="submit" className="bg-custom-yellow text-black rounded-xl border-gray-900 duration-500 hover:scale-105">
+        <Button
+          type="submit"
+          className="bg-custom-yellow text-black rounded-xl border-gray-900 duration-500 hover:scale-105"
+        >
           {title}
         </Button>
       </form>

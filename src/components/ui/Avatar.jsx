@@ -10,7 +10,6 @@ const Avatar = ({ handleLogout }) => {
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    // Asegúrate de que el código solo se ejecuta en el cliente
     if (typeof window !== "undefined") {
       const userId = localStorage.getItem("id");
       const userType = localStorage.getItem("type");
@@ -79,11 +78,18 @@ const Avatar = ({ handleLogout }) => {
                     </Link>
                   </li>
                   {localStorage.getItem("type") === "Titular" && (
-                    <li>
-                      <Link href="/mis-amarras" className="block px-4 py-2 hover:bg-gray-100">
-                        Mis amarras
-                      </Link>
-                    </li>
+                    <>
+                      <li>
+                        <Link href="/mis-amarras" className="block px-4 py-2 hover:bg-gray-100">
+                          Mis amarras
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="/boats" className="block px-4 py-2 hover:bg-gray-100">
+                          Mis embarcaciones
+                        </Link>
+                      </li>
+                    </>
                   )}
                   <li>
                     <Link href="/posts" className="block px-4 py-2 hover:bg-gray-100">

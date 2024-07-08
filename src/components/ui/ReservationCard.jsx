@@ -23,15 +23,19 @@ const ReservationCard = ({ reservation }) => {
           {reservation.amarra.location}
         </h3>
         <p className="text-sm">
-          Del {convertToDate(reservation.dateLapse.startDate)} al{" "}
-          {convertToDate(reservation.dateLapse.endDate)}
+          Del {convertToDate(reservation.dateLapse.startDate)} al {convertToDate(reservation.dateLapse.endDate)}
         </p>
         <p className="text-sm"> {reservation.amarra.dailyRate} USD por día</p>
         <p className="text-sm">
           {reservation.amarra.dailyRate * calculateDays(reservation.dateLapse)} USD por{" "}
           {calculateDays(reservation.dateLapse)} días
         </p>
-        {localStorage.getItem("type") === "Admin" && <p>Alquilada por: {reservation.owner.fullName}</p>}
+        {localStorage.getItem("type") === "Admin" && (
+          <>
+            <p>Dueño: {reservation.owner.fullName}</p>
+            <p>Alquilada por: {reservation.owner.fullName}</p>
+          </>
+        )}
         <Image
           src={reservation.amarra.image}
           width={300}
