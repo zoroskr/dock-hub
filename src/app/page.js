@@ -188,7 +188,7 @@ export default function Home() {
                   <option value="nuevos">Más nuevas</option>
                 </select>
               </div>
-              {localStorage.getItem("type") === "Titular" && localStorage.getItem("verified") === "true"  || (localStorage.getItem("type") === "Admin") && (
+              {(localStorage.getItem("type") === "Titular" && localStorage.getItem("verified") === "true"  || (localStorage.getItem("type") === "Admin")) && (
                 <div id="checkboxList" className="text-sm font-medium">
                   <div>
                     <input
