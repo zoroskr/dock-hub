@@ -1,10 +1,26 @@
 "use client";
 
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import Image from "next/image";
+import { getUsers } from "@/app/services/users.api";
 
 const ReservationCard = ({ reservation }) => {
+  const [amarraOwner, setAmarraOwner] = useState();
+
+  useEffect(() => {
+    const fetchBoatOwner = async () => {
+      const users = await getUsers();
+      const owner = users.find((user) => {
+        
+        console.log("🚀 ~ owner ~ owner:", user.amarras.includes(reservation.amarra._id));
+        return user.amarras.includes(reservation.amarra._id);
+      });
+      setAmarraOwner(owner);
+    }
+    fetchBoatOwner();
+  }, []);
+
   const convertToDate = (date) => {
     return new Date(date).toLocaleDateString();
   };
@@ -20,7 +36,7 @@ const ReservationCard = ({ reservation }) => {
     <div className="max-w-sm bg-custom-gray mx-auto rounded-xl shadow dark:bg-gray-800 dark:border-gray-700">
       <div className="p-5 grid place-items-center">
         <h3 className="text-xl font-bold text-center text-custom-gray dark:text-gray-100">
-          {reservation.amarra.location}
+          Amarra {reservation.amarra.mooringNumber} - {reservation.amarra.location}
         </h3>
         <p className="text-sm">
           Del {convertToDate(reservation.dateLapse.startDate)} al {convertToDate(reservation.dateLapse.endDate)}
@@ -32,7 +48,7 @@ const ReservationCard = ({ reservation }) => {
         </p>
         {localStorage.getItem("type") === "Admin" && (
           <>
-            <p>Dueño: {reservation.owner.fullName}</p>
+            <>{amarraOwner && <p>Dueño: {amarraOwner.fullName}</p>}</>
             <p>Alquilada por: {reservation.owner.fullName}</p>
           </>
         )}

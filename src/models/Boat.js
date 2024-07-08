@@ -7,6 +7,8 @@ const boatSchema = new mongoose.Schema({
   description: String,
   image: String,
   adapted: Boolean,
+  latitud: Number,
+  longitud: Number,
   owner: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 });
 

@@ -1,11 +1,13 @@
 "use client";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Button, Label, Select, TextInput, Textarea } from "flowbite-react";
 import { useParams, useRouter } from "next/navigation";
 import { createBoat, updateBoat } from "@/app/services/boats.api";
 import { verifyUser } from "@/app/services/verify.api";
 import Swal from "sweetalert2";
 import { getUser, updateUser } from "@/app/services/users.api";
+import dynamic from "next/dynamic";
+const Map = dynamic(() => import("@/components/ui/Map"), { ssr: false });
 
 const BoatsForm = ({
   boat = {
@@ -15,18 +17,24 @@ const BoatsForm = ({
     description: "",
     image: "",
     owner: "",
+    adapted: false,
+    latitud: -34.92145,
+    longitud: -57.95453,
   },
   title,
 }) => {
   const form = useRef(boat);
   const params = useParams();
   const router = useRouter();
+  // Dentro de PostsForm, agrega estos estados al principio del componente
+  const [lat, setLat] = useState(-34.92145); // Valor inicial arbitrario
+  const [lng, setLng] = useState(-57.95453); // Valor inicial arbitrario
 
   useEffect(() => {
     if (form.current) {
       form.current.elements.plate.value = boat.plate || "";
       form.current.elements.name.value = boat.name || "";
-      form.current.elements.type.value = boat.type || "";
+      // form.current.elements.type.value = boat.type || "";
       form.current.elements.description.value = boat.description || "";
       form.current.elements.image.value = boat.image || "";
       form.current.elements.isAdapted.checked = boat.adapted || false;
@@ -60,6 +68,8 @@ const BoatsForm = ({
       image: url,
       adapted: formData.get("isAdapted") === "on",
       owner: localStorage.getItem("id"),
+      latitud: lat,
+      longitud: lng,
     };
 
     try {
@@ -116,14 +126,14 @@ const BoatsForm = ({
           </div>
         </div>
 
-        <div className="max-w-md w-full">
+        {/* <div className="max-w-md w-full">
           <div className="mb-2 block">
             <Label htmlFor="type" value="Tipo" />
           </div>
           <div className="rounded-xl overflow-hidden">
             <TextInput name="type" type="text" placeholder="Tipo de embarcacion" required shadow />
           </div>
-        </div>
+        </div> */}
 
         <div className="max-w-md w-full">
           <div className="mb-2 block">
@@ -161,6 +171,14 @@ const BoatsForm = ({
             Está adaptado para personas con capacidad disminuida
           </label>
         </div>
+        <Map
+          lat={lat}
+          lng={lng}
+          onPositionChange={(newLat, newLng) => {
+            setLat(newLat);
+            setLng(newLng);
+          }}
+        />
         <Button
           type="submit"
           className="bg-custom-yellow text-black rounded-xl border-gray-900 duration-500 hover:scale-105"

@@ -21,8 +21,8 @@ const BoatCard = ({ boat }) => {
         adapted: boat.adapted,
         owner: boat.owner,
         state: "Activo",
-        latitud: -34.92145,
-        longitud: -57.95453,
+        latitud: boat.latitud || -34.92145,
+        longitud: boat.longitud || -57.95453,
       };
 
       const newPost = await createPost(post);

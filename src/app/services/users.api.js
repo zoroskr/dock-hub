@@ -2,7 +2,7 @@ import Swal from "sweetalert2";
 
 export const getUsers = async () => {
   try {
-    const response = await fetch(`http://localhost:3000/users`);
+    const response = await fetch(`http://localhost:3000/api/users`);
     if (!response.ok) {
       throw new Error('No se pudo obtener el usuario');
     }
