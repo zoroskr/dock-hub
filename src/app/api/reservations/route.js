@@ -1,7 +1,7 @@
 import { connectDB } from "@/libs/mongodb";
 import Amarra from "@/models/Amarra";
 import Reservation from "@/models/Reservation";
-import User from "@/models/user";
+import User from "@/models/User";
 import { NextResponse } from "next/server";
 
 export async function GET() {
@@ -34,7 +34,6 @@ export async function POST(request) {
 
     user.reservations.push(newReservation._id);
     await user.save();
-
 
     const { amarra } = reservationData;
     const amarra2 = await Amarra.findById(amarra);

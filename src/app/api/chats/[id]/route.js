@@ -1,6 +1,6 @@
 import { connectDB } from "@/libs/mongodb";
 import Chat from "@/models/Chat"; // Asegúrate de importar el modelo de Chat
-import User from "@/models/user"; 
+import User from "@/models/User";
 import { NextResponse } from "next/server";
 
 export async function GET(request, { params }) {
@@ -42,7 +42,6 @@ export async function PUT(request, { params }) {
   }
 }
 
-
 export async function DELETE(request, { params }) {
   try {
     await connectDB();
@@ -56,10 +55,7 @@ export async function DELETE(request, { params }) {
     }
 
     // Elimina la referencia del chat en todos los usuarios
-    await User.updateMany(
-      { chats: id },
-      { $pull: { chats: id } }
-    );
+    await User.updateMany({ chats: id }, { $pull: { chats: id } });
 
     return NextResponse.json({ message: "Chat deleted successfully" });
   } catch (error) {

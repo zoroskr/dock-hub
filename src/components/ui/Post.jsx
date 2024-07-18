@@ -14,7 +14,7 @@ const MapDisplay = dynamic(() => import("./MapSinDrag"), { ssr: false });
 
 
 
-const Post = ({ post, showProposeButton, isFavorite = false, onRemoveFavorite }) => {
+const Post = ({ post, showProposeButton, isFavorite = false, ownerButtons = true }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [needsTruncate, setNeedsTruncate] = useState(false);
   const [star, setStar] = useState(isFavorite);
@@ -22,12 +22,12 @@ const Post = ({ post, showProposeButton, isFavorite = false, onRemoveFavorite })
   const [userType, setUserType] = useState(null); // Nuevo estado para almacenar el tipo de usuario
   const loggedUserId = localStorage.getItem("id");
   const showButton = loggedUserId && loggedUserId !== post.owner;
-  const showOwnerButtons = loggedUserId && loggedUserId === post.owner;
+  const showOwnerButtons = loggedUserId && loggedUserId === post.owner && ownerButtons;
 
   const descriptionRef = useRef(null);
 
   useEffect(() => {
-    const type = localStorage.getItem('type');
+    const type = localStorage.getItem("type");
     setUserType(type);
   }, []);
 
@@ -163,7 +163,6 @@ const Post = ({ post, showProposeButton, isFavorite = false, onRemoveFavorite })
     window.location.reload();
   };
 
-
   return (
     <div className="max-w-sm bg-custom-gray rounded-xl shadow dark:bg-gray-800 dark:border-gray-700 duration-500 hover:scale-105">
       <div className="p-5 flex flex-col justify-between">
@@ -205,10 +204,10 @@ const Post = ({ post, showProposeButton, isFavorite = false, onRemoveFavorite })
             </div>
           )}
         </div>
-          
+
         <div className="w-full mb-2 justify-center rounded-xl">
-          <MapDisplay lat={post.latitud} lng={post.longitud}/>
-        </div> 
+          <MapDisplay lat={post.latitud} lng={post.longitud} />
+        </div>
 
         {showButton && showProposeButton && userType !== "Admin" && post.state !== "Pausado" && (
           <button
@@ -223,12 +222,20 @@ const Post = ({ post, showProposeButton, isFavorite = false, onRemoveFavorite })
               fill="none"
               viewBox="0 0 14 10"
             >
-              <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
+              <path
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M1 5h12m0 0L9 1m4 4L9 9"
+              />
             </svg>
           </button>
         )}
 
-        {post.state === "Pausado" && <p className="text-sm font-semibold mb-1 mx-auto">Esta publicacion se encuentra pausada</p>}
+        {post.state === "Pausado" && (
+          <p className="text-sm font-semibold mb-1 mx-auto">Esta publicacion se encuentra pausada</p>
+        )}
 
         {showOwnerButtons && (
           <div className="flex justify-between gap-2">

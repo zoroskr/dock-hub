@@ -1,10 +1,11 @@
 import { connectDB } from "@/libs/mongodb";
-import User from "@/models/user";
+import User from "@/models/User";
 import Reservation from "@/models/Reservation";
 import { NextResponse } from "next/server";
 import Amarra from "@/models/Amarra";
 import Marina from "@/models/Marina";
 import Boat from "@/models/Boat";
+import Post from "@/models/Post";
 
 export async function GET(request, { params }) {
   try {
@@ -20,6 +21,8 @@ export async function GET(request, { params }) {
     }
 
     // obtener los datos referenciados
+    const posts = await Post.find({ _id: { $in: user.posts } });
+
     const reservations = await Reservation.find({ _id: { $in: user.reservations } });
 
     const marinasPromises = reservations.map(async (reservation) => {
@@ -56,6 +59,7 @@ export async function GET(request, { params }) {
 
     const userWithReservations = {
       ...user.toObject(),
+      posts,
       reservations: reservationsWithMarinas,
       amarras: amarrasWithMarinasAndBoatsAndReservations,
       boats,

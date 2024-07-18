@@ -11,6 +11,7 @@ const schema = new mongoose.Schema({
   verified: Boolean,
   confirmationToken: String,
   resident: Boolean, // Argentino residente o no
+  posts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }],
   favorites: [String],
   chats: [String],
   reservations: [{ type: mongoose.Schema.Types.ObjectId, ref: "Reservation" }],
