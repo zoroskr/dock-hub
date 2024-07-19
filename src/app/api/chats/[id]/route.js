@@ -18,7 +18,10 @@ export async function GET(request, { params }) {
       return NextResponse.json({ error: "chat not found" }, { status: 404 });
     }
 
-    return NextResponse.json(chat);
+    const users = await User.find({ _id: { $in: chat.users } });
+    const fullChat = { ...chat.toObject(), users };
+
+    return NextResponse.json(fullChat);
   } catch (error) {
     return NextResponse.json({ error: "Error fetching chat" }, { status: 500 });
   }

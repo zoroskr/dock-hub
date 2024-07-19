@@ -5,7 +5,6 @@ import { useParams } from "next/navigation";
 import { getUser, getAdmin, updateUser } from "../../services/users.api";
 import { updateChat, getChat, deleteChat } from "@/app/services/chats.api";
 import { useRouter } from "next/navigation";
-import { verifyUser } from "@/app/services/verify.api";
 import Swal from "sweetalert2";
 
 const ChatInterface = () => {
@@ -59,6 +58,7 @@ const ChatInterface = () => {
       if ((!chat.agree.includes(localStorage.getItem("id"))) && (chat.agree.length == 1)) {
         let admin = await getAdmin();
         admin = await updateUser(admin._id, { ...admin, chats: [...admin.chats, params.id] });
+        let idsUsers = chat.users.map((user) => user._id);
         await updateChat(params.id, {
           users: [...chat.users, admin],
           agree: [...chat.agree, localStorage.getItem("id")],
@@ -105,9 +105,9 @@ const ChatInterface = () => {
     let data;
     try {
       const usuariosInvolucrados = chat.users.filter((userId) => userId !== user._id);
-      console.log("🚀 ~ handleAuthorizeClick ~ usuariosInvolucrados:", usuariosInvolucrados)
-      const involucrado1 = await getUser(usuariosInvolucrados[0]);
-      const involucrado2 = await getUser(usuariosInvolucrados[1]);
+      console.log("🚀 ~ handleAuthorizeClick ~ usuariosInvolucrados:", usuariosInvolucrados);
+      const involucrado1 = chat.users[0];
+      const involucrado2 = chat.users[1];
       const verifiedInvolucrado1 = await verify({ dni: involucrado1.DNI, id_bien: "any" });
       const verifiedInvolucrado2 = await verify({ dni: involucrado2.DNI, id_bien: "any" });
 
@@ -135,7 +135,10 @@ const ChatInterface = () => {
         });
         return;
       }
-      if ((verifiedInvolucrado1 === "ok" && (verifiedInvolucrado2 === "ok") || verifiedInvolucrado2 === "Bien inhibido")) {
+      if (
+        (verifiedInvolucrado1 === "ok" && verifiedInvolucrado2 === "ok") ||
+        verifiedInvolucrado2 === "Bien inhibido"
+      ) {
         setShowDateTimeForm(true);
       }
     } catch (error) {
@@ -178,9 +181,9 @@ const ChatInterface = () => {
       });
       return;
     }
+    
     try {
-      const response = await fetch(`http://localhost:3000/api/intercambio/${params.id}`, {
-        // Corregido: eliminado el `}` al final de la URL
+      const response = await fetch(`http://localhost:3000/api/intercambio`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -189,7 +192,7 @@ const ChatInterface = () => {
           date: date,
           time: time,
           chatId: params.id,
-          place: place
+          place: place,
         }),
       });
 
@@ -213,12 +216,10 @@ const ChatInterface = () => {
       try {
         const usuario = await getUser(localStorage.getItem("id"));
         setUser(usuario);
-        const chatResponse = await fetch(`http://localhost:3000/api/chats/${params.id}`);
-        if (chatResponse.ok) {
-          const chatData = await chatResponse.json();
-          setChat(chatData);
-          const idOtroUsuario = chatData.users.find((userId) => userId != usuario._id);
-          const otroUsuario = await getUser(idOtroUsuario);
+        const chat = await getChat(params.id);
+        if (chat) {
+          setChat(chat);
+          const otroUsuario = chat.users.find((user) => user._id !== usuario._id && user.type !== "Admin");
           setOtherUser(otroUsuario);
         }
       } catch (error) {
@@ -288,7 +289,10 @@ const ChatInterface = () => {
           </div>
           <div className="overflow-auto p-4 bg-gray-800">
             {chat.messages.map((message, index) => (
-              <div key={index} className={`flex ${user && message.sender === user.fullName ? "justify-end" : "justify-start"}`}>
+              <div
+                key={index}
+                className={`flex ${user && message.sender === user.fullName ? "justify-end" : "justify-start"}`}
+              >
                 <div className={`bg-custom-yellow text-black p-3 m-4 rounded-xl max-w-xs`}>
                   <div className="text-sm mb-1 text-black font-bold justify-end">{message.sender}</div>
                   <div className="overflow-auto break-words">{message.content}</div>
@@ -307,7 +311,10 @@ const ChatInterface = () => {
                 style={{ resize: "none" }} // Evita que el textarea sea redimensionable
               />
               <div className="flex">
-                <button type="submit" className="w-1/3 flex-1 p-1 mx-1 rounded-xl bg-gray-800 duration-300 hover:bg-gray-500 text-white">
+                <button
+                  type="submit"
+                  className="w-1/3 flex-1 p-1 mx-1 rounded-xl bg-gray-800 duration-300 hover:bg-gray-500 text-white"
+                >
                   Enviar
                 </button>
                 <Button
@@ -323,9 +330,25 @@ const ChatInterface = () => {
             <div className="flex flex-1 p-4 rounded-b-xl bg-white border-t border-gray-200">
               {showDateTimeForm ? (
                 <div className="flex flex-col w-full justify-center gap-3 items-center mt-2">
-                  <input type="date" value={date} className="p-3 rounded-xl border border-gray-300" onChange={handleDateChange} />
-                  <input type="time" value={time} className="p-3 rounded-xl border border-gray-300" onChange={handleTimeChange} />
-                  <input type="text" value={place} className="p-3 rounded-xl border border-gray-300" onChange={handlePlaceChange} placeholder="Lugar del intercambio"/>
+                  <input
+                    type="date"
+                    value={date}
+                    className="p-3 rounded-xl border border-gray-300"
+                    onChange={handleDateChange}
+                  />
+                  <input
+                    type="time"
+                    value={time}
+                    className="p-3 rounded-xl border border-gray-300"
+                    onChange={handleTimeChange}
+                  />
+                  <input
+                    type="text"
+                    value={place}
+                    className="p-3 rounded-xl border border-gray-300"
+                    onChange={handlePlaceChange}
+                    placeholder="Lugar del intercambio"
+                  />
                   <Button
                     type="button"
                     className="p-2 rounded-xl bg-gray-800 text-white duration-200 hover:bg-gray-700"

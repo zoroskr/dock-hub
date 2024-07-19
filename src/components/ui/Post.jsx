@@ -9,10 +9,7 @@ import { deletePost, updatePost } from "@/app/services/posts.api";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 
-
 const MapDisplay = dynamic(() => import("./MapSinDrag"), { ssr: false });
-
-
 
 const Post = ({ post, showProposeButton, isFavorite = false, ownerButtons = true }) => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -45,14 +42,13 @@ const Post = ({ post, showProposeButton, isFavorite = false, ownerButtons = true
     event.preventDefault();
 
     const owner = await getUser(post.owner);
-    const interesado = localStorage.getItem("id");
-    const interesadoData = await getUser(interesado);
+    const proposer = await getUser(localStorage.getItem("id"));
 
     // Prepara los datos para la solicitud POST
     const postData = {
       proposer: {
-        email: interesadoData.email,
-        fullName: interesadoData.fullName,
+        email: proposer.email,
+        fullName: proposer.fullName,
       },
       owner: {
         email: owner.email,

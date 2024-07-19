@@ -6,6 +6,7 @@ import Amarra from "@/models/Amarra";
 import Marina from "@/models/Marina";
 import Boat from "@/models/Boat";
 import Post from "@/models/Post";
+import Chat from "@/models/Chat";
 
 export async function GET(request, { params }) {
   try {
@@ -21,7 +22,15 @@ export async function GET(request, { params }) {
     }
 
     // obtener los datos referenciados
+
     const posts = await Post.find({ _id: { $in: user.posts } });
+    const chats = await Chat.find({ _id: { $in: user.chats } });
+    
+    const chatsWithAllUsersPromises = chats.map(async (chat) => {
+      const users = await User.find({ _id: { $in: chat.users } });
+      return { ...chat.toObject(), users };
+    });
+    const chatsWithAllUsers = await Promise.all(chatsWithAllUsersPromises);
 
     const reservations = await Reservation.find({ _id: { $in: user.reservations } });
 
@@ -57,15 +66,16 @@ export async function GET(request, { params }) {
 
     const boats = await Boat.find({ _id: { $in: user.boats } });
 
-    const userWithReservations = {
+    const fullUser = {
       ...user.toObject(),
       posts,
+      chats: chatsWithAllUsers,
       reservations: reservationsWithMarinas,
       amarras: amarrasWithMarinasAndBoatsAndReservations,
       boats,
     };
-
-    return NextResponse.json(userWithReservations);
+    
+    return NextResponse.json(fullUser);
   } catch (error) {
     console.log(error);
     return NextResponse.json({ error: "Error fetching user" }, { status: 500 });
