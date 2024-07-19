@@ -1,28 +1,18 @@
 "use client";
 import React, { useEffect, useRef } from "react";
-import { useParams, useRouter } from "next/navigation";
-
-import {
-  createUser,
-  updateUser,
-  getUserByEmail,
-} from "@/app/services/users.api";
-
+import { createUser, updateUser, getUserByEmail } from "@/app/services/users.api";
 import Swal from "sweetalert2";
-import { Label, Select } from "flowbite-react";
 
 const UserForm = ({ user, title, userId = false }) => {
   const form = useRef(user);
-  const params = useParams();
-  const router = useRouter(); 
 
   useEffect(() => {
     if (form.current) {
       form.current.elements.fullName.value = user.fullName || "";
       form.current.elements.DNI.value = user.DNI || "";
       form.current.elements.address.value = user.address || "";
-        form.current.elements.email.value = user.email || "";
-        form.current.elements.age.value = user.age || "";
+      form.current.elements.email.value = user.email || "";
+      form.current.elements.age.value = user.age || "";
       form.current.elements.password.value = user.password || "";
       form.current.elements["repeat-password"].value = user.password || "";
       form.current.elements.isOwner.checked = user.isOwner || false;
@@ -51,7 +41,7 @@ const UserForm = ({ user, title, userId = false }) => {
       age: formData.get("age"),
       type: t,
       verified: false,
-      resident: formData.get("isResident") === "on"
+      resident: formData.get("isResident") === "on",
     };
     console.log("user", user);
 
@@ -81,27 +71,27 @@ const UserForm = ({ user, title, userId = false }) => {
 
     try {
       if (userId) {
-      user._id = userId;
-      await updateUser(user._id, user);
-      message = "¡Actualización exitosa!";
-    } else {
-      const newUser = await createUser(user);
-      localStorage.setItem("id", newUser._id);
-      localStorage.setItem('type', user.type);
-      localStorage.setItem('verified', user.verified);
-    }
+        user._id = userId;
+        await updateUser(user._id, user);
+        message = "¡Actualización exitosa!";
+      } else {
+        const newUser = await createUser(user);
+        localStorage.setItem("id", newUser._id);
+        localStorage.setItem("type", user.type);
+        localStorage.setItem("verified", user.verified);
+      }
 
       Swal.fire({
-        icon: 'success',
+        icon: "success",
         title: message,
       }).then(() => {
         // Redirigir al home después de mostrar el mensaje
-        router.push('/login');
+        window.location.href = "/";
       });
     } catch (error) {
       Swal.fire({
-        icon: 'error',
-        title: 'Error',
+        icon: "error",
+        title: "Error",
         text: error.message,
       });
     }
@@ -111,7 +101,9 @@ const UserForm = ({ user, title, userId = false }) => {
     <div className="flex justify-center items-center h-screen mt-16 mb-16">
       <div className="max-w-lg w-full bg-gray-900 rounded-xl p-6">
         <form ref={form} className="max-w-sm mx-auto" onSubmit={handleSubmit}>
-          <h1 className="text-xl font-bold leading-tight tracking-tight text-white md:text-2xl dark:text-white">{title}</h1>
+          <h1 className="text-xl font-bold leading-tight tracking-tight text-white md:text-2xl dark:text-white">
+            {title}
+          </h1>
           <div className="mb-5 mt-3">
             <label htmlFor="fullname" className="block mb-2 text-sm font-medium text-white dark:text-white">
               Nombre
