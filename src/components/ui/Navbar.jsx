@@ -36,7 +36,6 @@ const Navbar = () => {
             style={{ borderRadius: "50%" }}
             priority
           />
-          {/* Puedes ajustar marginTop según el tamaño de tu logo */}
         </Link>
 
         <div className="hidden w-full md:block md:w-auto" id="navbar-default">
@@ -76,21 +75,35 @@ const Navbar = () => {
               {isLoggedIn ? (
                 <>
                   <li>
-                    <Link href="/amarras" className="block text-md text-white duration-300 hover:scale-110" aria-current="page">
+                    <Link
+                      href="/amarras"
+                      className="block text-md text-white duration-300 hover:scale-110"
+                      aria-current="page"
+                    >
                       Amarras
                     </Link>
                   </li>
                   {userType !== "Admin" && (
-                  <li>
-                    <Link href="/publicar" className="block text-md text-white duration-300 hover:scale-110" aria-current="page">
-                      Crear Publicación
-                    </Link>
-                  </li>)}
-                  <li>
-                    <Link href="/chats" className="block text-md text-white duration-300 hover:scale-110" aria-current="page">
-                      Mis chats
-                    </Link>
-                  </li>
+                    <li>
+                      <Link
+                        href="/publicar"
+                        className="block text-md text-white duration-300 hover:scale-110"
+                        aria-current="page"
+                      >
+                        Crear Publicación
+                      </Link>
+                    </li>
+                  )}
+                  {localStorage.getItem("type") === "Titular" && (
+                    <li>
+                      <Link
+                        href="/publicarEmbarcacion"
+                        className="block text-md text-white duration-300 hover:scale-110"
+                      >
+                        Cargar embarcación
+                      </Link>
+                    </li>
+                  )}
                   <li>
                     <Avatar handleLogout={handleLogout}>Mi usuario</Avatar>
                   </li>

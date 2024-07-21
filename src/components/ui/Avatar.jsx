@@ -33,7 +33,7 @@ const Avatar = ({ handleLogout }) => {
   }, [refDropdown]);
 
   return (
-    <div style={{ position: "relative" }}>
+    <div className="relative" ref={refDropdown}>
       <span className="ml-2 cursor-pointer" onClick={toggleDropdown}>
         <div className="inline-block rounded-full bg-rgb-190-175-85 p-1 duration-300 hover:scale-110">
           <Image src="/user48.png" alt="" width={30} height={30} />
@@ -41,7 +41,6 @@ const Avatar = ({ handleLogout }) => {
       </span>
       {isOpen && (
         <div
-          ref={refDropdown}
           className="absolute right-0 z-10 bg-white border border-gray-200 rounded-xl shadow border-t-0"
           style={{ top: "calc(100% + 8px)" }}
         >
@@ -65,13 +64,6 @@ const Avatar = ({ handleLogout }) => {
                 </>
               ) : (
                 <>
-                  {localStorage.getItem("type") === "Titular" && (
-                    <li>
-                      <Link href="/publicarEmbarcacion" className="block px-4 py-2 hover:bg-gray-100">
-                        Cargar embarcación
-                      </Link>
-                    </li>
-                  )}
                   <li>
                     <Link href="/reservations" className="block px-4 py-2 hover:bg-gray-100">
                       Mis reservas
@@ -93,12 +85,17 @@ const Avatar = ({ handleLogout }) => {
                   )}
                   <li>
                     <Link href="/posts" className="block px-4 py-2 hover:bg-gray-100">
-                      Ver mis publicaciones
+                      Mis publicaciones
                     </Link>
                   </li>
                   <li>
                     <Link href="/favorites" className="block px-4 py-2 hover:bg-gray-100">
-                      Ver mis favoritos
+                      Mis favoritos
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/chats" className="block px-4 py-2 hover:bg-gray-100" aria-current="page">
+                      Mis chats
                     </Link>
                   </li>
                   <li>
