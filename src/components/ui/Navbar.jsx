@@ -1,11 +1,15 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+
+import {Navbar } from "flowbite-react";
+
 import Avatar from "./Avatar";
 import Image from "next/image";
 import Link from "next/link";
 
-const Navbar = () => {
+
+const Nav = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userType, setUserType] = useState("");
 
@@ -24,8 +28,8 @@ const Navbar = () => {
   }, []);
 
   return (
-    <div className="bg-gray-900 border-gray-200 dark:bg-gray-900 shadow-md">
-      <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-1">
+    <Navbar fluid rounded className="bg-gray-900 text-sm">
+      <Navbar.Brand href="https://flowbite-react.com">
         <Link href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
           <Image
             src="/logo_yatemate.png"
@@ -37,105 +41,103 @@ const Navbar = () => {
             priority
           />
         </Link>
+      </Navbar.Brand>
 
-        <div className="hidden w-full md:block md:w-auto" id="navbar-default">
+      <div className="flex md:order-2">
+        <Avatar handleLogout={handleLogout} />
+        <Navbar.Toggle />
+      </div>
+
+      <Navbar.Collapse className="text-black">
+        <li>
+          <Link
+            href="/"
+            className="block py-2 px-3 text-md md:text-white md:bg-transparent md:text-white-700 md:p-0 dark:text-white md:dark:text-blue-500 duration-300 md:hover:scale-110 bg-custom-yellow"
+            aria-current="page"
+          >
+            <Navbar.Link as="a">Inicio</Navbar.Link>
+          </Link>
+        </li>
+        {userType === "Admin" && isLoggedIn && (
           <>
-            <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-900 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 dark:text-white md:dark:text-blue-500 items-center max-h-16">
-              <li /*style={{visibility:"hidden"}}*/>
+            <li>
+              <Link
+                href="/admin/register"
+                className="block py-2 px-3 text-md text-white md:bg-transparent md:text-white-700 md:p-0 dark:text-white md:dark:text-blue-500 duration-300 md:hover:scale-110"
+                aria-current="page"
+              >
+                <Navbar.Link as="a">Registrar administrativo</Navbar.Link>
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/reservations"
+                className="block py-2 px-3 text-md text-white md:bg-transparent md:text-white-700 md:p-0 dark:text-white md:dark:text-blue-500 duration-300 md:hover:scale-110"
+                aria-current="page"
+              >
+                <Navbar.Link as="a">Reservas</Navbar.Link>
+              </Link>
+            </li>
+          </>
+        )}
+        {isLoggedIn ? (
+          <>
+            <li>
+              <Link
+                href="/amarras"
+                className="block py-2 px-3 text-md text-white md:bg-transparent md:text-white-700 md:p-0 dark:text-white md:dark:text-blue-500 duration-300 md:hover:scale-110"
+                aria-current="page"
+              >
+                <Navbar.Link as="a">Amarras</Navbar.Link>
+              </Link>
+            </li>
+            {userType !== "Admin" && (
+              <li>
                 <Link
-                  href="/"
-                  className="block py-2 px-3 text-md text-white md:bg-transparent md:text-white-700 md:p-0 dark:text-white md:dark:text-blue-500 duration-300 hover:scale-110"
+                  href="/publicar"
+                  className="block py-2 px-3 text-md text-white md:bg-transparent md:text-white-700 md:p-0 dark:text-white md:dark:text-blue-500 duration-300 md:hover:scale-110"
                   aria-current="page"
                 >
-                  Inicio
+                  <Navbar.Link as="a">Crear Publicación</Navbar.Link>
                 </Link>
               </li>
-              {userType === "Admin" && isLoggedIn && (
-                <>
-                  <li>
-                    <Link
-                      href="/admin/register"
-                      className="block py-2 px-3 text-md text-white md:bg-transparent md:text-white-700 md:p-0 dark:text-white md:dark:text-blue-500 duration-300 hover:scale-110"
-                      aria-current="page"
-                    >
-                      Registrar administrativo
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/reservations"
-                      className="block py-2 px-3 text-md text-white md:bg-transparent md:text-white-700 md:p-0 dark:text-white md:dark:text-blue-500 duration-300 hover:scale-110"
-                      aria-current="page"
-                    >
-                      Reservas
-                    </Link>
-                  </li>
-                </>
-              )}
-              {isLoggedIn ? (
-                <>
-                  <li>
-                    <Link
-                      href="/amarras"
-                      className="block text-md text-white duration-300 hover:scale-110"
-                      aria-current="page"
-                    >
-                      Amarras
-                    </Link>
-                  </li>
-                  {userType !== "Admin" && (
-                    <li>
-                      <Link
-                        href="/publicar"
-                        className="block text-md text-white duration-300 hover:scale-110"
-                        aria-current="page"
-                      >
-                        Crear Publicación
-                      </Link>
-                    </li>
-                  )}
-                  {localStorage.getItem("type") === "Titular" && (
-                    <li>
-                      <Link
-                        href="/publicarEmbarcacion"
-                        className="block text-md text-white duration-300 hover:scale-110"
-                      >
-                        Cargar embarcación
-                      </Link>
-                    </li>
-                  )}
-                  <li>
-                    <Avatar handleLogout={handleLogout}>Mi usuario</Avatar>
-                  </li>
-                </>
-              ) : (
-                <>
-                  <li>
-                    <Link
-                      href="/login"
-                      className="block py-2 px-3 text-md text-white md:bg-transparent md:text-white-700 md:p-0 dark:text-white md:dark:text-blue-500 duration-300 hover:scale-110"
-                      aria-current="page"
-                    >
-                      Iniciar sesión
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/register"
-                      className="block py-2 px-3 text-md text-white md:bg-transparent md:text-white-700 md:p-0 dark:text-white md:dark:text-blue-500 duration-300 hover:scale-110"
-                      aria-current="page"
-                    >
-                      Registrarse
-                    </Link>
-                  </li>
-                </>
-              )}
-            </ul>
+            )}
+            {localStorage.getItem("type") === "Titular" && (
+              <li>
+                <Link
+                  href="/publicarEmbarcacion"
+                  className="block py-2 px-3 text-md text-white md:bg-transparent md:text-white-700 md:p-0 dark:text-white md:dark:text-blue-500 duration-300 md:hover:scale-110"
+                >
+                  <Navbar.Link as="a">Cargar embarcación</Navbar.Link>
+                </Link>
+              </li>
+            )}
           </>
-        </div>
-      </div>
-    </div>
+        ) : (
+          <>
+            <li>
+              <Link
+                href="/login"
+                className="block py-2 px-3 text-md text-white md:bg-transparent md:text-white-700 md:p-0 dark:text-white md:dark:text-blue-500 duration-300 md:hover:scale-110"
+                aria-current="page"
+              >
+                <Navbar.Link as="a">Iniciar sesión</Navbar.Link>
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/register"
+                className="block py-2 px-3 text-md text-white md:bg-transparent md:text-white-700 md:p-0 dark:text-white md:dark:text-blue-500 duration-300 md:hover:scale-110"
+                aria-current="page"
+              >
+                <Navbar.Link as="a">Registrarse</Navbar.Link>
+              </Link>
+            </li>
+          </>
+        )}
+      </Navbar.Collapse>
+    </Navbar>
   );
 };
 
-export default Navbar;
+export default Nav;

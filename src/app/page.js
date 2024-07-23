@@ -256,7 +256,7 @@ export default function Home() {
               <div className="aspect-w-16 aspect-h-9 mb-4">
                 <video
                   src="/yateMate.mp4"
-                  autoPlay
+                  // autoPlay
                   muted
                   loop
                   className="object-cover rounded-xl"
