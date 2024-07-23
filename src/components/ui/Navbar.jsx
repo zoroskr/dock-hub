@@ -1,15 +1,12 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-
-import {Navbar } from "flowbite-react";
-
 import Avatar from "./Avatar";
 import Image from "next/image";
 import Link from "next/link";
+import NavLink from "./NavLink";
 
-
-const Nav = () => {
+const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userType, setUserType] = useState("");
 
@@ -28,116 +25,94 @@ const Nav = () => {
   }, []);
 
   return (
-    <Navbar fluid rounded className="bg-gray-900 text-sm">
-      <Navbar.Brand href="https://flowbite-react.com">
+    <nav className="bg-gray-900 border-gray-200 shadow-md">
+      <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto md:p-1 p-4">
         <Link href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
           <Image
             src="/logo_yatemate.png"
             width={100}
             height={100}
-            className="rounded-md"
-            alt="Flowbite Logo"
-            style={{ borderRadius: "50%" }}
+            className="rounded-full"
+            alt="YateMate Logo"
             priority
           />
         </Link>
-      </Navbar.Brand>
 
-      <div className="flex md:order-2">
-        <Avatar handleLogout={handleLogout} />
-        <Navbar.Toggle />
-      </div>
+        <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+          <Avatar handleLogout={handleLogout} />
 
-      <Navbar.Collapse className="text-black">
-        <li>
-          <Link
-            href="/"
-            className="block py-2 px-3 text-md md:text-white md:bg-transparent md:text-white-700 md:p-0 dark:text-white md:dark:text-blue-500 duration-300 md:hover:scale-110 bg-custom-yellow"
-            aria-current="page"
+          <button
+            data-collapse-toggle="navbar-user"
+            type="button"
+            className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-400 rounded-xl md:hidden hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600"
+            aria-controls="navbar-user"
+            aria-expanded="false"
           >
-            <Navbar.Link as="a">Inicio</Navbar.Link>
-          </Link>
-        </li>
-        {userType === "Admin" && isLoggedIn && (
-          <>
+            <span className="sr-only">Open main menu</span>
+            <svg
+              className="w-5 h-5"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 17 14"
+            >
+              <path
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M1 1h15M1 7h15M1 13h15"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <div className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-user">
+          <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-700 rounded-xl bg-gray-800 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-gray-900">
             <li>
-              <Link
-                href="/admin/register"
-                className="block py-2 px-3 text-md text-white md:bg-transparent md:text-white-700 md:p-0 dark:text-white md:dark:text-blue-500 duration-300 md:hover:scale-110"
-                aria-current="page"
-              >
-                <Navbar.Link as="a">Registrar administrativo</Navbar.Link>
-              </Link>
+              <NavLink text="Inicio" path="" />
             </li>
-            <li>
-              <Link
-                href="/reservations"
-                className="block py-2 px-3 text-md text-white md:bg-transparent md:text-white-700 md:p-0 dark:text-white md:dark:text-blue-500 duration-300 md:hover:scale-110"
-                aria-current="page"
-              >
-                <Navbar.Link as="a">Reservas</Navbar.Link>
-              </Link>
-            </li>
-          </>
-        )}
-        {isLoggedIn ? (
-          <>
-            <li>
-              <Link
-                href="/amarras"
-                className="block py-2 px-3 text-md text-white md:bg-transparent md:text-white-700 md:p-0 dark:text-white md:dark:text-blue-500 duration-300 md:hover:scale-110"
-                aria-current="page"
-              >
-                <Navbar.Link as="a">Amarras</Navbar.Link>
-              </Link>
-            </li>
-            {userType !== "Admin" && (
-              <li>
-                <Link
-                  href="/publicar"
-                  className="block py-2 px-3 text-md text-white md:bg-transparent md:text-white-700 md:p-0 dark:text-white md:dark:text-blue-500 duration-300 md:hover:scale-110"
-                  aria-current="page"
-                >
-                  <Navbar.Link as="a">Crear Publicación</Navbar.Link>
-                </Link>
-              </li>
+            {userType === "Admin" && isLoggedIn && (
+              <>
+                <li>
+                  <NavLink text="Resgistrar administrativo" path="admin/register" />
+                </li>
+                <li>
+                  <NavLink text="Reservas" path="reservations" />
+                </li>
+              </>
             )}
-            {localStorage.getItem("type") === "Titular" && (
-              <li>
-                <Link
-                  href="/publicarEmbarcacion"
-                  className="block py-2 px-3 text-md text-white md:bg-transparent md:text-white-700 md:p-0 dark:text-white md:dark:text-blue-500 duration-300 md:hover:scale-110"
-                >
-                  <Navbar.Link as="a">Cargar embarcación</Navbar.Link>
-                </Link>
-              </li>
+            {isLoggedIn ? (
+              <>
+                <li>
+                  <NavLink text="Amarras" path="amarras" />
+                </li>
+                {userType !== "Admin" && (
+                  <li>
+                    <NavLink text="Crear Publicación" path="publicar" />
+                  </li>
+                )}
+                {localStorage.getItem("type") === "Titular" && (
+                  <li>
+                    <NavLink text="Cargar embarcación" path="publicarEmbarcacion" />
+                  </li>
+                )}
+              </>
+            ) : (
+              <>
+                <li>
+                  <NavLink text="Iniciar sesión" path="login" />
+                </li>
+                <li>
+                  <NavLink text="Registrarse" path="register" />
+                </li>
+              </>
             )}
-          </>
-        ) : (
-          <>
-            <li>
-              <Link
-                href="/login"
-                className="block py-2 px-3 text-md text-white md:bg-transparent md:text-white-700 md:p-0 dark:text-white md:dark:text-blue-500 duration-300 md:hover:scale-110"
-                aria-current="page"
-              >
-                <Navbar.Link as="a">Iniciar sesión</Navbar.Link>
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/register"
-                className="block py-2 px-3 text-md text-white md:bg-transparent md:text-white-700 md:p-0 dark:text-white md:dark:text-blue-500 duration-300 md:hover:scale-110"
-                aria-current="page"
-              >
-                <Navbar.Link as="a">Registrarse</Navbar.Link>
-              </Link>
-            </li>
-          </>
-        )}
-      </Navbar.Collapse>
-    </Navbar>
+          </ul>
+        </div>
+      </div>
+    </nav>
   );
 };
 
-export default Nav;
+export default Navbar;
