@@ -175,11 +175,10 @@ export default function Home() {
                   <FilterButton text="Aplicar" handleClick={aplicarFiltros} />
                 </div>
               </div>
-
             </div>
           </section>
 
-          <div className="max-w-screen-xl flex flex-wrap justify-between">
+          <div className="flex flex-wrap justify-between">
             <div className="w-1/5 p-2 sticky top-0 h-screen flex items-center">
               <div className="aspect-w-16 aspect-h-9 mb-4">
                 <video
@@ -193,7 +192,7 @@ export default function Home() {
                 />
               </div>
             </div>
-            <div className="w-4/5 p-2 grid grid-cols-3 gap-4">
+            <div className="w-4/5 p-2 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 place-items-center">
               {posts && posts.length > 0 ? (
                 posts.map((post) => (
                   <div className="" key={post._id}>

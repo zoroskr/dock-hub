@@ -22,6 +22,7 @@ const Post = ({ post, showProposeButton, isFavorite = false, ownerButtons = true
   const showOwnerButtons = loggedUserId && loggedUserId === post.owner && ownerButtons;
 
   const descriptionRef = useRef(null);
+  const hiddenRef = useRef(null);
 
   useEffect(() => {
     const type = localStorage.getItem("type");
@@ -30,7 +31,9 @@ const Post = ({ post, showProposeButton, isFavorite = false, ownerButtons = true
 
   useEffect(() => {
     if (descriptionRef.current) {
-      setNeedsTruncate(descriptionRef.current.scrollHeight > descriptionRef.current.clientHeight);
+      console.log("🚀 ~ useEffect ~ hiddenRef.current:", hiddenRef.current);
+      console.log("🚀 ~ useEffect ~ hiddenRef.current.clientHeight:", hiddenRef.current.clientHeight)
+      setNeedsTruncate(descriptionRef.current.scrollHeight > hiddenRef.current.clientHeight);
     }
   }, [post.description]);
 
@@ -160,14 +163,12 @@ const Post = ({ post, showProposeButton, isFavorite = false, ownerButtons = true
   };
 
   return (
-    <div className="max-w-sm bg-custom-gray rounded-xl shadow dark:bg-gray-800 dark:border-gray-700 duration-500 hover:scale-105">
+    <div className="max-w-sm bg-white rounded-xl shadow dark:bg-gray-800 dark:border-gray-700">
       <div className="p-5 flex flex-col justify-between">
         <div className="flex justify-between mb-2">
-          <a href="#">
-            <h5 className="mb-1 text-2xl font-bold tracking-tight text-gray-900 dark:text-white break-words overflow-y-auto">
-              {post.name}
-            </h5>
-          </a>
+          <h5 className="mb-1 text-2xl font-bold tracking-tight text-gray-900 dark:text-white break-words overflow-y-auto">
+            {post.name}
+          </h5>
           <span className="text-2xl cursor-pointer" onClick={handleFavorite}>
             <Image src={star ? "/icons8-star.svg" : "/icons8-starWhite.svg"} alt="star" width={20} height={20}></Image>
           </span>
@@ -182,33 +183,34 @@ const Post = ({ post, showProposeButton, isFavorite = false, ownerButtons = true
             </div>
           </>
         )}
-        <div className="relative mb-2">
-          <Image src={post.image} alt="bora" width={300} height={300} className="rounded-xl h-48 object-cover" />
+        <div className="mb-2 grid place-items-center">
+          <Image src={post.image} alt="image post" width={300} height={300} className="rounded-xl h-48 object-cover" />
         </div>
         <div className="relative">
+          <div ref={hiddenRef} className="fixed h-[4.5rem] -z-10"></div>
           <p
             ref={descriptionRef}
-            className={`mb-4 font-normal w-full text-black dark:text-gray-400 break-words ${!isExpanded ? "fixed-height" : ""}`}
+            className={`mb-4 font-normal w-full text-black dark:text-gray-400 break-words ${!isExpanded ? "relative overflow-hidden max-h-[4.5rem]" : ""}`}
           >
             {post.description}
           </p>
           {needsTruncate && (
             <div className="button-container">
               <button onClick={handleExpandClick} className="text-gray-800 font-semibold text-sm">
-                {isExpanded ? "Ver menos" : "Ver más"}
+                {isExpanded ? "Ver menos" : "Ver más..."}
               </button>
             </div>
           )}
         </div>
 
-        <div className="w-full mb-2 justify-center rounded-xl">
+        <div className="w-full mb-2 justify-center rounded-xl z-0">
           <MapDisplay lat={post.latitud} lng={post.longitud} />
         </div>
 
         {showButton && showProposeButton && userType !== "Admin" && post.state !== "Pausado" && (
           <button
             onClick={handleSubmit}
-            className="inline-flex items-center mx-auto mb-2 mt-1 px-3 py-2 text-sm font-medium text-center text-white bg-gray-800 rounded-xl duration-300 hover:bg-gray-700"
+            className="inline-flex items-center mx-auto mb-2 mt-1 px-3 py-2 text-xs md:text-sm font-medium text-center text-white bg-gray-800 rounded-xl duration-300 hover:bg-gray-700"
           >
             Proponer Intercambio
             <svg
