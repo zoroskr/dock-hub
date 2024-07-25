@@ -25,7 +25,7 @@ const Navbar = () => {
   }, []);
 
   return (
-    <nav className="bg-gray-900 border-gray-200 shadow-md">
+    <nav className="fixed w-screen z-40 bg-gray-900 border-gray-200 shadow-md">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto md:p-1 p-4">
         <Link href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
           <Image
@@ -39,7 +39,7 @@ const Navbar = () => {
         </Link>
 
         <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-          <Avatar handleLogout={handleLogout} />
+          {isLoggedIn && <Avatar handleLogout={handleLogout} />}
 
           <button
             data-collapse-toggle="navbar-user"

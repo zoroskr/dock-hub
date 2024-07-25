@@ -5,6 +5,9 @@ import Post from "@/components/ui/Post";
 import { getPosts } from "./services/posts.api";
 import { getUser } from "./services/users.api";
 import Loading from "./loading";
+import CustomCheckbox from "@/components/ui/CustomCheckbox";
+import SearchInput from "@/components/ui/SearchInput";
+import FilterButton from "@/components/ui/FilterButton";
 
 export default function Home() {
   const [posts, setPosts] = useState([]);
@@ -113,13 +116,13 @@ export default function Home() {
     posts = posts.filter((p) => p.state === "Activo");
 
     const activeFilters = Object.keys(selectedOptions).filter((option) => selectedOptions[option]);
-    if (activeFilters.length>0){
+    if (activeFilters.length > 0) {
       posts = posts.filter((p) => activeFilters.includes(p.type));
     }
-    if (adaptadosCheckbox.checked){
+    if (adaptadosCheckbox.checked) {
       posts = posts.filter((p) => p.adapted);
     }
-    if (valor == "nuevos"){
+    if (valor == "nuevos") {
       posts = posts.reverse();
     }
 
@@ -140,117 +143,42 @@ export default function Home() {
         <Loading />
       ) : (
         <>
-          <div className="flex">
-            <form className="w-1/2 mt-auto mb-auto ml-auto p-3" onSubmit={handleSubmit} ref={form}>
-              <label
-                htmlFor="default-search"
-                className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
-              >
-                Search
-              </label>
-              <div className="relative rounded-xl bg-custom-gray">
-                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                  <svg
-                    className="w-4 h-4 text-gray-500 dark:text-gray-400"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-                    />
-                  </svg>
-                </div>
-                <input
-                  type="search"
-                  id="default-search"
-                  className="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-xl bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 break-words overflow-y-auto"
-                  placeholder="Buscar Embarcaciones, Vehiculos..."
-                />
-                <button
-                  type="button"
-                  className="text-white absolute right-2.5 bottom-2.5 rounded-xl bg-gray-800 duration-300 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                >
-                  Buscar
-                </button>
-              </div>
-            </form>
-            <div className="flex w-1/2 mr-auto p-3 items-center justify-evenly text-sm">
-              <div className="flex items-center justify-between">
+          <section className="flex flex-col md:flex-row">
+            <SearchInput className="bg-blue-500" handleSubmit={handleSubmit} form={form} />
+
+            <div className="flex md:w-1/2 md:mr-auto p-3 items-center justify-evenly text-sm">
+              <div className="lg:flex items-center justify-between">
                 <div className="mr-1 text-xs">Ordenar Por</div>
                 <select name="ordenador" id="ordenador" className="rounded-xl text-xs justify-evenly">
                   <option value="viejos">Más antiguas</option>
                   <option value="nuevos">Más nuevas</option>
                 </select>
               </div>
-              {(localStorage.getItem("type") === "Titular" && localStorage.getItem("verified") === "true"  || (localStorage.getItem("type") === "Admin")) && (
-                <div id="checkboxList" className="text-sm font-medium">
-                  <div>
-                    <input
-                      type="checkbox"
-                      id="Embarcaciones"
-                      className="m-1 rounded-xl focus:outline-none"
-                      style={{ outline: "none", boxShadow: "none" }}
-                      onChange={handleCheckboxChange}
-                    />
-                    <label htmlFor="Embarcaciones">Embarcaciones</label>
+
+              <div className="grid grid-cols-1 md:grid-cols-2">
+                {((localStorage.getItem("type") === "Titular" && localStorage.getItem("verified") === "true") ||
+                  localStorage.getItem("type") === "Admin") && (
+                  <div id="checkboxList" className="text-xs lg:text-sm font-medium">
+                    <CustomCheckbox type="Embarcaciones" handleCheckboxChange={handleCheckboxChange} />
+                    <CustomCheckbox type="Vehículos" handleCheckboxChange={handleCheckboxChange} />
+                    <CustomCheckbox type="Aeronaves" handleCheckboxChange={handleCheckboxChange} />
+                    <CustomCheckbox type="Inmuebles" handleCheckboxChange={handleCheckboxChange} />
                   </div>
-                  <div>
-                    <input
-                      type="checkbox"
-                      id="Vehículos"
-                      className="m-1 rounded-xl focus:outline-none"
-                      style={{ outline: "none", boxShadow: "none" }}
-                      onChange={handleCheckboxChange}
-                    />
-                    <label htmlFor="Vehículos">Vehiculos</label>
-                  </div>
-                  <div>
-                    <input
-                      type="checkbox"
-                      id="Aeronaves"
-                      className="m-1 rounded-xl focus:outline-none"
-                      style={{ outline: "none", boxShadow: "none" }}
-                      onChange={handleCheckboxChange}
-                    />
-                    <label htmlFor="Aeronaves">Aeronaves</label>
-                  </div>
-                  <div>
-                    <input
-                      type="checkbox"
-                      id="Inmuebles"
-                      className="m-1 rounded-xl focus:outline-none"
-                      style={{ outline: "none", boxShadow: "none" }}
-                      onChange={handleCheckboxChange}
-                    />
-                    <label htmlFor="Inmuebles">Inmuebles</label>
-                  </div>
+                )}
+
+                <div className="text-xs lg:text-sm">
+                  <CustomCheckbox
+                    type="adaptados"
+                    label="Aptos para discapacitados"
+                    handleCheckboxChange={handleCheckboxChange}
+                  />
+                  <FilterButton text="Aplicar" handleClick={aplicarFiltros} />
                 </div>
-              )}
-              <div>
-                <input
-                  type="checkbox"
-                  id="adaptados"
-                  className="rounded-xl focus:outline-none"
-                  style={{ outline: "none", boxShadow: "none" }}
-                />
-                <label htmlFor="adaptados" className="m-1 text-sm font-medium">
-                  Aptos para discapacitados
-                </label>
               </div>
-              <button
-                className="text-white rounded-xl bg-gray-800 duration-300 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                onClick={aplicarFiltros}
-              >
-                Aplicar
-              </button>
+
             </div>
-          </div>
+          </section>
+
           <div className="max-w-screen-xl flex flex-wrap justify-between">
             <div className="w-1/5 p-2 sticky top-0 h-screen flex items-center">
               <div className="aspect-w-16 aspect-h-9 mb-4">
