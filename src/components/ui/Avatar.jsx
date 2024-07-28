@@ -51,9 +51,9 @@ const Avatar = ({ handleLogout }) => {
           className="w-44 absolute right-0 z-10 bg-white border border-gray-200 rounded-xl shadow border-t-0 divide-y divide-gray-100"
           style={{ top: "calc(100% + 8px)" }}
         >
-          <div class="px-4 py-3 text-sm text-gray-900 dark:text-white">
+          <div className="px-4 py-3 text-sm text-gray-900 dark:text-white">
             <div>{user.fullName}</div>
-            <div class="font-medium truncate">{user.email}</div>
+            <div className="font-medium truncate">{user.email}</div>
           </div>
           <ul className="py-1">
             {isAdmin ? (

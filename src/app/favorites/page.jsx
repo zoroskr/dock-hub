@@ -6,6 +6,8 @@ import { getPosts } from "@/app/services/posts.api";
 import { getUser, updateUser } from "../services/users.api";
 import Swal from "sweetalert2";
 import EmptyList from "@/components/ui/EmptyList";
+import Loading from "../loading";
+import Title from "@/components/ui/Title";
 
 export default function Home() {
   const [posts, setPosts] = useState([]);
@@ -61,29 +63,30 @@ export default function Home() {
 
   return (
     <>
-      <div className="max-w-screen-xl flex flex-wrap justify-between">
-        <div className="w-4/5 p-2 grid grid-cols-3 gap-4">
-          {loading ? (
-            <span className="text-3xl mt-auto mb-auto ml-auto mr-auto text-center p-3 col-span-3 font-medium">
-              Cargando Favoritos...
-            </span>
-          ) : posts && posts.length > 0 ? (
-            posts.map((post) => (
-              <div className="p-2" key={post._id}>
-                <Post
-                  post={post}
-                  ownerButtons={false}
-                  showProposeButton={true}
-                  isFavorite={true}
-                  onRemoveFavorite={onRemoveFavorite}
-                />
-              </div>
-            ))
-          ) : (
-            <EmptyList message={message} />
-          )}
-        </div>
-      </div>
+      <Title text="Mis favoritos" />
+      {loading ? (
+        <Loading />
+      ) : (
+        <>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 place-items-center gap-4 p-2">
+            {posts && posts.length > 0 ? (
+              posts.map((post) => (
+                <div className="p-2" key={post._id}>
+                  <Post
+                    post={post}
+                    ownerButtons={false}
+                    showProposeButton={true}
+                    isFavorite={true}
+                    onRemoveFavorite={onRemoveFavorite}
+                  />
+                </div>
+              ))
+            ) : (
+              <EmptyList message={message} />
+            )}
+          </div>
+        </>
+      )}
     </>
   );
 }
