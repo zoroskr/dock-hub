@@ -1,8 +1,9 @@
 "use client";
-import React, { useEffect, useRef } from 'react';
-import { useRouter } from 'next/navigation';
-import { updateUser } from '@/app/services/users.api';
-import Swal from 'sweetalert2';
+import React, { useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
+import { updateUser } from "@/app/services/users.api";
+import Swal from "sweetalert2";
+import FormButton from "./FormButton";
 
 const UserForm = ({ user, title, userId }) => {
   const router = useRouter(); // Hook useRouter para redirigir
@@ -10,38 +11,38 @@ const UserForm = ({ user, title, userId }) => {
 
   useEffect(() => {
     if (form.current) {
-      form.current.elements.fullName.value = user.fullName || '';
-      form.current.elements.address.value = user.address || '';
-      form.current.elements.password.value = user.password || '';
+      form.current.elements.fullName.value = user.fullName || "";
+      form.current.elements.address.value = user.address || "";
+      form.current.elements.password.value = user.password || "";
     }
   }, [user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     const formData = new FormData(form.current);
-  
+
     const user = {
-      fullName: formData.get('fullName'),
-      address: formData.get('address'),
-      password: formData.get('password'),
-    }
-  
+      fullName: formData.get("fullName"),
+      address: formData.get("address"),
+      password: formData.get("password"),
+    };
+
     try {
       const result = await updateUser(userId, user);
       if (!result) {
-        throw new Error('No se pudo actualizar el usuario');
+        throw new Error("No se pudo actualizar el usuario");
       }
       Swal.fire({
-        icon: 'success',
-        title: '¡Actualización exitosa!',
+        icon: "success",
+        title: "¡Actualización exitosa!",
       }).then(() => {
-        router.push('/'); // Redirgir al home después de actualizar
+        router.push("/"); // Redirgir al home después de actualizar
       });
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   return (
     <div className="flex justify-center items-center h-screen mt-16 mb-16">
@@ -51,10 +52,7 @@ const UserForm = ({ user, title, userId }) => {
             {title}
           </h1>
           <div className="mb-5 mt-3">
-            <label
-              for="fullname"
-              className="block mb-2 text-sm font-medium text-white dark:text-white"
-            >
+            <label for="fullname" className="block mb-2 text-sm font-medium text-white dark:text-white">
               Nombre
             </label>
             <input
@@ -67,12 +65,8 @@ const UserForm = ({ user, title, userId }) => {
             />
           </div>
 
-
           <div className="mb-5">
-            <label
-              for="address"
-              className="block mb-2 text-sm font-medium text-white dark:text-white"
-            >
+            <label for="address" className="block mb-2 text-sm font-medium text-white dark:text-white">
               Dirección
             </label>
             <input
@@ -86,10 +80,7 @@ const UserForm = ({ user, title, userId }) => {
           </div>
 
           <div className="mb-5">
-            <label
-              for="password"
-              className="block mb-2 text-sm font-medium text-white dark:text-white"
-            >
+            <label for="password" className="block mb-2 text-sm font-medium text-white dark:text-white">
               Contraseña
             </label>
             <input
@@ -101,16 +92,11 @@ const UserForm = ({ user, title, userId }) => {
             />
           </div>
 
-          <button
-            type="submit"
-            className="text-black  bg-custom-yellow duration-300 hover:scale-105 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          >
-            {title}
-          </button>
+          <FormButton text={title} />
         </form>
       </div>
     </div>
   );
-}
+};
 
 export default UserForm;

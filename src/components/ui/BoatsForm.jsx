@@ -7,6 +7,7 @@ import { verifyUser } from "@/app/services/verify.api";
 import Swal from "sweetalert2";
 import { getUser, updateUser } from "@/app/services/users.api";
 import dynamic from "next/dynamic";
+import FormButton from "./FormButton";
 const Map = dynamic(() => import("@/components/ui/Map"), { ssr: false });
 
 const BoatsForm = ({
@@ -179,12 +180,7 @@ const BoatsForm = ({
             setLng(newLng);
           }}
         />
-        <Button
-          type="submit"
-          className="bg-custom-yellow text-black rounded-xl border-gray-900 duration-500 hover:scale-105"
-        >
-          {title}
-        </Button>
+        <FormButton text={title} />
       </form>
     </div>
   );

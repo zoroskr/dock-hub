@@ -7,6 +7,7 @@ import { verifyUser } from "@/app/services/verify.api";
 import Swal from "sweetalert2";
 import { getUser } from "@/app/services/users.api";
 import dynamic from "next/dynamic";
+import FormButton from "./FormButton";
 const Map = dynamic(() => import("@/components/ui/Map"), { ssr: false });
 
 const PostsForm = ({
@@ -140,14 +141,25 @@ const PostsForm = ({
           <div className="mb-2 block">
             <Label htmlFor="description" value="Descripción" />
           </div>
-          <Textarea name="description" placeholder="Descripción de las características!" required rows={3} className="rounded-xl" />
+          <Textarea
+            name="description"
+            placeholder="Descripción de las características!"
+            required
+            rows={3}
+            className="rounded-xl"
+          />
         </div>
 
         <div className="max-w-md w-full">
           <div className="mb-1 block">
             <Label htmlFor="image" value="Link a imagen" />
           </div>
-          <TextInput className="rounded-xl overflow-hidden" name="image" type="url" placeholder="Link a la imagen del bien" />
+          <TextInput
+            className="rounded-xl overflow-hidden"
+            name="image"
+            type="url"
+            placeholder="Link a la imagen del bien"
+          />
         </div>
 
         <div className="max-w-md mx-auto">
@@ -161,25 +173,27 @@ const PostsForm = ({
           </Select>
         </div>
         <div className="max-w-md">
-        <input
-          type="checkbox"
-          id="isAdapted"
-          name="isAdapted"
-          className="text-blue-500 rounded-xl focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:text-blue-500 dark:shadow-sm-light"
-        />
-        <label htmlFor="isAdapted" className="text-white dark:text-white font-semibold text-sm">
-          Está adaptado para personas con capacidad disminuida
-        </label>
+          <input
+            type="checkbox"
+            id="isAdapted"
+            name="isAdapted"
+            className="text-blue-500 rounded-xl focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:text-blue-500 dark:shadow-sm-light"
+          />
+          <label htmlFor="isAdapted" className="text-white dark:text-white font-semibold text-sm">
+            Está adaptado para personas con capacidad disminuida
+          </label>
         </div>
 
-        <Map lat={lat} lng={lng} onPositionChange={(newLat, newLng) => {
-          setLat(newLat);
-          setLng(newLng);
-        }}/>
+        <Map
+          lat={lat}
+          lng={lng}
+          onPositionChange={(newLat, newLng) => {
+            setLat(newLat);
+            setLng(newLng);
+          }}
+        />
 
-        <Button type="submit" className="bg-custom-yellow text-black rounded-xl border-gray-900 duration-500 hover:scale-105">
-          {title}
-        </Button>
+        <FormButton text={title} />
       </form>
     </div>
   );

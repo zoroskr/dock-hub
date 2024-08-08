@@ -2,13 +2,10 @@
 import React, { useEffect, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 
-import {
-  createUser,
-  updateUser,
-  getUserByEmail,
-} from "@/app/services/users.api";
+import { createUser, updateUser, getUserByEmail } from "@/app/services/users.api";
 
 import Swal from "sweetalert2";
+import FormButton from "./FormButton";
 
 const UserForm = ({ user, title, userId = false }) => {
   const form = useRef(user);
@@ -76,21 +73,21 @@ const UserForm = ({ user, title, userId = false }) => {
       } else {
         const newUser = await createUser(user);
         localStorage.setItem("id", newUser._id);
-        localStorage.setItem('type', user.type);
-        localStorage.setItem('verified', user.verified);
+        localStorage.setItem("type", user.type);
+        localStorage.setItem("verified", user.verified);
       }
 
       Swal.fire({
-        icon: 'success',
+        icon: "success",
         title: message,
       }).then(() => {
         // Redirigir al home después de mostrar el mensaje
-        router.push('/');
+        router.push("/");
       });
     } catch (error) {
       Swal.fire({
-        icon: 'error',
-        title: 'Error',
+        icon: "error",
+        title: "Error",
         text: error.message,
       });
     }
@@ -104,10 +101,7 @@ const UserForm = ({ user, title, userId = false }) => {
             {title}
           </h1>
           <div className="mb-5 mt-3">
-            <label
-              for="fullname"
-              className="block mb-2 text-sm font-medium text-white dark:text-white"
-            >
+            <label for="fullname" className="block mb-2 text-sm font-medium text-white dark:text-white">
               Nombre
             </label>
             <input
@@ -121,10 +115,7 @@ const UserForm = ({ user, title, userId = false }) => {
           </div>
 
           <div className="mb-5">
-            <label
-              for="DNI"
-              className="block mb-2 text-sm font-medium text-white dark:text-white"
-            >
+            <label for="DNI" className="block mb-2 text-sm font-medium text-white dark:text-white">
               DNI
             </label>
             <input
@@ -138,10 +129,7 @@ const UserForm = ({ user, title, userId = false }) => {
           </div>
 
           <div className="mb-5">
-            <label
-              for="address"
-              className="block mb-2 text-sm font-medium text-white dark:text-white"
-            >
+            <label for="address" className="block mb-2 text-sm font-medium text-white dark:text-white">
               Dirección
             </label>
             <input
@@ -155,10 +143,7 @@ const UserForm = ({ user, title, userId = false }) => {
           </div>
 
           <div className="mb-5">
-            <label
-              for="email"
-              className="block mb-2 text-sm font-medium text-white dark:text-white"
-            >
+            <label for="email" className="block mb-2 text-sm font-medium text-white dark:text-white">
               Email
             </label>
             <input
@@ -173,10 +158,7 @@ const UserForm = ({ user, title, userId = false }) => {
           </div>
 
           <div className="mb-5">
-            <label
-              htmlFor="age"
-              className="block mb-2 text-sm font-medium text-white dark:text-white"
-            >
+            <label htmlFor="age" className="block mb-2 text-sm font-medium text-white dark:text-white">
               Edad
             </label>
             <input
@@ -190,10 +172,7 @@ const UserForm = ({ user, title, userId = false }) => {
           </div>
 
           <div className="mb-5">
-            <label
-              for="password"
-              className="block mb-2 text-sm font-medium text-white dark:text-white"
-            >
+            <label for="password" className="block mb-2 text-sm font-medium text-white dark:text-white">
               Contraseña
             </label>
             <input
@@ -205,10 +184,7 @@ const UserForm = ({ user, title, userId = false }) => {
             />
           </div>
           <div className="mb-5">
-            <label
-              for="repeat-password"
-              className="block mb-2 text-sm font-medium text-white dark:text-white"
-            >
+            <label for="repeat-password" className="block mb-2 text-sm font-medium text-white dark:text-white">
               Repetir contraseña
             </label>
             <input
@@ -219,31 +195,7 @@ const UserForm = ({ user, title, userId = false }) => {
               required
             />
           </div>
-
-          {/* <div className="mb-5">
-            <div className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                id="isOwner"
-                name="isOwner"
-                disabled={userId}
-                className="text-blue-500 rounded-xl focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:text-blue-500 dark:shadow-sm-light"
-              />
-              <label
-                for="isOwner"
-                className="text-white dark:text-white font-semibold"
-              >
-                Soy cliente en Yate Mate
-              </label>
-            </div>
-          </div> */}
-
-          <button
-            type="submit"
-            className="text-black  bg-custom-yellow duration-300 hover:scale-105 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          >
-            {title}
-          </button>
+          <FormButton text={title} />
         </form>
       </div>
     </div>

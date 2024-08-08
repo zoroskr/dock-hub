@@ -2,6 +2,7 @@
 import React, { useEffect, useRef } from "react";
 import { createUser, updateUser, getUserByEmail } from "@/app/services/users.api";
 import Swal from "sweetalert2";
+import FormButton from "./FormButton";
 
 const UserForm = ({ user, title, userId = false }) => {
   const form = useRef(user);
@@ -230,12 +231,7 @@ const UserForm = ({ user, title, userId = false }) => {
             </div>
           </div>
 
-          <button
-            type="submit"
-            className="text-black  bg-custom-yellow duration-300 hover:scale-105 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          >
-            {title}
-          </button>
+          <FormButton text={title} />
         </form>
       </div>
     </div>
