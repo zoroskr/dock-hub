@@ -139,7 +139,7 @@ const page = () => {
         <Loading />
       ) : (
         <div className="w-3/4 grid grid-cols-2 place-items-center mt-8 mx-auto">
-          <BerthCard title="Reservar amarra" amarra={amarra} mueveOno={false} />
+          <BerthCard title="Reservar amarra" amarra={amarra} />
           <div className="grid gap-2">
             <span className="font-medium text-lg w-full mx-auto text-center">Seleccione el periodo</span>
             <DatePicker

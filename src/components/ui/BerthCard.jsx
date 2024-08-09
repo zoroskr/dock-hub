@@ -1,10 +1,11 @@
 "use client";
 
 import React from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 
-const BerthCard = ({ amarra, mueveOno }) => {
+const BerthCard = ({ amarra }) => {
   const router = useRouter();
+  const params = useParams();
 
   const addDays = (date, days) => {
     const result = new Date(date);
@@ -21,9 +22,7 @@ const BerthCard = ({ amarra, mueveOno }) => {
   };
 
   return (
-    <div
-      className={`max-w-sm bg-custom-gray rounded-xl shadow dark:bg-gray-800 dark:border-gray-700 duration-500 ${mueveOno ? "hover:scale-105" : ""}`}
-    >
+    <div className="max-w-sm bg-custom-gray rounded-xl shadow dark:bg-gray-800 dark:border-gray-700">
       <div className="p-5 flex flex-col justify-between">
         <img src={"https://i.imgur.com/A4j1U5Y.jpeg"} alt={amarra.location} className="rounded-xl" />
         <div className="p-2">
@@ -36,15 +35,15 @@ const BerthCard = ({ amarra, mueveOno }) => {
         </div>
         <div className="flex w-full justify-between">
           <span className="text-sm ml-2">${amarra.dailyRate} USD por día</span>
-          {mueveOno && (
-            <div
+          {!params.id && (
+            <button
               className="bg-gray-800 text-white font-medium text-sm p-2 rounded-xl duration-300 hover:bg-gray-500 cursor-pointer"
               onClick={() => {
                 router.push(`/amarras/${amarra._id}`);
               }}
             >
               Alquilar
-            </div>
+            </button>
           )}
         </div>
       </div>

@@ -32,7 +32,7 @@ const Post = ({ post, showProposeButton, isFavorite = false, ownerButtons = true
   useEffect(() => {
     if (descriptionRef.current) {
       console.log("🚀 ~ useEffect ~ hiddenRef.current:", hiddenRef.current);
-      console.log("🚀 ~ useEffect ~ hiddenRef.current.clientHeight:", hiddenRef.current.clientHeight)
+      console.log("🚀 ~ useEffect ~ hiddenRef.current.clientHeight:", hiddenRef.current.clientHeight);
       setNeedsTruncate(descriptionRef.current.scrollHeight > hiddenRef.current.clientHeight);
     }
   }, [post.description]);
@@ -109,11 +109,11 @@ const Post = ({ post, showProposeButton, isFavorite = false, ownerButtons = true
     }
     const user = await getUser(loggedUserId);
     let icon = "success";
-    let message = "Se agregó a Mis favoritos.";
+    let m = "Se agregó a Mis favoritos.";
     if (user.favorites.includes(post._id)) {
       user.favorites = user.favorites.filter((id) => id !== post._id);
       icon = "error";
-      message = "Se eliminó de Mis favoritos.";
+      m = "Se eliminó de Mis favoritos.";
       setStar(false);
     } else {
       user.favorites.push(post._id);
@@ -132,7 +132,7 @@ const Post = ({ post, showProposeButton, isFavorite = false, ownerButtons = true
     });
     Toast.fire({
       icon: icon,
-      title: message,
+      title: m,
     });
   };
 
@@ -162,13 +162,44 @@ const Post = ({ post, showProposeButton, isFavorite = false, ownerButtons = true
     window.location.reload();
   };
 
+  const relativeDate = (date) => {
+    const now = new Date();
+    const created = new Date(date);
+    const diff = now - created;
+    const seconds = Math.floor(diff / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+    const weeks = Math.floor(days / 7);
+
+    if (weeks > 0) {
+      return weeks === 1 ? "1 sem" : `${weeks} sem`;
+    }
+    if (days > 0) {
+      return days === 1 ? "1 d" : `${days} d`;
+    }
+    if (hours > 0) {
+      return hours === 1 ? "1 h" : `${hours} h`;
+    }
+    if (minutes > 0) {
+      return minutes === 1 ? "1 min" : `${minutes} min`;
+    }
+    return seconds === 1 ? "1 s" : `${seconds} s`;
+  };
+
   return (
     <div className="max-w-sm bg-white rounded-xl shadow dark:bg-gray-800 dark:border-gray-700">
       <div className="p-5 flex flex-col justify-between">
         <div className="flex justify-between mb-2">
-          <h5 className="mb-1 text-2xl font-bold tracking-tight text-gray-900 dark:text-white break-words overflow-y-auto">
-            {post.name}
-          </h5>
+          <div className="flex justify-evenly items-center">
+            <h5 className="mb-1 text-2xl font-bold tracking-tight text-gray-900 dark:text-white break-words overflow-y-auto mr-1">
+              {post.name}
+            </h5>
+            <span className="text-sm font-semibold">
+              •{post.createdAt ? relativeDate(post.createdAt) : relativeDate(new Date())}
+            </span>
+          </div>
+
           <span className="text-2xl cursor-pointer" onClick={handleFavorite}>
             <Image src={star ? "/icons8-star.svg" : "/icons8-starWhite.svg"} alt="star" width={20} height={20}></Image>
           </span>

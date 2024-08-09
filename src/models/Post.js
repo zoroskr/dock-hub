@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const schema = new mongoose.Schema({
   plate: String,
@@ -10,7 +10,11 @@ const schema = new mongoose.Schema({
   state: String, // "Activo", "Pendiente", "Pausado"
   adapted: Boolean, // Adaptado para gente con discapacidad o no
   latitud: Number,
-  longitud: Number
+  longitud: Number,
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
-export default mongoose.models.Post || mongoose.model('Post', schema);
+export default mongoose.models.Post || mongoose.model("Post", schema);

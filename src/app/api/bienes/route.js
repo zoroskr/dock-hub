@@ -17,12 +17,9 @@ export async function POST(request) {
     const { owner } = data;
 
     const user = await User.findById(owner);
-    console.log("🚀 ~ POST ~ user:", user)
-    
+
     const post = await Post.create(data);
-    console.log("🚀 ~ POST ~ post:", post)
-    console.log("🚀 ~ POST ~ user.posts:", user.posts)
-    
+
     user.posts.push(post._id);
     await user.save();
 

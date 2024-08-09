@@ -10,7 +10,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { setHours, setMinutes, setSeconds, setMilliseconds } from "date-fns";
 
-const CardAmarra = ({ amarra, mueveOno, onAmarraUpdated }) => {
+const CardAmarra = ({ amarra,onAmarraUpdated }) => {
   const [absence, setAbsence] = useState(false);
   const [dateRange, setDateRange] = useState([null, null]);
   const [startDate, endDate] = dateRange;
@@ -63,9 +63,7 @@ const CardAmarra = ({ amarra, mueveOno, onAmarraUpdated }) => {
   };
 
   return (
-    <div
-      className={`max-w-sm bg-custom-gray rounded-xl shadow dark:bg-gray-800 dark:border-gray-700 duration-500 ${mueveOno ? "hover:scale-105" : ""}`}
-    >
+    <div className="max-w-sm bg-custom-gray rounded-xl shadow dark:bg-gray-800 dark:border-gray-700 duration-500">
       <div className="p-5 flex flex-col justify-between">
         <h1 className="text-xl font-bold">{amarra.location}</h1>
         <p>Amarra: {amarra.mooringNumber}</p>
