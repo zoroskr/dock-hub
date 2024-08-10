@@ -68,9 +68,9 @@ export default function Home() {
         <Loading />
       ) : (
         <>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 place-items-center gap-4 p-2">
-            {posts && posts.length > 0 ? (
-              posts.map((post) => (
+          {posts && posts.length > 0 ? (
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(290px,384px))] gap-4 p-4 justify-center">
+              {posts.map((post) => (
                 <div className="p-2" key={post._id}>
                   <Post
                     post={post}
@@ -80,11 +80,11 @@ export default function Home() {
                     onRemoveFavorite={onRemoveFavorite}
                   />
                 </div>
-              ))
-            ) : (
-              <EmptyList message={message} />
-            )}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <EmptyList message={message} />
+          )}
         </>
       )}
     </>

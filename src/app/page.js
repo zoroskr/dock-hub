@@ -192,7 +192,7 @@ export default function Home() {
                 />
               </div>
             </div>
-            <div className="w-4/5 p-2 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 place-items-center">
+            <div className="w-4/5 p-2 grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-4 place-items-center">
               {posts && posts.length > 0 ? (
                 posts.map((post) => (
                   <div className="" key={post._id}>

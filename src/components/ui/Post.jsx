@@ -188,7 +188,7 @@ const Post = ({ post, showProposeButton, isFavorite = false, ownerButtons = true
   };
 
   return (
-    <div className="max-w-sm bg-white rounded-xl shadow dark:bg-gray-800 dark:border-gray-700">
+    <div className="max-w-sm bg-custom-gray rounded-xl shadow dark:bg-gray-800 dark:border-gray-700">
       <div className="p-5 flex flex-col justify-between">
         <div className="flex justify-between mb-2">
           <div className="flex justify-evenly items-center">

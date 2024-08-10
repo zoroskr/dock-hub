@@ -53,7 +53,7 @@ const BoatCard = ({ boat }) => {
           </h5>
         </div>
         <div className="relative mb-2">
-          <Image src={boat.image} alt="bora" width={300} height={300} className="rounded-xl h-48 object-cover" priority />
+          <Image src={boat.image} alt={boat.description} width={300} height={300} className="rounded-xl h-48 object-cover" priority />
         </div>
         <div className="relative">
           <p className={"mb-4 font-normal w-full text-black dark:text-gray-400 break-words"}>{boat.description}</p>

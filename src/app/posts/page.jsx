@@ -27,7 +27,7 @@ const page = () => {
 
   return (
     <>
-      <div className="flex flex-col items-center gap-14 min-h-screen w-full">
+      <div className="flex flex-col items-center gap-4 min-h-screen w-full">
         <Title text="Mis Publicaciones" />
         <div className="flex flex-wrap justify-center gap-4">
           {loading ? (

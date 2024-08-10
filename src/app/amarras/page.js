@@ -82,9 +82,11 @@ const page = () => {
   return (
     <>
       <Title text="Amarras disponibles" />
-      <div className="flex justify-center space-x-3">
-        <div className="w-1/5 p-1 gap-4 mt-3">
-          <div className="flex text-md text-black font-semibold mb-2 justify-center">Filtrar por fecha de disponibilidad</div>
+      <div className="flex justify-center space-x-3 h-screen">
+        <div className="sticky top-56 h-screen w-1/5 p-1 gap-4 mt-3 min-w-min">
+          <div className="flex text-md text-black font-semibold mb-2 justify-center">
+            Filtrar por fecha de disponibilidad
+          </div>
           <div className="flex items-center justify-center mx-auto">
             <DatePicker
               selected={startDate}
@@ -96,19 +98,25 @@ const page = () => {
             />
           </div>
           <div className="flex flex-col items-center p-3 gap-1">
-              <div className="text-xs">Ubicadas en el puerto</div>
-              <select name="puerto" id="puerto" className="rounded-xl text-xs justify-evenly" value={selectedMarina} onChange={handleSelectChange}>
-                <option value="todos">Cualquiera</option>
-                <option value="Marina Norte">Marina Norte</option>
-                <option value="Marina Centro">Marina Centro</option>
-                <option value="Marina Sur">Marina Sur</option>
-                <option value="Marina Este">Marina Este</option>
-                <option value="Marina Oeste">Marina Oeste</option>
-                <option value="Marina Delta">Marina Delta</option>
-                <option value="Marina Bahía">Marina Bahía</option>
-                <option value="Marina Atlántico">Marina Atlántico</option>
-              </select>
-            </div>
+            <div className="text-xs">Ubicadas en el puerto</div>
+            <select
+              name="puerto"
+              id="puerto"
+              className="rounded-xl text-xs justify-evenly"
+              value={selectedMarina}
+              onChange={handleSelectChange}
+            >
+              <option value="todos">Cualquiera</option>
+              <option value="Marina Norte">Marina Norte</option>
+              <option value="Marina Centro">Marina Centro</option>
+              <option value="Marina Sur">Marina Sur</option>
+              <option value="Marina Este">Marina Este</option>
+              <option value="Marina Oeste">Marina Oeste</option>
+              <option value="Marina Delta">Marina Delta</option>
+              <option value="Marina Bahía">Marina Bahía</option>
+              <option value="Marina Atlántico">Marina Atlántico</option>
+            </select>
+          </div>
           <div className="flex gap-2 justify-center mx-auto">
             <button
               className="text-white rounded-xl bg-gray-800 duration-300 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
@@ -124,14 +132,14 @@ const page = () => {
             </button>
           </div>
         </div>
-        <div className="w-4/5 p-1 mb-2">
+        <div className="w-4/5 p-2 grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-4 place-items-center bg-black">
           {!loading ? (
             amarras && amarras.length > 0 ? (
-              <div className="grid grid-cols-3 gap-3 mt-5">
+              <>
                 {amarras.map((amarra) => (
                   <BerthCard key={amarra._id} amarra={amarra} />
                 ))}
-              </div>
+              </>
             ) : (
               <EmptyList message="No hay amarras disponibles para alquilar" />
             )
@@ -140,7 +148,6 @@ const page = () => {
           )}
         </div>
       </div>
-
     </>
   );
 };
