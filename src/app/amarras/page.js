@@ -82,8 +82,8 @@ const page = () => {
   return (
     <>
       <Title text="Amarras disponibles" />
-      <div className="flex justify-center space-x-3 h-screen">
-        <div className="sticky top-56 h-screen w-1/5 p-1 gap-4 mt-3 min-w-min">
+      <div className="flex flex-col md:flex-row w-screen justify-center items-center md:items-start">
+        <div className="w-1/5 p-1 gap-4 m-3 min-w-min text-center">
           <div className="flex text-md text-black font-semibold mb-2 justify-center">
             Filtrar por fecha de disponibilidad
           </div>
@@ -132,7 +132,7 @@ const page = () => {
             </button>
           </div>
         </div>
-        <div className="w-4/5 p-2 grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-4 place-items-center bg-black">
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(290px,1fr))] gap-4 p-4 place-items-center min-w-min w-4/5">
           {!loading ? (
             amarras && amarras.length > 0 ? (
               <>

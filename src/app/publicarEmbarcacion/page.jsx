@@ -12,13 +12,10 @@ const page = () => {
     owner: ''
   }
   return (
-    <div className='grid place-items-center'>
-      <BoatsForm
-        title='Cargar una embarcación'
-        boat={boat}
-      ></BoatsForm>
+    <div className="grid place-items-center p-6">
+      <BoatsForm title="Cargar una embarcación" boat={boat}></BoatsForm>
     </div>
-  )
+  );
 }
 
 export default page

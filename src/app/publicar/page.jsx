@@ -10,7 +10,7 @@ const page = () => {
     owner: ''
   }
   return (
-    <div className='grid place-items-center'>
+    <div className='grid place-items-center px-6 py-3'>
       <PostsForm
         title='Cargar un bien'
         post={post}

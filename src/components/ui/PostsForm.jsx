@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
-import { Button, Label, Select, TextInput, Textarea } from "flowbite-react";
+import { Label, TextInput, Textarea } from "flowbite-react";
 import { useParams, useRouter } from "next/navigation";
 import { createPost, updatePost } from "@/app/services/posts.api";
 import { verifyUser } from "@/app/services/verify.api";
@@ -33,7 +33,7 @@ const PostsForm = ({
       form.current.elements.name.value = post.name || "";
       form.current.elements.description.value = post.description || "";
       form.current.elements.image.value = post.image || "";
-      form.current.elements.type.value = post.type || "";
+      form.current.elements.type.value = post.type || "Vehículos";
       form.current.elements.isAdapted.checked = post.adapted || false;
 
     }
@@ -162,16 +162,17 @@ const PostsForm = ({
           />
         </div>
 
-        <div className="max-w-md mx-auto">
+        <div className="max-w-md mx-auto text-center">
           <div className="mb-2 block">
             <Label htmlFor="type" value="Selecciona el tipo de bien" className="text-white" />
           </div>
-          <Select name="type" id="type" className="custom-select" required>
+          <select name="type" id="type" className="rounded-xl text-sm" required>
             <option>Vehículos</option>
             <option>Aeronaves</option>
             <option>Inmuebles</option>
-          </Select>
+          </select>
         </div>
+
         <div className="max-w-md">
           <input
             type="checkbox"
